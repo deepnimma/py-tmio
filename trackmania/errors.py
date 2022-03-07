@@ -32,7 +32,7 @@ __all__ = (
 
 # pylint: disable=unnecessary-pass
 class TrackmaniaException(Exception):
-    """Base exception class for py-trackmania.io"""
+    """Base exception class for py-tmio"""
 
     pass
 

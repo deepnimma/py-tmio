@@ -70,7 +70,7 @@ class APIClient:
             raise NoUserAgentSetError()
 
         self.session = aiohttp.ClientSession(
-            headers={"User-Agent": Client.user_agent + " | via py-trackmania.io"},
+            headers={"User-Agent": Client.user_agent + " | via py-tmio"},
             **session_kwargs,
         )
 

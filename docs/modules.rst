@@ -1,4 +1,4 @@
-py-trackmania.io
+py-tmio
 ================
 
 .. toctree::

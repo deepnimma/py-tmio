@@ -1,10 +1,10 @@
-# py-trackmania.io
+# py-tmio
 [![Trackmania.io API Status](https://img.shields.io/website?down_message=Offline&label=Trackmania.io%20API&up_message=Online&url=https%3A%2F%2Ftrackmania.io)](https://trackmania.io)
 
-[![GitHub issues](https://img.shields.io/github/issues/NottCurious/py-trackmania.io?logo=github)](https://github.com/NottCurious/py-trackmania.io/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/NottCurious/py-trackmania.io?logo=github)](https://github.com/NottCurious/py-trackmania.io/pulls)
-[![GitHub Repo stars](https://img.shields.io/github/stars/NottCurious/py-trackmania.io?logo=github&style=flat-square)](https://github.com/NottCurious/py-trackmania.io/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/NottCurious/py-trackmania.io?style=flat-square)](https://github.com/NottCurious/py-trackmania.io/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/NottCurious/py-tmio?logo=github)](https://github.com/NottCurious/py-tmio/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/NottCurious/py-tmio?logo=github)](https://github.com/NottCurious/py-tmio/pulls)
+[![GitHub Repo stars](https://img.shields.io/github/stars/NottCurious/py-tmio?logo=github&style=flat-square)](https://github.com/NottCurious/py-tmio/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/NottCurious/py-tmio?style=flat-square)](https://github.com/NottCurious/py-tmio/network/members)
 
 
 Trackmania API Helper for Python!
@@ -19,7 +19,7 @@ Your User-Agent Must Have:
 Example:
 `NottCurious#4351 | TMIndiaBot`
 
-*" | via py-trackmania.io" is automatically appended to your user_agent*
+*" | via py-tmio" is automatically appended to your user_agent*
 
 #### How to set user_agent
 ```python
@@ -42,9 +42,9 @@ Docs can be found on [readthedocs.org](https://py-trackmaniaio.readthedocs.io/en
 ## Installation
 **Note:** Must have Python 3.10 or higher.
 ```shell
-python3 -m pip install py-trackmania.io # Linux
+python3 -m pip install py-tmio # Linux
 
-python -m pip install py-trackmania.io # Windows
+python -m pip install py-tmio # Windows
 ```
 
 ## Caching
@@ -53,7 +53,7 @@ Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 Caching is not *required* but is highly recommended.
 
 ## Pull Requests and Issues
-If you have any suggestions, bugs, fixes or enhancements, please open a [Pull Request](https://github.com/NottCurious/py-trackmania.io/compare) or [Issue](https://github.com/NottCurious/py-trackmania.io/issues/new)
+If you have any suggestions, bugs, fixes or enhancements, please open a [Pull Request](https://github.com/NottCurious/py-tmio/compare) or [Issue](https://github.com/NottCurious/py-tmio/issues/new)
 
 ## Discord
 Contact me on Discord if you have any questions, NottCurious#4351

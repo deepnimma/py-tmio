@@ -13,12 +13,12 @@ packages = [
 ]
 
 setup(
-    name="py-trackmania.io",
+    name="py-tmio",
     author="Deepesh Nimma",
-    url="https://github.com/NottCurious/py-trackmania.io",
+    url="https://github.com/NottCurious/py-tmio",
     project_urls={
         "Documentation": "https://py-trackmaniaio.rtfd.io/",
-        "Issue Tracker": "https://github.com/NottCurious/py-trackmania.io/issues",
+        "Issue Tracker": "https://github.com/NottCurious/py-tmio/issues",
     },
     version=version,
     license="MIT",

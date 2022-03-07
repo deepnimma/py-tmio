@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-project = "py-trackmania.io"
+project = "py-tmio"
 copyright = "2022, Deepesh Nimma"
 author = "Deepesh Nimma"
 

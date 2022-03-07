@@ -15,7 +15,7 @@ from .config import *
 from .constants import *
 from .errors import *
 
-__title__ = "py-trackmania.io"
+__title__ = "py-tmio"
 __author__ = "Deepesh Nimma"
 __license__ = "MIT"
 __copyright__ = "Copyright 2022-present Deepesh Nimma"
