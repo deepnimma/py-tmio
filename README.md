@@ -1,0 +1,62 @@
+# py-trackmania.io
+[![Trackmania.io API Status](https://img.shields.io/website?down_message=Offline&label=Trackmania.io%20API&up_message=Online&url=https%3A%2F%2Ftrackmania.io)](https://trackmania.io)
+
+[![GitHub issues](https://img.shields.io/github/issues/NottCurious/py-trackmania.io?logo=github)](https://github.com/NottCurious/py-trackmania.io/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/NottCurious/py-trackmania.io?logo=github)](https://github.com/NottCurious/py-trackmania.io/pulls)
+[![GitHub Repo stars](https://img.shields.io/github/stars/NottCurious/py-trackmania.io?logo=github&style=flat-square)](https://github.com/NottCurious/py-trackmania.io/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/NottCurious/py-trackmania.io?style=flat-square)](https://github.com/NottCurious/py-trackmania.io/network/members)
+
+
+Trackmania API Helper for Python!
+
+## Important - [Trackmania.io API for my own project?](https://openplanet.dev/tmio/api)
+*See below on how to set your user_agent*
+
+Your User-Agent Must Have:
+1. Your Discord Username
+2. Your Project Name
+
+Example:
+`NottCurious#4351 | TMIndiaBot`
+
+*" | via py-trackmania.io" is automatically appended to your user_agent*
+
+#### How to set user_agent
+```python
+from trackmania import Client
+
+Client.user_agent = "NottCurious#4351 | TMIndiaBot"
+```
+
+#### How to set Redis Server host and port
+```python
+from trackmania import Client
+
+Client.redis_host = "127.0.0.1"
+Client.rediS_port = 6379
+```
+
+## Docs
+Docs can be found on [readthedocs.org](https://py-trackmaniaio.readthedocs.io/en/latest/).
+
+## Installation
+**Note:** Must have Python 3.10 or higher.
+```shell
+python3 -m pip install py-trackmania.io # Linux
+
+python -m pip install py-trackmania.io # Windows
+```
+
+## Caching
+Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
+
+Caching is not *required* but is highly recommended.
+
+## Pull Requests and Issues
+If you have any suggestions, bugs, fixes or enhancements, please open a [Pull Request](https://github.com/NottCurious/py-trackmania.io/compare) or [Issue](https://github.com/NottCurious/py-trackmania.io/issues/new)
+
+## Discord
+Contact me on Discord if you have any questions, NottCurious#4351
+
+## License
+[MIT License](https://mit-license.org/)
