@@ -10,6 +10,9 @@ with open("README.md") as f:
 
 packages = [
     "trackmania",
+    "trackmania.managers",
+    "trackmania.structures",
+    "trackmania.util",
 ]
 
 setup(
@@ -34,4 +37,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    packages=packages
 )
