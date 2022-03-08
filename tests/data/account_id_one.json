@@ -1,0 +1,70 @@
+[
+   {
+       "player": {
+           "name": "NottCurious",
+           "tag": "$F63W$F971$FCBS$FFFP",
+           "id": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
+           "zone": {
+               "name": "India",
+               "flag": "IND",
+               "parent": {
+                   "name": "Asia",
+                   "flag": "asia",
+                   "parent": {
+                       "name": "World",
+                       "flag": "WOR"
+                   }
+               }
+           },
+           "meta": {
+               "twitch": "NottCurious",
+               "youtube": "UCZV9i9_sgXwIdN6cy1uFkyw",
+               "twitter": "nottcurious"
+           }
+       },
+       "matchmaking": [
+           {
+               "typename": "3v3",
+               "typeid": 2,
+               "accountid": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
+               "rank": 4717,
+               "score": 2000,
+               "progression": 2000,
+               "division": {
+                   "position": 7,
+                   "rule": "points_range",
+                   "minpoints": 2000,
+                   "maxpoints": 2299
+               },
+               "division_next": {
+                   "position": 8,
+                   "rule": "points_range",
+                   "minpoints": 2300,
+                   "maxpoints": 2599
+               }
+           },
+           {
+               "typename": "Royal",
+               "typeid": 3,
+               "accountid": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
+               "rank": 30914,
+               "score": 1292,
+               "progression": 0,
+               "division": {
+                   "position": 1,
+                   "rule": "victory_count",
+                   "minpoints": 0,
+                   "maxpoints": 0
+               },
+               "division_next": {
+                   "position": 2,
+                   "rule": "victory_count",
+                   "minpoints": 0,
+                   "maxpoints": 0,
+                   "minwins": 1,
+                   "maxwins": 9
+               }
+           }
+       ]
+   }
+]

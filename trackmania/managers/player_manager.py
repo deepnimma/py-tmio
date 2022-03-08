@@ -220,10 +220,12 @@ class PlayerManager:
         if isinstance(players, PlayerSearchResult):
             try:
                 cache_client.set(
-                    name=f"{players.name.lower()}|ID", value=players.player_id
+                    name=f"{players.name.decode('utf-8').lower()}|ID",
+                    value=players.player_id,
                 )
                 cache_client.set(
-                    name=f"{players.player_id}|username", value=players.name
+                    name=f"{players.player_id.decode('utf-8')}|username",
+                    value=players.name,
                 )
             except (ConnectionRefusedError, redis.exceptions.ConnectionError):
                 pass

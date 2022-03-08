@@ -108,9 +108,9 @@ class PlayerParsers:
         :return: The list of PlayerZone objects.
         :rtype: List[PlayerZone]
         """
-        if len(zone_positions) == 3:
-            player_zone_list = []
+        player_zone_list = []
 
+        if len(zone_positions) == 3:
             player_zone_list.append(
                 PlayerZone(zones["flag"], zones["name"], zone_positions[0])
             )
@@ -127,8 +127,6 @@ class PlayerParsers:
                 )
             )
         elif len(zone_positions) == 4:
-            player_zone_list = []
-
             player_zone_list.append(
                 PlayerZone(zones["flag"], zones["name"], zone_positions[0])
             )
@@ -151,9 +149,7 @@ class PlayerParsers:
                     zone_positions[3],
                 )
             )
-        elif len(player_zone_list) == 5:
-            player_zone_list = []
-
+        elif len(zone_positions) == 5:
             player_zone_list.append(
                 PlayerZone(zones["flag"], zones["name"], zone_positions[0])
             )
@@ -326,13 +322,22 @@ class PlayerParsers:
         except KeyError:
             club_tag = None
 
-        zone_data = PlayerParsers._parse_zones(
-            data["player"]["zone"], [-1, -1, -1, -1, -1]
-        )
-
-        matchmaking_data = PlayerParsers._parse_matchmaking(
-            data["player"]["matchmaking"]
-        )
+        try:
+            zone_data = PlayerParsers._parse_search_zones(data["player"]["zone"])
+        except KeyError:
+            zone_data = [
+                PlayerZone(None, None, None),
+                PlayerZone(None, None, None),
+                PlayerZone(None, None, None),
+                PlayerZone(None, None, None),
+                PlayerZone(None, None, None),
+            ]
+        try:
+            matchmaking_data = PlayerParsers._parse_matchmaking(
+                data["player"]["matchmaking"]
+            )
+        except KeyError:
+            matchmaking_data = [None, None]
 
         return (
             club_tag,
@@ -342,3 +347,49 @@ class PlayerParsers:
             matchmaking_data[0],
             matchmaking_data[1],
         )
+
+    @staticmethod
+    def _parse_search_zones(zones: Dict) -> List[PlayerZone]:
+        """
+        Parses the zones for search result. A seperate function because search result does not have the zone positions.
+
+        :param zones: Zone data
+        :type zones: Dict
+        :return: The list of PlayerZone objects to represent the zone data. Zone positions are set as -1.
+        :rtype: :class:`List[:class:`PlayerZone`]`
+        """
+        player_zone_list = []
+
+        player_zone_list.append(PlayerZone(zones["flag"], zones["name"], -1))
+        player_zone_list.append(
+            PlayerZone(zones["parent"]["flag"], zones["parent"]["name"], -1)
+        )
+        player_zone_list.append(
+            PlayerZone(
+                zones["parent"]["parent"]["flag"], zones["parent"]["parent"]["name"], -1
+            )
+        )
+
+        try:
+            player_zone_list.append(
+                PlayerZone(
+                    zones["parent"]["parent"]["parent"]["flag"],
+                    zones["parent"]["parent"]["parent"]["name"],
+                    -1,
+                )
+            )
+
+            try:
+                player_zone_list.append(
+                    PlayerZone(
+                        zones["parent"]["parent"]["parent"]["parent"]["flag"],
+                        zones["parent"]["parent"]["parent"]["parent"]["name"],
+                        -1,
+                    )
+                )
+            except KeyError:
+                pass
+        except KeyError:
+            pass
+
+        return player_zone_list

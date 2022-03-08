@@ -70,6 +70,38 @@ class TestPlayerManager(unittest.TestCase):
                 resp.trophies.player_id, "b73fe3d7-a92a-4a6d-ab9d-49005caec499"
             )
 
+    @aioresponses()
+    def test_to_account_id(self, mocked):
+        Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
+
+        with open("./tests/data/account_id_one.json", "r", encoding="UTF-8") as file:
+            mocked.get(
+                "https://trackmania.io/api/players/find?search=NottCurious",
+                status=200,
+                payload=json.load(file),
+            )
+
+            loop = asyncio.get_event_loop()
+            resp = loop.run_until_complete(
+                PlayerManager.to_account_id("NottCurious")
+            ).decode("utf-8")
+
+            self.assertEqual(str(resp), "b73fe3d7-a92a-4a6d-ab9d-49005caec499")
+
+        with open("./tests/data/account_id_two.json", "r", encoding="UTF-8") as file:
+            mocked.get(
+                "https://trackmania.io/api/players/find?search=Kaizer",
+                status=200,
+                payload=json.load(file),
+            )
+
+            loop = asyncio.get_event_loop()
+            resp = loop.run_until_complete(
+                PlayerManager.to_account_id("Kaizer")
+            ).decode("utf-8")
+
+            self.assertEqual(str(resp), "7fea7bd6-cb02-4df8-b978-0b0335e4a531")
+
 
 if __name__ == "__main__":
     Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
