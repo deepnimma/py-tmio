@@ -13,10 +13,15 @@ class TestPlayerManager(unittest.TestCase):
     def test_get(self, mocked):
         Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
         with open("./tests/data/player_get.json", "r", encoding="UTF-8") as file:
-            mocked.get("https://trackmania.io/api/player/aa", payload=json.load(file))
+            mocked.get(
+                "https://trackmania.io/api/player/b73fe3d7-a92a-4a6d-ab9d-49005caec499",
+                payload=json.load(file),
+            )
 
             loop = asyncio.get_event_loop()
-            resp = loop.run_until_complete(PlayerManager.get("aa"))
+            resp = loop.run_until_complete(
+                PlayerManager.get("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
+            )
 
             self.assertEqual(resp.club_tag, "$F63W$F971$FCBS$FFFP")
             self.assertEqual(resp.first_login, "2021-02-12T11:04:02+00:00")
