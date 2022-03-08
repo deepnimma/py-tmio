@@ -37,5 +37,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=packages
+    packages=packages,
 )

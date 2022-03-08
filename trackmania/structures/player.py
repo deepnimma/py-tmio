@@ -271,7 +271,7 @@ class PlayerMatchmaking:
             )
         except ZeroDivisionError:
             self.progress = 0
-            
+
     @property
     def min_points(self):
         """min points property"""
@@ -338,7 +338,7 @@ class Player:
         self.zone = zone
         self.m3v3_data = m3v3_data
         self.royal_data = royal_data
-        
+
     def __str__(self):
         """
         String representation of the class.
