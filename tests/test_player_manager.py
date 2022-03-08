@@ -102,6 +102,38 @@ class TestPlayerManager(unittest.TestCase):
 
             self.assertEqual(str(resp), "7fea7bd6-cb02-4df8-b978-0b0335e4a531")
 
+    @aioresponses()
+    def test_to_username(self, mocked):
+        Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
+
+        with open("./tests/data/to_username_one.json", "r", encoding="UTF-8") as file:
+            mocked.get(
+                "https://trackmania.io/api/player/b73fe3d7-a92a-4a6d-ab9d-49005caec499",
+                status=200,
+                payload=json.load(file),
+            )
+
+            loop = asyncio.get_event_loop()
+            resp = loop.run_until_complete(
+                PlayerManager.to_username("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
+            ).decode("UTF-8")
+
+            self.assertEqual(str(resp), "NottCurious")
+
+        with open("./tests/data/to_username_two.json", "r", encoding="UTF-8") as file:
+            mocked.get(
+                "https://trackmania.io/api/player/17cebbbb-2637-4110-ba67-f733de4559ea",
+                status=200,
+                payload=json.load(file),
+            )
+
+            loop = asyncio.get_event_loop()
+            resp = loop.run_until_complete(
+                PlayerManager.to_username("17cebbbb-2637-4110-ba67-f733de4559ea")
+            ).decode("UTF-8")
+
+            self.assertEqual(str(resp), "Kaizer_TM")
+
 
 if __name__ == "__main__":
     Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
