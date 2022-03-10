@@ -35,7 +35,7 @@ from ..util.map_parsers import MapParsers
 
 __all__ = ("TotdManager",)
 
-
+# pylint: disable=too-few-public-methods
 class TotdManager:
     """
     TotdManager is a class that handles functions related to totd map

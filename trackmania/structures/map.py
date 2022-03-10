@@ -25,7 +25,7 @@ from .medal_times import MedalTimes
 
 __all__ = ("TOTD",)
 
-
+# pylint: disable=too-many-arguments, too-many-instance-attributes, too-few-public-methods
 class TOTD:
     """
     Class that represents a totd map

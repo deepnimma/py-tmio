@@ -23,10 +23,7 @@ SOFTWARE.
 """
 import json
 from contextlib import suppress
-from multiprocessing.connection import Connection
-from re import search
 from typing import List
-from urllib import response
 
 import redis
 
@@ -38,8 +35,6 @@ from ..constants import TMIO
 from ..errors import InvalidIDError, InvalidMatchmakingGroupError, InvalidUsernameError
 from ..structures.player import Player
 from ..util import player_parsers
-
-__all__ = ("PlayerManager",)
 
 
 async def get_player(player_id: str) -> Player | None:
@@ -77,8 +72,8 @@ async def get_player(player_id: str) -> Player | None:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         cache_client.set(f"{player_id}|data", json.dumps(player_resp), ex=600)
-        cache_client.set(f"{player_data.index(4).lower()}:id", player_id)
-        cache_client.set(f"{player_id}:username", player_data[4])
+        cache_client.set(f"{player_data['name'].lower()}:id", player_id)
+        cache_client.set(f"{player_id}:username", player_data["name"])
 
     return Player(**player_data)
 
@@ -181,8 +176,8 @@ async def to_username(player_id: str) -> str | None:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             cache_client.set(f"{player_id}|username", player.name)
         return player.name
-    else:
-        return None
+
+    return None
 
 
 async def top_matchmaking(group: int, page: int = 0):
