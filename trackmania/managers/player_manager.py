@@ -185,81 +185,60 @@ async def to_username(player_id: str) -> str | None:
         return None
 
 
-class PlayerManager:
-    @staticmethod
-    async def top_matchmaking(group: int, page: int = 0):
-        """
-        Retrieves the Matchmaking leaderboard.
+async def top_matchmaking(group: int, page: int = 0):
+    """
+    Retrieves the Matchmaking leaderboard.
 
-        :param group: The group id, 2 is 3v3 matchmaking and 3 is royal matchmaking.
-        :type group: int
-        :param page: The page of the leaderboard. Each number is 50 users, defaults to 0
-        :type page: int, optional
+    :param group: The group id, 2 is 3v3 matchmaking and 3 is royal matchmaking.
+    :type group: int
+    :param page: The page of the leaderboard. Each number is 50 users, defaults to 0
+    :type page: int, optional
 
-        Caching
-        -------
-        Caches each page for 1 hour.
-        """
-        try:
-            leaderboard = cache_client.get(name=f"matchmaking|{group}|{page}")
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            leaderboard = None
+    Caching
+    -------
+    Caches each page for 1 hour.
+    """
+    if int(group) not in (2, 3):
+        raise InvalidMatchmakingGroupError("Matchmaking group should be 2 or 3.")
 
-        if leaderboard is not None:
-            return leaderboard
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if cache_client.exists(f"matchmaking|{group}|{page}"):
+            return json.loads(cache_client.get(f"matchmaking|{group}|{page}"))
 
-        api_client = APIClient()
+    api_client = APIClient()
+    matchmaking_resp = await api_client.get(
+        TMIO.build([TMIO.tabs.top_matchmaking, group, page])
+    )
+    await api_client.close()
 
-        if int(group) not in (2, 3):
-            raise InvalidMatchmakingGroupError(
-                "Matchmaking Group should be 2 or 3. 2 for 3v3, 3 for royal"
-            )
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        cache_client.set(
+            f"matchmaking|{group}|{page}", json.dumps(matchmaking_resp), ex=3600
+        )
 
-        leaderboard_url = TMIO.build([TMIO.tabs.top_matchmaking, group, page])
+    return matchmaking_resp
 
-        leaderboard_data = await api_client.get(leaderboard_url)
 
-        await api_client.close()
+async def top_trophies(page: int = 0):
+    """
+    Gets the Trophy leaderboard.
 
-        try:
-            cache_client.set(
-                name=f"matchmaking|{group}|{page}", value=leaderboard_data, ex=3600
-            )
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            pass
+    :param page: Page for the leaderboard, each page contains 50 players. defaults to 0
+    :type page: int, optional
 
-        return leaderboard_data
+    Caching
+    -------
+    Caches trophy leaderboard page for 3 hr
+    """
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if cache_client.exists(f"trophies|{page}"):
+            return json.loads(cache_client.get(f"trophies|{page}"))
 
-    @staticmethod
-    async def top_trophies(page: int = 0):
-        """
-        Gets the Trophy leaderboard.
+    api_client = APIClient()
+    trophies_resp = await api_client.get(TMIO.build([TMIO.tabs.top_trophies, page]))
+    await api_client.close()
 
-        :param page: Page for the leaderboard, each page contains 50 players. defaults to 0
-        :type page: int, optional
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        cache_client.set(f"trophies|{page}", json.dumps(trophies_resp), ex=10800)
 
-        Caching
-        -------
-        Caches trophy leaderboard page for 3 hr
-        """
-        try:
-            leaderboard = cache_client.get(name=f"trophy|{page}")
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            leaderboard = None
-
-        if leaderboard is not None:
-            return leaderboard
-
-        api_client = APIClient()
-
-        trophy_leaderboard_url = TMIO.build([TMIO.tabs.top_trophies, page])
-
-        leaderboard_data = await api_client.get(trophy_leaderboard_url)
-        await api_client.close()
-
-        try:
-            cache_client.set(name=f"trophy|{page}", value=leaderboard_data, ex=10800)
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            pass
-
-        return leaderboard_data
+    return trophies_resp
