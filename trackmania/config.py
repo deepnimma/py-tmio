@@ -42,6 +42,3 @@ class Client:
     user_agent = None
     redis_host = "127.0.0.1"
     redis_port = 6379
-
-
-cache_client = Redis(host=Client.redis_host, port=Client.redis_port)

@@ -30,7 +30,7 @@ import redis
 from trackmania.structures.player import PlayerSearchResult
 
 from ..api import APIClient
-from ..config import cache_client
+from ..config import Client
 from ..constants import TMIO
 from ..errors import InvalidIDError, InvalidMatchmakingGroupError, InvalidUsernameError
 from ..structures.player import Player
@@ -53,6 +53,8 @@ async def get_player(player_id: str) -> Player | None:
     * Caches `username:player_id` pair forever.
     * Caches `player_id:username` pair forever.
     """
+    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+
     if player_id == "":
         raise InvalidIDError("The player id cannot be empty.")
 
@@ -90,6 +92,8 @@ async def search_player(
     :return: None if no players. PlayerSearchResult if one player. List of PlayerSearchResult if multiple players.
     :rtype: None|PlayerSearchResult|List[PlayerSearchResult]
     """
+    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+
     if username == "":
         raise InvalidUsernameError("Usernmae cannot be empty.")
 
@@ -134,6 +138,8 @@ async def to_account_id(username: str) -> str | None:
     * Caches `username:player_id` pair forever.
     * Caches `player_id:username` pair forever.
     """
+    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{username.lower()}|id"):
             return cache_client.get(f"{username.lower()}|id").decode("utf-8")
@@ -166,6 +172,8 @@ async def to_username(player_id: str) -> str | None:
     :return: The player's username, None if the player does not exist.
     :rtype: str | None
     """
+    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|username"):
             return cache_client.get(f"{player_id}|username").decode("utf-8")
@@ -193,6 +201,8 @@ async def top_matchmaking(group: int, page: int = 0):
     -------
     Caches each page for 1 hour.
     """
+    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+
     if int(group) not in (2, 3):
         raise InvalidMatchmakingGroupError("Matchmaking group should be 2 or 3.")
 
@@ -225,6 +235,8 @@ async def top_trophies(page: int = 0):
     -------
     Caches trophy leaderboard page for 3 hr
     """
+    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"trophies|{page}"):
             return json.loads(cache_client.get(f"trophies|{page}"))

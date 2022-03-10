@@ -30,47 +30,38 @@ import redis
 from trackmania.structures.map import TOTD
 
 from ..api import APIClient
-from ..config import cache_client
+from ..config import Client
 from ..constants import TMIO
 from ..util import map_parsers
 
 
-# pylint: disable=too-few-public-methods
-class TotdManager:
+async def latest() -> TOTD:
     """
-    TotdManager is a class that handles functions related to totd map
+    Fetches the current totd map
+
+    :return: TOTD object
+    :rtype: :class:`TOTD`
+
+    Caching
+    -------
+    * Caches the latest_totd data for 1 hour unless it is past 10:30pm
     """
+    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
 
-    @staticmethod
-    async def latest() -> TOTD:
-        """
-        Fetches the current totd map
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if cache_client.exists("latest_totd"):
+            return map_parsers.parse_totd_map(
+                json.loads(cache_client.get("latest_totd"))
+            )
 
-        :return: TOTD object
-        :rtype: :class:`TOTD`
+    api_client = APIClient()
+    latest_totd = await api_client.get(TMIO.build([TMIO.tabs.totd, "0"]))["days"][-1]
+    await api_client.close()
 
-        Caching
-        -------
-        * Caches the latest_totd data for 1 hour unless it is past 10:30pm
-        """
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists("latest_totd"):
-                return map_parsers.parse_totd_map(
-                    json.loads(cache_client.get("latest_totd"))
-                )
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if (datetime.now().hour() > 22 and datetime.now().minute() > 30) and (
+            datetime.now().hour() < 23 and datetime.now().minute() < 30
+        ):
+            cache_client.set(name="latest_totd", value=json.dumps(latest_totd), ex=3600)
 
-        api_client = APIClient()
-        latest_totd = await api_client.get(TMIO.build([TMIO.tabs.totd, "0"]))["days"][
-            -1
-        ]
-        await api_client.close()
-
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if (datetime.now().hour() > 22 and datetime.now().minute() > 30) and (
-                datetime.now().hour() < 23 and datetime.now().minute() < 30
-            ):
-                cache_client.set(
-                    name="latest_totd", value=json.dumps(latest_totd), ex=3600
-                )
-
-        return map_parsers.parse_totd_map(latest_totd)
+    return map_parsers.parse_totd_map(latest_totd)
