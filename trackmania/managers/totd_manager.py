@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 import json
+from contextlib import suppress
 from datetime import datetime
 
 import redis
@@ -31,9 +32,8 @@ from trackmania.structures.map import TOTD
 from ..api import APIClient
 from ..config import cache_client
 from ..constants import TMIO
-from ..util.map_parsers import MapParsers
+from ..util import map_parsers
 
-__all__ = ("TotdManager",)
 
 # pylint: disable=too-few-public-methods
 class TotdManager:
@@ -53,31 +53,24 @@ class TotdManager:
         -------
         * Caches the latest_totd data for 1 hour unless it is past 10:30pm
         """
-        try:
-            totd = cache_client.get("latest_totd")
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            totd = None
-
-        if totd is not None:
-            return MapParsers.parse_totd_map(json.loads(totd))
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists("latest_totd"):
+                return map_parsers.parse_totd_map(
+                    json.loads(cache_client.get("latest_totd"))
+                )
 
         api_client = APIClient()
-
-        latest_totd_url = TMIO.build([TMIO.tabs.totd, "0"])
-        latest_month_totds = await api_client.get(latest_totd_url)
-
+        latest_totd = await api_client.get(TMIO.build([TMIO.tabs.totd, "0"]))["days"][
+            -1
+        ]
         await api_client.close()
 
-        latest_totd = latest_month_totds["days"][-1]
-
-        try:
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if (datetime.now().hour() > 22 and datetime.now().minute() > 30) and (
                 datetime.now().hour() < 23 and datetime.now().minute() < 30
             ):
                 cache_client.set(
                     name="latest_totd", value=json.dumps(latest_totd), ex=3600
                 )
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            pass
 
-        return MapParsers.parse_totd_map(latest_totd)
+        return map_parsers.parse_totd_map(latest_totd)
