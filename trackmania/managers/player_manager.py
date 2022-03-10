@@ -22,7 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 import json
+from contextlib import suppress
+from multiprocessing.connection import Connection
+from re import search
 from typing import List
+from urllib import response
 
 import redis
 
@@ -33,237 +37,155 @@ from ..config import cache_client
 from ..constants import TMIO
 from ..errors import InvalidIDError, InvalidMatchmakingGroupError, InvalidUsernameError
 from ..structures.player import Player
-from ..util.player_parsers import PlayerParsers
+from ..util import player_parsers
 
 __all__ = ("PlayerManager",)
 
 
-class PlayerManager:
+async def get_player(player_id: str) -> Player | None:
     """
-    PlayerManager is a class that handles all player related functions.
+    Retrieves a player's information using their player_id
+
+    :param player_id: The player id to get information for.
+    :type player_id: str
+    :raises InvalidIDError: if the player id is empty, or no player exists with that player_id.
+    :return: The player's information.
+    :rtype: :class:`Player` | None
+
+    Caching
+    -------
+    * Caches the player information for 10 minutes.
+    * Caches `username:player_id` pair forever.
+    * Caches `player_id:username` pair forever.
     """
+    if player_id == "":
+        raise InvalidIDError("The player id cannot be empty.")
 
-    @staticmethod
-    async def get(player_id: str) -> Player:
-        """
-        Retrieves a player's information
-
-        :param player_id: The player id to get information for.
-        :type player_id: str
-        :raises InvalidIDError: if the player id is empty, or no player exists with that player_id.
-        :return: The player's information.
-        :rtype: :class:`Player`
-
-        Caching
-        -------
-        * Caches the player information for 10 minutes.
-        * Caches `username:player_id` pair forever.
-        * Caches `player_id:username` pair forever.
-        """
-
-        if player_id == "":
-            raise InvalidIDError("Player ID cannot be empty")
-
-        try:
-            # Checking the cache to see if the player is already in the cache
-            response = cache_client.get(name=f"{player_id}|Data")
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            # User does not have redis running
-            response = None
-
-        # Response is None when it is not in the cache
-        if response is None:
-            api_client = APIClient()
-
-            player_url = TMIO.build([TMIO.tabs.player, player_id])
-
-            response = await api_client.get(player_url)
-            await api_client.close()
-
-            try:
-                raise InvalidIDError(response["error"])
-            except KeyError:
-                pass
-        else:
-            response = json.loads(response)
-
-        (
-            club_tag,
-            first_login,
-            player_id,
-            last_club_tag_change,
-            login,
-            meta,
-            name,
-            trophies,
-            zone,
-            m3v3,
-            royal,
-        ) = PlayerParsers.parse_data(response)
-
-        try:
-            # Stores the Player's ID Forever
-            # cache_client.set(key=f'{name.lower()}|ID', value=player_id, expire=0)
-            cache_client.set(name=f"{name.lower()}|ID", value=player_id)
-
-            # Stores the Player's Username-ID Pair Forever
-            cache_client.set(name=f"{player_id}|username", value=name)
-
-            # Stores the Player Object for 10 minutes
-            cache_client.set(
-                name=f"{player_id}|Data", value=json.dumps(response), ex=600
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if cache_client.exists(f"{player_id}|data"):
+            return Player(
+                **player_parsers.parse_player(
+                    json.loads(cache_client.get(f"{player_id}|data"))
+                )
             )
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            pass
 
-        return Player(
-            club_tag,
-            first_login,
-            player_id,
-            last_club_tag_change,
-            login,
-            meta,
-            name,
-            trophies,
-            zone,
-            m3v3,
-            royal,
+    api_client = APIClient()
+    player_resp = await api_client.get(TMIO.build([TMIO.tabs.player, player_id]))
+    await api_client.close()
+
+    player_data = player_parsers.parse_player(player_resp)
+
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        cache_client.set(f"{player_id}|data", json.dumps(player_resp), ex=600)
+        cache_client.set(f"{player_data.index(4).lower()}:id", player_id)
+        cache_client.set(f"{player_id}:username", player_data[4])
+
+    return Player(**player_data)
+
+
+async def search_player(
+    username: str,
+) -> None | PlayerSearchResult | List[PlayerSearchResult]:
+    """
+    Searches for a player's information
+
+    :param username: The player's username to search for.
+    :type username: str
+    :raises InvalidUsernameError: If the username is empty or if there is no users with this username.
+    :return: None if no players. PlayerSearchResult if one player. List of PlayerSearchResult if multiple players.
+    :rtype: None|PlayerSearchResult|List[PlayerSearchResult]
+    """
+    if username == "":
+        raise InvalidUsernameError("Usernmae cannot be empty.")
+
+    api_client = APIClient()
+    search_result = await api_client.get(
+        TMIO.build([TMIO.tabs.players]) + f"/find?search={username}"
+    )
+    await api_client.close()
+
+    try:
+        raise InvalidUsernameError(search_result["error"])
+    except (KeyError, TypeError):
+        pass
+
+    if len(search_result) == 0:
+        return None
+    if len(search_result) == 1:
+        return PlayerSearchResult(
+            **player_parsers._parse_search_results(search_result[0])
         )
 
-    @staticmethod
-    async def search(
-        username: str,
-    ) -> None | PlayerSearchResult | List[PlayerSearchResult]:
-        """
-        Searches for a player's information
+    results = []
 
-        :param username: The player's username to search for.
-        :type username: str
-        :raises InvalidUsernameError: If the username is empty or if there is no users with this username.
-        :return: None if no players. PlayerSearchResult if one player. List of PlayerSearchResult if multiple players.
-        :rtype: None|PlayerSearchResult|List[PlayerSearchResult]
-        """
-        if username == "":
-            raise InvalidUsernameError("Username cannot be empty.")
+    for player_data in search_result:
+        results.append(
+            PlayerSearchResult(**player_parsers._parse_search_results(player_data))
+        )
+    return results
 
-        api_client = APIClient()
 
-        player_url = TMIO.build([TMIO.tabs.players]) + f"/find?search={username}"
+async def to_account_id(username: str) -> str | None:
+    """
+    Returns the account id of the given username
 
-        response = await api_client.get(player_url)
-        await api_client.close()
+    :param username: The username of the player.
+    :type username: str
+    :return: The id of the player.
+    :rtype: str | None
 
-        try:
-            raise InvalidUsernameError(response["error"])
-        except (KeyError, TypeError):
-            pass
+    Caching
+    -------
+    * Caches `username:player_id` pair forever.
+    * Caches `player_id:username` pair forever.
+    """
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if cache_client.exists(f"{username.lower()}|id"):
+            return cache_client.get(f"{username.lower()}|id").decode("utf-8")
 
-        if len(response) == 0:
+        player_data = await search_player(username)
+
+        if player_data is None:
             return None
-        if len(response) == 1:
-            (
-                club_tag,
-                name,
-                player_id,
-                zones,
-                threes,
-                royal,
-            ) = PlayerParsers._parse_search_results(response[0])
+        if isinstance(player_data, PlayerSearchResult):
+            with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+                cache_client.set(
+                    f"{player_data.name.lower()}|id", player_data.player_id
+                )
 
-            return PlayerSearchResult(club_tag, name, player_id, zones, threes, royal)
+            return player_data.player_id
 
-        results = []
-
-        for player in response:
-            (
-                club_tag,
-                name,
-                player_id,
-                zones,
-                threes,
-                royal,
-            ) = PlayerParsers._parse_search_results(player)
-
-            results.append(
-                PlayerSearchResult(club_tag, name, player_id, zones, threes, royal)
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            cache_client.set(
+                f"{player_data[0].name.lower()}|id", player_data[0].player_id
             )
+        return player_data[0].player_id
 
-        return results
 
-    @staticmethod
-    async def to_account_id(username: str) -> str | None:
-        """
-        Returns the account id of the given username
+async def to_username(player_id: str) -> str | None:
+    """
+    Gets a player's username from their ID.
 
-        :param username: The username of the player.
-        :type username: str
-        :return: The id of the player.
-        :rtype: str | None
+    :param player_id: The ID of the player.
+    :type player_id: str
+    :return: The player's username, None if the player does not exist.
+    :rtype: str | None
+    """
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if cache_client.exists(f"{player_id}|username"):
+            return cache_client.get(f"{player_id}|username").decode("utf-8")
 
-        Caching
-        -------
-        * Caches `username:player_id` pair forever.
-        * Caches `player_id:username` pair forever.
-        """
-        try:
-            player_id = cache_client.get(name=f"{username.lower()}|ID")
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            player_id = None
+    player = await get_player(player_id)
 
-        if player_id is not None:
-            return player_id
-
-        players = await PlayerManager.search(username)
-
-        if players is None:
-            return None
-        if isinstance(players, PlayerSearchResult):
-            try:
-                cache_client.set(
-                    name=f"{players.name.decode('utf-8').lower()}|ID",
-                    value=players.player_id,
-                )
-                cache_client.set(
-                    name=f"{players.player_id.decode('utf-8')}|username",
-                    value=players.name,
-                )
-            except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-                pass
-            return players.player_id
-        # Cache all players in the list.
-        for player in players:
-            try:
-                cache_client.set(
-                    name=f"{player.name.lower()}|ID", value=player.player_id
-                )
-                cache_client.set(name=f"{player.player_id}|username", value=player.name)
-            except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-                pass
-
-        return players[0].player_id
-
-    @staticmethod
-    async def to_username(player_id: str) -> str | None:
-        """
-        Gets a player's username from their ID.
-
-        :param player_id: The ID of the player.
-        :type player_id: str
-        :return: The player's username, None if the player does not exist.
-        :rtype: str | None
-        """
-
-        try:
-            username = cache_client.get(name=f"{player_id}|username")
-        except (ConnectionRefusedError, redis.exceptions.ConnectionError):
-            username = None
-
-        if username is not None:
-            return username
-
-        player = await PlayerManager.get(player_id)
+    if player is not None:
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            cache_client.set(f"{player_id}|username", player.name)
         return player.name
+    else:
+        return None
 
+
+class PlayerManager:
     @staticmethod
     async def top_matchmaking(group: int, page: int = 0):
         """
