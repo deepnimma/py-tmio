@@ -35,7 +35,7 @@ from ..constants import TMIO
 from ..util import map_parsers
 
 
-async def latest() -> TOTD:
+async def latest_totd() -> TOTD:
     """
     Fetches the current totd map
 
@@ -55,13 +55,13 @@ async def latest() -> TOTD:
             )
 
     api_client = APIClient()
-    latest_totd = await api_client.get(TMIO.build([TMIO.tabs.totd, "0"]))["days"][-1]
+    latest_totd = await api_client.get(TMIO.build([TMIO.tabs.totd, "0"]))
+    latest_totd = latest_totd["days"][-1]
     await api_client.close()
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        if (datetime.now().hour() > 22 and datetime.now().minute() > 30) and (
-            datetime.now().hour() < 23 and datetime.now().minute() < 30
-        ):
+        hour, minute = datetime.now().hour, datetime.now().minute
+        if not ((hour > 22 and minute > 30) and (hour < 23 and minute < 30)):
             cache_client.set(name="latest_totd", value=json.dumps(latest_totd), ex=3600)
 
     return map_parsers.parse_totd_map(latest_totd)
