@@ -24,6 +24,7 @@ SOFTWARE.
 import json
 from contextlib import suppress
 from datetime import datetime
+from typing import Dict, List
 
 import redis
 
@@ -65,3 +66,80 @@ async def latest_totd() -> TOTD:
             cache_client.set(name="latest_totd", value=json.dumps(latest_totd), ex=3600)
 
     return map_parsers.parse_totd_map(latest_totd)
+
+
+async def totd(year: int = 2022, month: int = 1, day: int = 1) -> TOTD | List[Dict]:
+    """
+    Gets the TOTD of a specific day.
+
+    :param year: The year of the TOTD, defaults to 2022. Acceptable values are 2020, 2021 and 2022.
+    :type year: int, optional
+    :param month: The month of the TOTD, defaults to 1 for January. Acceptable values are in the range 1-12.
+    :type month: int, optional
+    :param day: The day of the TOTD, defaults to 1. Acceptable values are 1-31. If the day is -1 then all totds of the month are returned.
+    :type day: int, optional
+    """
+
+    # Date Checks
+    today_date = datetime.now()
+
+    if year not in (2020, 2021, 2022):
+        raise ValueError("Year must be 2020, 2021 or 2022")
+    if month not in range(1, 13):
+        raise ValueError("Month must be in the range 1-12")
+    if day not in range(-1, 31) or day == 0:
+        raise ValueError("Day cannot be greater than 31")
+    if today_date.year == year and today_date.month < month:
+        raise ValueError("Month must be in the past")
+    if today_date.year == year and today_date.month == month and today_date.day < day:
+        raise ValueError("Day must be in the past.")
+    if month == 2 and year % 4 != 0 and day > 28:
+        raise ValueError("February only has 28 days in a non-leap year.")
+    if month == 2 and year % 4 == 0 and day > 29:
+        raise ValueError("February only has 29 days in a leap year.")
+    if month % 2 == 0 and day > 30:
+        raise ValueError("This month (%s) only has 30 days." % month)
+    if year == 2020 and month < 7:
+        raise ValueError("TM2020 Released on July 1st.")
+
+    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if day == -1 and cache_client.exists(f"totd|{year}|{month}|-1"):
+            return json.loads(cache_client.get(f"totd|{year}|{month}|-1"))
+
+        if cache_client.exists(f"totd|{year}|{month}|{day}"):
+            return map_parsers.parse_totd_map(
+                json.loads(cache_client.get(f"totd|{year}|{month}|{day}"))
+            )
+
+    # Find how many months ago the given month is.
+    count = 0
+
+    if year == 2020:
+        count = (12 - month) + 12 + today_date.month
+    elif year == 2021:
+        count = (12 - month) + today_date.month
+    else:
+        count = today_date.month - month
+
+    api_client = APIClient()
+    month_data = await api_client.get(TMIO.build([TMIO.tabs.totd, str(count)]))
+    await api_client.close()
+
+    if day == -1:
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            cache_client.set(
+                f"totd|{year}|{month}|-1",
+                json.dumps(month_data),
+                ex=None if count != 0 else 14400,
+            )
+        return month_data["days"]
+
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        cache_client.set(
+            f"totd|{year}|{month}|{day}",
+            json.dumps(month_data["days"][day - 1]),
+            ex=None if count != 0 else 14400,
+        )
+    return map_parsers.parse_totd_map(month_data["days"][day - 1])
