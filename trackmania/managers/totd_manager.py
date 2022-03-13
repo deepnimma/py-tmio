@@ -36,12 +36,12 @@ from ..constants import TMIO
 from ..util import map_parsers
 
 
-async def latest_totd(leaderboard: bool = False) -> TOTD:
+async def latest_totd(leaderboard_flag: bool = False) -> TOTD:
     """
     Fetches the current TOTD Map.
 
-    :param leaderboard: Whether to add the top 100 leaderboard to the data. If set to True, it makes another api request. Defaults to False
-    :type leaderboard: bool, optional
+    :param leaderboard_flag: Whether to add the top 100 leaderboard to the data. If set to True, it makes another api request. Defaults to False
+    :type leaderboard_flag: bool, optional
     :return: TOTD object
     :rtype: :class:`TOTD`
 
@@ -53,24 +53,39 @@ async def latest_totd(leaderboard: bool = False) -> TOTD:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists("latest_totd"):
-            return map_parsers.parse_totd_map(
-                json.loads(cache_client.get("latest_totd"))
-            )
+            latest_totd = json.loads(cache_client.get("latest_totd"))
+            return map_parsers.parse_totd_map(latest_totd, latest_totd["leaderboard"])
 
     api_client = APIClient()
     latest_totd = await api_client.get(TMIO.build([TMIO.tabs.totd, "0"]))
-    latest_totd = latest_totd["days"][-1]
+    latest_totd: dict = latest_totd["days"][-1]
+
+    if leaderboard_flag:
+        raw_lb_data = await api_client.get(
+            TMIO.build(
+                [TMIO.tabs.leaderboard, TMIO.tabs.map, latest_totd["map"]["mapUid"]]
+            )
+            + "?offset=0&length=100"
+        )
+        leaderboard = raw_lb_data["tops"]
+    else:
+        leaderboard = None
+
     await api_client.close()
+
+    latest_totd.update({"leaderboard": leaderboard})
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         hour, minute = datetime.utcnow().hour, datetime.utcnow().minute
         if not ((hour > 17 and minute > 0) and (hour < 18 and minute < 0)):
             cache_client.set(name="latest_totd", value=json.dumps(latest_totd), ex=3600)
 
-    return map_parsers.parse_totd_map(latest_totd)
+    return map_parsers.parse_totd_map(latest_totd, leaderboard)
 
 
-async def totd(year: int = 2022, month: int = 1, day: int = 1) -> TOTD | List[Dict]:
+async def totd(
+    year: int = 2022, month: int = 1, day: int = 1, leaderboard_flag: bool = False
+) -> TOTD | List[Dict]:
     """
     Gets the TOTD of a specific day.
 
@@ -80,6 +95,8 @@ async def totd(year: int = 2022, month: int = 1, day: int = 1) -> TOTD | List[Di
     :type month: int, optional
     :param day: The day of the TOTD, defaults to 1. Acceptable values are 1-31. If the day is -1 then all totds of the month are returned.
     :type day: int, optional
+    :param leaderboard_flag: Whether to add the top 100 leaderboard to the data. If set to True, it makes another api request. Defaults to False
+    :type leaderboard_flag: bool, optional
     """
 
     # Date Checks
@@ -111,9 +128,8 @@ async def totd(year: int = 2022, month: int = 1, day: int = 1) -> TOTD | List[Di
             return json.loads(cache_client.get(f"totd|{year}|{month}|-1"))
 
         if cache_client.exists(f"totd|{year}|{month}|{day}"):
-            return map_parsers.parse_totd_map(
-                json.loads(cache_client.get(f"totd|{year}|{month}|{day}"))
-            )
+            totd = cache_client.get(f"totd|{year}|{month}|{day}")
+            return map_parsers.parse_totd_map(json.loads(totd, totd["leaderboard"]))
 
     # Find how many months ago the given month is.
     count = 0
@@ -127,7 +143,6 @@ async def totd(year: int = 2022, month: int = 1, day: int = 1) -> TOTD | List[Di
 
     api_client = APIClient()
     month_data = await api_client.get(TMIO.build([TMIO.tabs.totd, str(count)]))
-    await api_client.close()
 
     if day == -1:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
@@ -138,10 +153,28 @@ async def totd(year: int = 2022, month: int = 1, day: int = 1) -> TOTD | List[Di
             )
         return month_data["days"]
 
+    if leaderboard_flag:
+        raw_lb_data = await api_client.get(
+            TMIO.build(
+                [
+                    TMIO.tabs.leaderboard,
+                    TMIO.tabs.map,
+                    month_data["days"][day - 1]["map"]["mapUid"],
+                ]
+            )
+            + "?offset=0&length=100"
+        )
+        leaderboard = raw_lb_data["tops"]
+    else:
+        leaderboard = None
+    await api_client.close()
+
+    month_data["days"][day - 1].update({"leaderboard": leaderboard})
+
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         cache_client.set(
             f"totd|{year}|{month}|{day}",
             json.dumps(month_data["days"][day - 1]),
             ex=None if count != 0 else 14400,
         )
-    return map_parsers.parse_totd_map(month_data["days"][day - 1])
+    return map_parsers.parse_totd_map(month_data["days"][day - 1], leaderboard)

@@ -21,6 +21,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from typing import Dict, List
+
 from .medal_times import MedalTimes
 
 __all__ = ("TOTD",)
@@ -46,6 +48,7 @@ class TOTD:
         week_day: int,
         month_day: int,
         leaderboard_uid: str,
+        leaderboard: List[Dict] | None = None,
     ):
         """
         Constructor for the class
@@ -63,3 +66,4 @@ class TOTD:
         self.week_day = week_day
         self.month_day = month_day
         self.leaderboard_uid = leaderboard_uid
+        self.leaderboard = leaderboard

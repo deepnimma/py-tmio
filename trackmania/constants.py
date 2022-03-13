@@ -34,6 +34,8 @@ class TMIOTabs:
         self.player = "player"
         self.players = "players"
         self.trophies = "trophies"
+        self.map = "map"
+        self.leaderboard = "leaderboard"
 
         self.top_matchmaking: str = "top/matchmaking"
         self.top_trophies: str = "top/trophies"

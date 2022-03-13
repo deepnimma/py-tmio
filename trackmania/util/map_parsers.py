@@ -21,13 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from typing import Dict
+from typing import Dict, List
 
 from ..structures.map import TOTD
 from ..structures.medal_times import MedalTimes
 
 
-def parse_totd_map(map_data: Dict) -> TOTD:
+def parse_totd_map(map_data: Dict, leaderboard: List[Dict] | None = None) -> TOTD:
     """
     Parses TOTD Map Data.
 
@@ -71,4 +71,5 @@ def parse_totd_map(map_data: Dict) -> TOTD:
         week_day,
         month_day,
         leaderboard_uid,
+        leaderboard,
     )
