@@ -47,7 +47,7 @@ async def latest_totd(leaderboard: bool = False) -> TOTD:
 
     Caching
     -------
-    * Caches the latest_totd data for 1 hour unless it is past 10:30pm and before 11:30am. IST
+    * Caches the latest_totd data for 1 hour unless it is past 5pm and before 6am. UTC
     """
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
 
@@ -63,8 +63,8 @@ async def latest_totd(leaderboard: bool = False) -> TOTD:
     await api_client.close()
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        hour, minute = datetime.now().hour, datetime.now().minute
-        if not ((hour > 22 and minute > 30) and (hour < 23 and minute < 30)):
+        hour, minute = datetime.utcnow().hour, datetime.utcnow().minute
+        if not ((hour > 17 and minute > 0) and (hour < 18 and minute < 0)):
             cache_client.set(name="latest_totd", value=json.dumps(latest_totd), ex=3600)
 
     return map_parsers.parse_totd_map(latest_totd)
@@ -83,7 +83,7 @@ async def totd(year: int = 2022, month: int = 1, day: int = 1) -> TOTD | List[Di
     """
 
     # Date Checks
-    today_date = datetime.now()
+    today_date = datetime.utcnow()
 
     if year not in (2020, 2021, 2022):
         raise ValueError("Year must be 2020, 2021 or 2022")
