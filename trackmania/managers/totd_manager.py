@@ -36,16 +36,18 @@ from ..constants import TMIO
 from ..util import map_parsers
 
 
-async def latest_totd() -> TOTD:
+async def latest_totd(leaderboard: bool = False) -> TOTD:
     """
-    Fetches the current totd map
+    Fetches the current TOTD Map.
 
+    :param leaderboard: Whether to add the top 100 leaderboard to the data. If set to True, it makes another api request. Defaults to False
+    :type leaderboard: bool, optional
     :return: TOTD object
     :rtype: :class:`TOTD`
 
     Caching
     -------
-    * Caches the latest_totd data for 1 hour unless it is past 10:30pm
+    * Caches the latest_totd data for 1 hour unless it is past 10:30pm and before 11:30am. IST
     """
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
 
