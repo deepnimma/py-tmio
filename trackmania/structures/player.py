@@ -105,7 +105,7 @@ class PlayerTrophies:
     :param points: The number of points of the player.
     :type points: int
     :param trophies: The number of trophies of the player.
-    :type trophies: List[int]
+    :type trophies: :class:`List`[int]
     :param player_id: The Trackmania ID of the player
     :type player_id: str, optional
     """
@@ -142,7 +142,7 @@ class PlayerTrophies:
         :type page: int, optional
         :raises Exception: If an ID has not been set for the object.
         :return: Trophy history data.
-        :rtype: Dict
+        :rtype: :class:`Dict`
         """
         api_client = APIClient()
 

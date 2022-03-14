@@ -87,8 +87,8 @@ async def search_player(
     :param username: The player's username to search for.
     :type username: str
     :raises InvalidUsernameError: If the username is empty or if there is no users with this username.
-    :return: None if no players. PlayerSearchResult if one player. List of PlayerSearchResult if multiple players.
-    :rtype: None|PlayerSearchResult|List[PlayerSearchResult]
+    :return: None if no players. :class:`PlayerSearchResult` if one player. List of :class:`PlayerSearchResult` if multiple players.
+    :rtype: None|:class:`PlayerSearchResult`|:class:`List`[:class:`PlayerSearchResult`]
     """
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
 

@@ -25,7 +25,7 @@ SOFTWARE.
 
 from __future__ import division
 
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from trackmania.structures.player import PlayerSearchResult
 
@@ -37,14 +37,14 @@ from ..structures.player import (
 )
 
 
-def parse_player(data: Dict) -> tuple:
+def parse_player(data: Dict) -> Tuple:
     """
     Parses the JSON data into the required data types for the Player constructor.
 
     :param data: The JSON data to parse.
-    :type data: Dict
-    :return: the parsed data as a tuple.
-    :rtype: tuple
+    :type data: :class:`Dict`
+    :return: the parsed data as a Tuple.
+    :rtype: :class:`Tuple`
     """
 
     display_name = data["displayname"]
@@ -99,9 +99,9 @@ def _parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
     :param zones: the zones data from the API.
     :type zones: Dict
     :param zone_positions: The zone positions data from the API.
-    :type zone_positions: List[int]
-    :return: The list of PlayerZone objects.
-    :rtype: List[PlayerZone]
+    :type zone_positions: :class:`List`[int]
+    :return: The list of :class:`PlayerZone` objects.
+    :rtype: :class:`List`[:class:`PlayerZone`]
     """
     player_zone_list = []
 
@@ -185,9 +185,9 @@ def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
     Parses the Meta Data from the API into a PlayerMetaInfo object.
 
     :param metadata: The metadata data from the API.
-    :type metadata: Dict
+    :type metadata: :class:`Dict`
     :return: The parsed data
-    :rtype: PlayerMetaInfo
+    :rtype: :class:`PlayerMetaInfo`
     """
     # Please someone teach me a better way of doing this...
     try:
@@ -258,9 +258,9 @@ def _parse_matchmaking(data: List[Dict]) -> List[PlayerMatchmaking]:
         One for 3v3 Matchmaking and One for Royal Matchmaking.
 
     :param data: The matchmaking data.
-    :type data: List[Dict]
+    :type data: :class:`List`[:class:`Dict`]
     :return: The list of matchmaking data, one for 3v3 and the other for royal.
-    :rtype: List[PlayerMatchmaking]
+    :rtype: :class:`List`[:class:`PlayerMatchmaking`]
     """
     matchmaking_data = []
 
@@ -282,9 +282,9 @@ def __parse_3v3(data: Dict) -> PlayerMatchmaking:
     Parses matchmaking data for 3v3 and royal type matchmaking.
 
     :param data: The matchmaking data only.
-    :type data: Dict
+    :type data: :class:`Dict`
     :return: The parsed data.
-    :rtype: PlayerMatchmaking
+    :rtype: :class:`PlayerMatchmaking`
     """
     typename = data["info"]["typename"]
     typeid = data["info"]["typeid"]
@@ -305,9 +305,9 @@ def _parse_search_results(data: Dict) -> PlayerSearchResult:
     Parses the search result of a single player.
 
     :param data: Player data.
-    :type data: Dict
-    :return: Parsed data in a PlayerSearchResult object.
-    :rtype: PlayerSearchResult
+    :type data: :class:`Dict`
+    :return: Parsed data in a :class:`PlayerSearchResult` object.
+    :rtype: :class:`PlayerSearchResult`
     """
     name = data["player"]["name"]
     player_id = data["player"]["id"]
@@ -349,7 +349,7 @@ def _parse_search_zones(zones: Dict) -> List[PlayerZone]:
     :param zones: Zone data
     :type zones: Dict
     :return: The list of PlayerZone objects to represent the zone data. Zone positions are set as -1.
-    :rtype: :class:`List[:class:`PlayerZone`]`
+    :rtype: :class:`List`[:class:`PlayerZone`]
     """
     player_zone_list = []
 
