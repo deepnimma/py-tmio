@@ -27,13 +27,11 @@ from typing import List
 
 import redis
 
-from trackmania.structures.player import PlayerSearchResult
-
 from ..api import APIClient
 from ..config import Client
 from ..constants import TMIO
 from ..errors import InvalidIDError, InvalidMatchmakingGroupError, InvalidUsernameError
-from ..structures.player import Player
+from ..structures.player import Player, PlayerSearchResult
 from ..util import player_parsers
 
 

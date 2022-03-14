@@ -31,11 +31,11 @@ class TMIOTabs:
     """TMIO Endpoints"""
 
     def __init__(self):
-        self.player = "player"
-        self.players = "players"
-        self.trophies = "trophies"
-        self.map = "map"
-        self.leaderboard = "leaderboard"
+        self.player: str = "player"
+        self.players: str = "players"
+        self.trophies: str = "trophies"
+        self.map: str = "map"
+        self.leaderboard: str = "leaderboard"
 
         self.top_matchmaking: str = "top/matchmaking"
         self.top_trophies: str = "top/trophies"
@@ -44,6 +44,7 @@ class TMIOTabs:
         self.royal_id: int = 3
 
         self.totd: str = "totd"
+        self.ads: str = "ads"
 
 
 # pylint: disable=too-few-public-methods
@@ -111,7 +112,7 @@ class TMX:
         URL Builder for TMX API
 
         :param endpoints: The endpoints as a list.
-        :type endpoints: List[str]
+        :type endpoints: :class:`List`[str]
         :return: The URL.
         :rtype: str
         """
