@@ -46,7 +46,7 @@ async def get_player(player_id: str) -> Player | None:
     :rtype: :class:`Player` | None
 
     Caching
-    -------
+
     * Caches the player information for 10 minutes.
     * Caches `username:player_id` pair forever.
     * Caches `player_id:username` pair forever.
@@ -132,7 +132,7 @@ async def to_account_id(username: str) -> str | None:
     :rtype: str | None
 
     Caching
-    -------
+
     * Caches `username:player_id` pair forever.
     * Caches `player_id:username` pair forever.
     """
@@ -196,7 +196,7 @@ async def top_matchmaking(group: int, page: int = 0):
     :type page: int, optional
 
     Caching
-    -------
+
     Caches each page for 1 hour.
     """
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
@@ -230,7 +230,7 @@ async def top_trophies(page: int = 0):
     :type page: int, optional
 
     Caching
-    -------
+
     Caches trophy leaderboard page for 3 hr
     """
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
