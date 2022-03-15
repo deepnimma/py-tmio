@@ -54,8 +54,6 @@ Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 
 Caching is not *required* but is highly recommended.
 
-<<<<<<< HEAD
-=======
 ## Changelog
 **v0.1.0**
 
@@ -68,8 +66,12 @@ Caching is not *required* but is highly recommended.
     * `to_username(account_id)` command
     * `top_matchmaking(group, page)` command
     * `top_trophies(page)` command
+* `ad_manager`
+    * `get_ad(ad_id)` command
+* `totd_manager`
+    * `latest_totd(leaderboard)` command
+    * `totd(year, month, day, leaderboard)` command
 
->>>>>>> main
 ## Examples
 ### Latest TOTD
 ```python

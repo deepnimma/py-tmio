@@ -37,23 +37,18 @@ from ..util import player_parsers
 
 async def get_player(player_id: str) -> Player | None:
     """
-        Retrieves a player's information using their player_id
+    Retrieves a player's information using their player_id
 
-        :param player_id: The player id to get information for.
-        :type player_id: str
-        :raises InvalidIDError: if the player id is empty, or no player exists with that player_id.
-        :return: The player's information.
-        :rtype: :class:`Player` | None
+    :param player_id: The player id to get information for.
+    :type player_id: str
+    :raises :class:`InvalidIDError`: if the player id is empty, or no player exists with that player_id.
+    :return: The player's information.
+    :rtype: :class:`Player` | None
 
-        Caching
-    <<<<<<< HEAD
-        -------
-    =======
-
-    >>>>>>> main
-        * Caches the player information for 10 minutes.
-        * Caches `username:player_id` pair forever.
-        * Caches `player_id:username` pair forever.
+    Caching
+    * Caches the player information for 10 minutes.
+    * Caches `username:player_id` pair forever.
+    * Caches `player_id:username` pair forever.
     """
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
 
@@ -90,7 +85,7 @@ async def search_player(
 
     :param username: The player's username to search for.
     :type username: str
-    :raises InvalidUsernameError: If the username is empty or if there is no users with this username.
+    :raises :class:`InvalidUsernameError`: If the username is empty or if there is no users with this username.
     :return: None if no players. :class:`PlayerSearchResult` if one player. List of :class:`PlayerSearchResult` if multiple players.
     :rtype: None|:class:`PlayerSearchResult`|:class:`List`[:class:`PlayerSearchResult`]
     """

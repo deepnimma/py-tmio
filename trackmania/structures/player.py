@@ -27,6 +27,7 @@ from typing import Dict, List
 
 from ..api import APIClient
 from ..constants import TMIO
+from ..errors import InvalidIDError, InvalidTrophyNumber
 
 __all__ = (
     "PlayerMetaInfo",
@@ -140,23 +141,25 @@ class PlayerTrophies:
 
         :param page: Page number of trophy history, defaults to 0
         :type page: int, optional
-        :raises Exception: If an ID has not been set for the object.
+        :raises :class:`InvalidIDError`: If an ID has not been set for the object or an invalid id has been given to the player object.
         :return: Trophy history data.
         :rtype: :class:`Dict`
         """
         api_client = APIClient()
 
-        player_tab = TMIO().tabs.player
-        trophy_tab = TMIO().tabs.trophies
-        trophy_history = TMIO.build([player_tab, self.player_id, trophy_tab, page])
-
         if self.player_id is None:
-            raise Exception("ID Has not been set for the Object")
+            raise InvalidIDError("ID Has not been set for the Object")
 
-        ###
-        # Update the following, it's using the wrong endpoints. And also error handling
-        # for invalid player_id or non existent player
-        return await api_client.get(trophy_history).json()["gains"]
+        history = await api_client.get(
+            TMIO.build([TMIO.tabs.player, self.player_id, TMIO.tabs.trophies, page])
+        )
+
+        await api_client.close()
+
+        try:
+            return history["gains"]
+        except KeyError:
+            raise InvalidIDError(f"Player ID {self.player_id} does not exist")
 
     def set_id(self, player_id: str):
         """
@@ -173,13 +176,15 @@ class PlayerTrophies:
 
         :param number: The trophy number, from 1 (T1) to 9 (T2).
         :type number: int
-        :raises Exception: If the number is not between 1 and 9.
+        :raises :class:`InvalidTrophyNumber`: If the number is not between 1 and 9.
         :return: the number of trophies for that specific tier.
         :rtype: int
         """
 
         if number > 9 or number < 1:
-            raise Exception("Trophy Number cannot be less than 1 or greater than 9")
+            raise InvalidTrophyNumber(
+                "Trophy Number cannot be less than 1 or greater than 9"
+            )
 
         return self.trophies[number - 1]
 

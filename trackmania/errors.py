@@ -37,6 +37,18 @@ class TrackmaniaException(Exception):
     pass
 
 
+class InvalidPlayerException(TrackmaniaException):
+    """Exception raised when an invalid player is found."""
+
+    def __init__(self, *args):
+        if args:
+            message = args[0]
+        else:
+            message = None
+
+        super().__init__(message)
+
+
 class NoUserAgentSetError(Exception):
     """Exception raised when no user_agent has been set"""
 
@@ -45,7 +57,7 @@ class NoUserAgentSetError(Exception):
         super().__init__(message)
 
 
-class InvalidUsernameError(TrackmaniaException):
+class InvalidUsernameError(InvalidPlayerException):
     """Exception raised when an invalid username has been passed as an argument."""
 
     def __init__(self, *args):
@@ -57,7 +69,7 @@ class InvalidUsernameError(TrackmaniaException):
         super().__init__(message)
 
 
-class InvalidIDError(TrackmaniaException):
+class InvalidIDError(InvalidPlayerException):
     """Exception raised when an invalid ID has been passed as an argument."""
 
     def __init__(self, *args):
@@ -71,6 +83,18 @@ class InvalidIDError(TrackmaniaException):
 
 class InvalidMatchmakingGroupError(TrackmaniaException):
     """Exception raised when an invalid matchmaking group has been passed as an argument."""
+
+    def __init__(self, *args):
+        if args:
+            message = args[0]
+        else:
+            message = None
+
+        super().__init__(message)
+
+
+class InvalidTrophyNumber(TrackmaniaException):
+    """Exception raised when an invalid trophy number has been passed as an argument."""
 
     def __init__(self, *args):
         if args:
