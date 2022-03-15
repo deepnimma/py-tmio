@@ -35,7 +35,7 @@ Client.user_agent = "NottCurious#4351 | TMIndiaBot"
 from trackmania import Client
 
 Client.redis_host = "127.0.0.1"
-Client.rediS_port = 6379
+Client.redis_port = 6379
 ```
 
 ## Docs
