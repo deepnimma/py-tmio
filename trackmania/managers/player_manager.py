@@ -37,23 +37,18 @@ from ..util import player_parsers
 
 async def get_player(player_id: str) -> Player | None:
     """
-        Retrieves a player's information using their player_id
+    Retrieves a player's information using their player_id
 
-        :param player_id: The player id to get information for.
-        :type player_id: str
-        :raises InvalidIDError: if the player id is empty, or no player exists with that player_id.
-        :return: The player's information.
-        :rtype: :class:`Player` | None
+    :param player_id: The player id to get information for.
+    :type player_id: str
+    :raises InvalidIDError: if the player id is empty, or no player exists with that player_id.
+    :return: The player's information.
+    :rtype: :class:`Player` | None
 
-        Caching
-    <<<<<<< HEAD
-        -------
-    =======
-
-    >>>>>>> main
-        * Caches the player information for 10 minutes.
-        * Caches `username:player_id` pair forever.
-        * Caches `player_id:username` pair forever.
+    Caching
+    * Caches the player information for 10 minutes.
+    * Caches `username:player_id` pair forever.
+    * Caches `player_id:username` pair forever.
     """
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
 

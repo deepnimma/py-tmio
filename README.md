@@ -54,8 +54,6 @@ Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 
 Caching is not *required* but is highly recommended.
 
-<<<<<<< HEAD
-=======
 ## Changelog
 **v0.1.0**
 
@@ -69,7 +67,6 @@ Caching is not *required* but is highly recommended.
     * `top_matchmaking(group, page)` command
     * `top_trophies(page)` command
 
->>>>>>> main
 ## Examples
 ### Latest TOTD
 ```python
