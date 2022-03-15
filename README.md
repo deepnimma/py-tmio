@@ -54,6 +54,22 @@ Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 
 Caching is not *required* but is highly recommended.
 
+<<<<<<< HEAD
+=======
+## Changelog
+**v0.1.0**
+
+<small>**15th March, 2022**</small>
+* First Beta Release of py-tmio
+* `player_manager`
+    * `get_player(player_id)` command
+    * `search_player(username)` command
+    * `to_account_id(username)` command
+    * `to_username(account_id)` command
+    * `top_matchmaking(group, page)` command
+    * `top_trophies(page)` command
+
+>>>>>>> main
 ## Examples
 ### Latest TOTD
 ```python

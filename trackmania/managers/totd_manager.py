@@ -46,7 +46,6 @@ async def latest_totd(leaderboard_flag: bool = False) -> TOTD:
     :rtype: :class:`TOTD`
 
     Caching
-    -------
     * Caches the latest_totd data for 1 hour unless it is past 5pm and before 6am. UTC
     """
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
