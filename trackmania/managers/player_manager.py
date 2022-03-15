@@ -41,7 +41,7 @@ async def get_player(player_id: str) -> Player | None:
 
     :param player_id: The player id to get information for.
     :type player_id: str
-    :raises InvalidIDError: if the player id is empty, or no player exists with that player_id.
+    :raises :class:`InvalidIDError`: if the player id is empty, or no player exists with that player_id.
     :return: The player's information.
     :rtype: :class:`Player` | None
 
@@ -85,7 +85,7 @@ async def search_player(
 
     :param username: The player's username to search for.
     :type username: str
-    :raises InvalidUsernameError: If the username is empty or if there is no users with this username.
+    :raises :class:`InvalidUsernameError`: If the username is empty or if there is no users with this username.
     :return: None if no players. :class:`PlayerSearchResult` if one player. List of :class:`PlayerSearchResult` if multiple players.
     :rtype: None|:class:`PlayerSearchResult`|:class:`List`[:class:`PlayerSearchResult`]
     """
