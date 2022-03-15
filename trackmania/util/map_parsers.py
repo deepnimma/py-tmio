@@ -21,60 +21,55 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from typing import Dict
+from typing import Dict, List
 
 from ..structures.map import TOTD
 from ..structures.medal_times import MedalTimes
 
-__all__ = ("MapParsers",)
 
+def parse_totd_map(map_data: Dict, leaderboard: List[Dict] | None = None) -> TOTD:
+    """
+    Parses TOTD Map Data.
 
-class MapParsers:
-    """Internal Method to parse data required for TotdManager and MapManager functions."""
+    :param map_data: The map data as a dict or json.
+    :type map_data: :class:`Dict`
+    :return: The TOTD object for the map.
+    :rtype: :class:`TOTD`
+    """
+    campaign_id = map_data["campaignid"]
+    map_author_id = map_data["map"]["author"]
+    map_name = map_data["map"]["name"]
+    map_type = map_data["map"]["mapType"]
 
-    @staticmethod
-    def parse_totd_map(map_data: Dict) -> TOTD:
-        """
-        Parses TOTD Map Data.
+    medal_times = MedalTimes(
+        map_data["map"]["bronzeScore"],
+        map_data["map"]["silverScore"],
+        map_data["map"]["goldScore"],
+        map_data["map"]["authorScore"],
+    )
 
-        :param map_data: The map data as a dict or json.
-        :type map_data: Dict
-        :return: The TOTD object for the map.
-        :rtype: TOTD
-        """
-        campaign_id = map_data["campaignid"]
-        map_author_id = map_data["map"]["author"]
-        map_name = map_data["map"]["name"]
-        map_type = map_data["map"]["mapType"]
+    map_id = map_data["map"]["mapId"]
+    map_uid = map_data["map"]["mapUid"]
+    timestamp = map_data["map"]["timestamp"]
+    file_url = map_data["map"]["fileUrl"]
+    thumbnail_url = map_data["map"]["thumbnailUrl"]
+    week_day = map_data["weekday"]
+    month_day = map_data["monthday"]
+    leaderboard_uid = map_data["leaderboarduid"]
 
-        medal_times = MedalTimes(
-            map_data["map"]["bronzeScore"],
-            map_data["map"]["silverScore"],
-            map_data["map"]["goldScore"],
-            map_data["map"]["authorScore"],
-        )
-
-        map_id = map_data["map"]["mapId"]
-        map_uid = map_data["map"]["mapUid"]
-        timestamp = map_data["map"]["timestamp"]
-        file_url = map_data["map"]["fileUrl"]
-        thumbnail_url = map_data["map"]["thumbnailUrl"]
-        week_day = map_data["weekday"]
-        month_day = map_data["monthday"]
-        leaderboard_uid = map_data["leaderboarduid"]
-
-        return TOTD(
-            campaign_id,
-            map_author_id,
-            map_name,
-            map_type,
-            medal_times,
-            map_id,
-            map_uid,
-            timestamp,
-            file_url,
-            thumbnail_url,
-            week_day,
-            month_day,
-            leaderboard_uid,
-        )
+    return TOTD(
+        campaign_id,
+        map_author_id,
+        map_name,
+        map_type,
+        medal_times,
+        map_id,
+        map_uid,
+        timestamp,
+        file_url,
+        thumbnail_url,
+        week_day,
+        month_day,
+        leaderboard_uid,
+        leaderboard,
+    )

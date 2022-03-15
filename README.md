@@ -1,4 +1,6 @@
-# py-tmio
+<div align=center>
+<h1>py-trackmania.io</h1>
+
 [![Trackmania.io API Status](https://img.shields.io/website?down_message=Offline&label=Trackmania.io%20API&up_message=Online&url=https%3A%2F%2Ftrackmania.io)](https://trackmania.io)
 
 [![GitHub issues](https://img.shields.io/github/issues/NottCurious/py-tmio?logo=github)](https://github.com/NottCurious/py-tmio/issues)
@@ -6,8 +8,8 @@
 [![GitHub Repo stars](https://img.shields.io/github/stars/NottCurious/py-tmio?logo=github&style=flat-square)](https://github.com/NottCurious/py-tmio/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/NottCurious/py-tmio?style=flat-square)](https://github.com/NottCurious/py-tmio/network/members)
 
-
-Trackmania API Helper for Python!
+An Asyncio Friendly Trackmania API Wrapper for Python!
+</div>
 
 ## Important - [Trackmania.io API for my own project?](https://openplanet.dev/tmio/api)
 *See below on how to set your user_agent*
@@ -33,7 +35,7 @@ Client.user_agent = "NottCurious#4351 | TMIndiaBot"
 from trackmania import Client
 
 Client.redis_host = "127.0.0.1"
-Client.rediS_port = 6379
+Client.redis_port = 6379
 ```
 
 ## Docs
@@ -51,6 +53,17 @@ python -m pip install py-tmio # Windows
 Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 
 Caching is not *required* but is highly recommended.
+
+## Examples
+### Latest TOTD
+```python
+from trackmania.managers import totd_manager
+
+# In Async Function
+latest_totd = await totd_manager.latest_totd()
+
+print(latest_totd.map_name)
+```
 
 ## Pull Requests and Issues
 If you have any suggestions, bugs, fixes or enhancements, please open a [Pull Request](https://github.com/NottCurious/py-tmio/compare) or [Issue](https://github.com/NottCurious/py-tmio/issues/new)

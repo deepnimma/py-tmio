@@ -21,6 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+# pylint: disable=too-many-instance-attributes
 from typing import List
 
 __all__ = ("TMIO", "TMX")
@@ -30,9 +31,11 @@ class TMIOTabs:
     """TMIO Endpoints"""
 
     def __init__(self):
-        self.player = "player"
-        self.players = "players"
-        self.trophies = "trophies"
+        self.player: str = "player"
+        self.players: str = "players"
+        self.trophies: str = "trophies"
+        self.map: str = "map"
+        self.leaderboard: str = "leaderboard"
 
         self.top_matchmaking: str = "top/matchmaking"
         self.top_trophies: str = "top/trophies"
@@ -41,6 +44,7 @@ class TMIOTabs:
         self.royal_id: int = 3
 
         self.totd: str = "totd"
+        self.ads: str = "ads"
 
 
 # pylint: disable=too-few-public-methods
@@ -108,7 +112,7 @@ class TMX:
         URL Builder for TMX API
 
         :param endpoints: The endpoints as a list.
-        :type endpoints: List[str]
+        :type endpoints: :class:`List`[str]
         :return: The URL.
         :rtype: str
         """

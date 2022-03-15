@@ -41,17 +41,17 @@ class MedalTimes:
 
     def _format_seconds(self, score: int) -> str:
         """
-        Formats the number from milliseconds to min:sec:ms format.
+        Formats the number from milliseconds to minute:sec:millisecond format.
 
         :param score: The number in milliseconds.
         :type score: int
         :return: The number formatted.
         :rtype: str
         """
-        sec, ms = divmod(score, 1000)
-        min, sec = divmod(sec, 60)
+        sec, millisecond = divmod(score, 1000)
+        minute, sec = divmod(sec, 60)
 
-        return "%01d:%02d.%03d" % (min, sec, ms)
+        return "%01d:%02d.%03d" % (minute, sec, millisecond)
 
     def bronze_string(self) -> str:
         """

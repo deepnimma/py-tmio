@@ -5,7 +5,7 @@ import unittest
 from aioresponses import aioresponses
 
 from trackmania import Client
-from trackmania.managers import PlayerManager
+from trackmania.managers import player_manager
 
 
 class TestPlayerManager(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestPlayerManager(unittest.TestCase):
 
             loop = asyncio.get_event_loop()
             resp = loop.run_until_complete(
-                PlayerManager.get("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
+                player_manager.get_player("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
             )
 
             self.assertEqual(resp.club_tag, "$F63W$F971$FCBS$FFFP")
@@ -82,9 +82,8 @@ class TestPlayerManager(unittest.TestCase):
             )
 
             loop = asyncio.get_event_loop()
-            resp = loop.run_until_complete(
-                PlayerManager.to_account_id("NottCurious")
-            ).decode("utf-8")
+
+            resp = loop.run_until_complete(player_manager.to_account_id("NottCurious"))
 
             self.assertEqual(str(resp), "b73fe3d7-a92a-4a6d-ab9d-49005caec499")
 
@@ -96,11 +95,9 @@ class TestPlayerManager(unittest.TestCase):
             )
 
             loop = asyncio.get_event_loop()
-            resp = loop.run_until_complete(
-                PlayerManager.to_account_id("Kaizer")
-            ).decode("utf-8")
+            resp = loop.run_until_complete(player_manager.to_account_id("Kaizer"))
 
-            self.assertEqual(str(resp), "7fea7bd6-cb02-4df8-b978-0b0335e4a531")
+            self.assertEqual(str(resp), "17cebbbb-2637-4110-ba67-f733de4559ea")
 
     @aioresponses()
     def test_to_username(self, mocked):
@@ -115,8 +112,8 @@ class TestPlayerManager(unittest.TestCase):
 
             loop = asyncio.get_event_loop()
             resp = loop.run_until_complete(
-                PlayerManager.to_username("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
-            ).decode("UTF-8")
+                player_manager.to_username("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
+            )
 
             self.assertEqual(str(resp), "NottCurious")
 
@@ -129,8 +126,8 @@ class TestPlayerManager(unittest.TestCase):
 
             loop = asyncio.get_event_loop()
             resp = loop.run_until_complete(
-                PlayerManager.to_username("17cebbbb-2637-4110-ba67-f733de4559ea")
-            ).decode("UTF-8")
+                player_manager.to_username("17cebbbb-2637-4110-ba67-f733de4559ea")
+            )
 
             self.assertEqual(str(resp), "Kaizer_TM")
 

@@ -1,6 +1,6 @@
 [MESSAGES CONTROL]
 
-disable=protected-access
+disable=protected-access, too-many-arguments, too-many-instance-attributes, too-few-public-methods
 
 enable=bad-indentation,line-too-long
 

@@ -21,24 +21,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from typing import Dict
 
-from redis import Redis
+from ..structures.ad import Ad
 
-__all__ = ("Client",)
 
-# pylint: disable=too-few-public-methods
-class Client:
+def parse_ad(ad: Dict) -> Ad:
     """
-    Client class to manage user defined constants
+    Parses an AD dict to an :class:`Ad` class object.
 
-    :param user_agent: The user_agent to be used for the bot
-    :type user_agent: str
-    :param redis_host: The host of the redis server
-    :type redis_host: str
-    :param redis_port: The port of the redis server
-    :type redis_port: int
+    :param ad: The ad data as a dict.
+    :type ad: :class:`Dict`
+    :return: The ad data as an :class:`Ad` object.
+    :rtype: :class:`Ad`
     """
+    ad_data = {
+        "cp_image": ad["img64x10"],
+        "display_format": ad["displayformat"],
+        "image": ad["img16x9"],
+        "media": ad["media"],
+        "name": ad["name"],
+        "type": ad["type"],
+        "uid": ad["uid"],
+        "url": ad["url"],
+        "vertical_image": ad["img2x3"],
+    }
 
-    user_agent = None
-    redis_host = "127.0.0.1"
-    redis_port = 6379
+    return Ad(**ad_data)
