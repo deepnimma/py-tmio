@@ -190,7 +190,8 @@ class PlayerTrophies:
 
 
 class PlayerZone:
-    """Class that represents the player zone
+    """
+    Class that represents the player zone
 
     :param flag: The flag of the zone
     :type flag: str
