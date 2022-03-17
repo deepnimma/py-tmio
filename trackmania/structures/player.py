@@ -101,7 +101,7 @@ class PlayerTrophies:
 
     :param echelon: The trophy echelon of the player.
     :type echelon: int
-    :param last_change: The date of the last change of the player's trophies.
+    :param last_change: The date of the last change of the player's self.
     :type last_change: str
     :param points: The number of points of the player.
     :type points: int
@@ -174,7 +174,7 @@ class PlayerTrophies:
         """
         Returns the trophies by tier.
 
-        :param number: The trophy number, from 1 (T1) to 9 (T2).
+        :param number: The trophy number, from 1 (T1) to 9 (T9).
         :type number: int
         :raises :class:`InvalidTrophyNumber`: If the number is not between 1 and 9.
         :return: the number of trophies for that specific tier.
@@ -187,6 +187,19 @@ class PlayerTrophies:
             )
 
         return self.trophies[number - 1]
+
+    def score(self) -> int:
+        return (
+            0
+            + self.trophy(1) * 1
+            + self.trophy(2) * 10
+            + self.trophy(3) * 100
+            + self.trophy(4) * 1_000
+            + self.trophy(5) * 10_000
+            + self.trophy(6) * 100_000
+            + self.trophy(7) * 1_000_000
+            + self.trophy(8) * 10_000_000
+        )
 
 
 class PlayerZone:
