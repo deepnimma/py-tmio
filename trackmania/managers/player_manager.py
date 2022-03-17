@@ -23,7 +23,7 @@ SOFTWARE.
 """
 import json
 from contextlib import suppress
-from typing import List
+from typing import Dict, List, Tuple
 
 import redis
 
@@ -35,15 +35,23 @@ from ..structures.player import Player, PlayerSearchResult
 from ..util import player_parsers
 
 
-async def get_player(player_id: str) -> Player | None:
+async def get_player(player_id: str, raw: bool = False) -> Player | None:
     """
     Retrieves a player's information using their player_id
 
     :param player_id: The player id to get information for.
     :type player_id: str
+    :param raw: Whether to return the raw data from the API.
+    :type raw: bool
     :raises :class:`InvalidIDError`: if the player id is empty, or no player exists with that player_id.
-    :return: The player's information.
-    :rtype: :class:`Player` | None
+
+    if raw is False:
+        :return: The player's information.
+        :rtype: :class:`Player` | None
+
+    if raw is True:
+        :return: The player's information alongside the raw data in a tuple.
+        :rtype: :class:`Tuple`[:class:`Player`, :class:`Dict`] | None
 
     Caching
     * Caches the player information for 10 minutes.
