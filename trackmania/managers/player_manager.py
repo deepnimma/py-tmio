@@ -82,7 +82,10 @@ async def get_player(player_id: str, raw: bool = False) -> Player | None:
         cache_client.set(f"{player_data['name'].lower()}:id", player_id)
         cache_client.set(f"{player_id}:username", player_data["name"])
 
-    return Player(**player_data)
+    if not raw:
+        return Player(**player_data)
+    else:
+        return tuple(Player(**player_data), player_resp)
 
 
 async def search_player(
