@@ -61,12 +61,15 @@ async def get_player(
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|data"):
-            return Player(
+            player = Player(
                 **player_parsers.parse_player(
                     json.loads(cache_client.get(f"{player_id}|data"))
                 )
             )
-
+            if not raw:
+                return player
+            if raw:
+                return player, json.loads(cache_client.get(f"{player_id}|data"))
     api_client = APIClient()
     player_resp = await api_client.get(TMIO.build([TMIO.tabs.player, player_id]))
     await api_client.close()
