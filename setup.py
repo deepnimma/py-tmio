@@ -11,7 +11,6 @@ with open("README.md") as f:
 packages = [
     "trackmania",
     "trackmania.managers",
-    "trackmania.structures",
     "trackmania.util",
 ]
 
