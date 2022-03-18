@@ -2,7 +2,7 @@ from setuptools import setup
 
 requirements = ["python-dotenv", "aiohttp", "redis"]
 
-version = "v0.1.5"
+version = "v0.1.6"
 
 readme = ""
 with open("README.md") as f:
