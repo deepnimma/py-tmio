@@ -84,7 +84,7 @@ async def get_player(
     if not raw:
         return Player(**player_data)
     else:
-        return tuple(Player(**player_data), player_resp)
+        return Player(**player_data), player_resp
 
 
 async def search_player(
