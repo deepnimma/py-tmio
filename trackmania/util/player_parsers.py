@@ -266,12 +266,12 @@ def _parse_matchmaking(data: List[Dict]) -> List[PlayerMatchmaking]:
 
     try:
         matchmaking_data.append(__parse_3v3(data[0]))
-    except KeyError:
+    except (KeyError, IndexError):
         matchmaking_data.append(None)
 
     try:
         matchmaking_data.append(__parse_3v3(data[1]))
-    except KeyError:
+    except (KeyError, IndexError):
         matchmaking_data.append(None)
 
     return matchmaking_data
