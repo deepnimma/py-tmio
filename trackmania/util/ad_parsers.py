@@ -6,11 +6,10 @@ from ..structures.ad import Ad
 def parse_ad(ad: Dict) -> Ad:
     """Parses an AD dict to an :class:`Ad` class object.
 
-    Args:
-        ad (:class:`Dict`): The ad data as a dict.
+    :param ad (: class:`Dict`): The ad data as a dict.
+    :param ad: Dict:
+    :returns: class:`Ad`: The ad data as an :class:`Ad` object.
 
-    Returns:
-        :class:`Ad`: The ad data as an :class:`Ad` object.
     """
     ad_data = {
         "cp_image": ad["img64x10"],

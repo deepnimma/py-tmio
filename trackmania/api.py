@@ -17,6 +17,7 @@ class ResponseCodeError(ValueError):
     :type response_json: dict
     :param response_text: The response text
     :type response_text: str
+
     """
 
     def __init__(

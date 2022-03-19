@@ -4,8 +4,7 @@ __all__ = ("Client",)
 
 # pylint: disable=too-few-public-methods
 class Client:
-    """
-    Client class to manage user defined constants
+    """Client class to manage user defined constants
 
     :param user_agent: The user_agent to be used for the bot
     :type user_agent: str
@@ -13,6 +12,7 @@ class Client:
     :type redis_host: str
     :param redis_port: The port of the redis server
     :type redis_port: int
+
     """
 
     user_agent = None

@@ -2,28 +2,7 @@ __all__ = ("Ad",)
 
 
 class Ad:
-    """
-    The Maniapub.
-
-    :param cp_image: The 64x10 image URL of this ad (shown on Start, CPs and Finish)
-    :type cp_image: str
-    :param display_format: The display format of this screen (2x3 vertical image by default)
-    :type display_format: str
-    :param image: The 16x9 image URL of this ad (shown on the big screen)
-    :type image: str
-    :param media: The media of this ad (mostly the vertical image)
-    :type media: str
-    :param name: The name of this ad
-    :type name: str
-    :param type: The type of this ad
-    :type type: str
-    :param uid: The unique ID of this ad
-    :type uid: str
-    :param url: The URL of this ad
-    :type url: str
-    :param vertical_image: The vertical image URL of this ad (shown on the vertical screen)
-    :type vertical_image: str
-    """
+    """Represents an AD."""
 
     def __init__(
         self,
@@ -37,6 +16,20 @@ class Ad:
         url: str,
         vertical_image: str,
     ):
+        """
+        The maniapub.
+
+        Args:
+            cp_image (str): The 64x10 image URL of this ad (shown on Start, CPs and Finish)
+            display_format (str): The display format of this screen (2x3 vertical image by default)
+            image (str): The 16x9 image URL of this ad (shown on the big screen)
+            media (str): The media of this ad (mostly the vertical image)
+            name (str): The name of this ad
+            type (str): The type of this ad
+            uid (str): The unique ID of this ad
+            url (str): The URL of this ad
+            vertical_image (str): The vertical image URL of this ad (shown on the vertical screen)
+        """
         self.cp_image = cp_image
         self.display_format = display_format
         self.image = image

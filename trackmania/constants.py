@@ -28,12 +28,15 @@ class TMIOTabs:
 class TMIO:
     """Basic TMIO Api Details
 
-    Args:
-        protocol (str): The protocol to use for the api. Equal to
+    :param protocol: The protocol to use for the api. Equal to
             "https"
-        base (str): The base url for the api. Equal to "trackmania.io"
-        api (str): The api endpoint for `trackmania.io`. Equal to "api".
-        tabs (:class:`TMIOTabs`): The tabs for the api.
+    :type protocol: str
+    :param base: The base url for the api. Equal to "trackmania.io"
+    :type base: str
+    :param api: The api endpoint for `trackmania.io`. Equal to "api".
+    :type api: str
+    :param tabs (: class:`TMIOTabs`): The tabs for the api.
+
     """
 
     protocol: str = "https"
@@ -46,11 +49,12 @@ class TMIO:
     def build(endpoints: List[str]) -> str:
         """Builds a TMIO endpoint url.
 
-        Args:
-            endpoints (List[str]): The endpoints to build the url with.
+        :param endpoints: The endpoints to build the url with.
+        :type endpoints: List[str]
+        :param endpoints: List[str]:
+        :returns: The built endpoint url.
+        :rtype: str
 
-        Returns:
-            str: The built endpoint url.
         """
         url = f"{TMIO.protocol}://{TMIO.base}/{TMIO.api}/"
 
@@ -69,13 +73,16 @@ class TMIO:
 class TMX:
     """Basic TMX Api Details
 
-    Args:
-        protocol (str): The protocol to use for the api. Equal to
+    :param protocol: The protocol to use for the api. Equal to
             "https"
-        base (str): The base url for the api. Equal to
+    :type protocol: str
+    :param base: The base url for the api. Equal to
             "trackmania.exchange"
-        api (str): The api endpoint for `trackmania.exchange`. Equal to
+    :type base: str
+    :param api: The api endpoint for `trackmania.exchange`. Equal to
             "api".
+    :type api: str
+
     """
 
     protocol: str = "https"
@@ -86,11 +93,11 @@ class TMX:
     def build(endpoints: List[str]) -> str:
         """URL Builder for TMX API
 
-        Args:
-            endpoints (:class:`List`[str]): The endpoints as a list.
+        :param endpoints (: class:`List`[str]): The endpoints as a list.
+        :param endpoints: List[str]:
+        :returns: The URL.
+        :rtype: str
 
-        Returns:
-            str: The URL.
         """
         url = f"{TMX.protocol}://{TMX.base}/{TMX.api}/"
 

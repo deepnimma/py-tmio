@@ -7,11 +7,11 @@ from ..structures.medal_times import MedalTimes
 def parse_totd_map(map_data: Dict, leaderboard: List[Dict] | None = None) -> TOTD:
     """Parses TOTD Map Data.
 
-    Args:
-        map_data (:class:`Dict`): The map data as a dict or json.
+    :param map_data (: class:`Dict`): The map data as a dict or json.
+    :param map_data: Dict:
+    :param leaderboard: List[Dict] | None:  (Default value = None)
+    :returns: class:`TOTD`: The TOTD object for the map.
 
-    Returns:
-        :class:`TOTD`: The TOTD object for the map.
     """
     campaign_id = map_data["campaignid"]
     map_author_id = map_data["map"]["author"]
