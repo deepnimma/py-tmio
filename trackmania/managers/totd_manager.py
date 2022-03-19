@@ -36,7 +36,7 @@ from ..constants import TMIO
 from ..util import map_parsers
 
 
-async def latest_totd(leaderboard_flag: bool = False) -> TOTD:
+async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
     """
     Fetches the current TOTD Map.
 
@@ -83,70 +83,64 @@ async def latest_totd(leaderboard_flag: bool = False) -> TOTD:
 
 
 async def totd(
-    year: int = 2022, month: int = 1, day: int = 1, leaderboard_flag: bool = False
+    date: datetime | int = -1, month: bool = False, leaderboard_flag: bool = False
 ) -> TOTD | List[Dict]:
     """
     Gets the TOTD of a specific day.
 
-    :param year: The year of the TOTD, defaults to 2022. Acceptable values are 2020, 2021 and 2022.
-    :type year: int, optional
-    :param month: The month of the TOTD, defaults to 1 for January. Acceptable values are in the range 1-12.
-    :type month: int, optional
-    :param day: The day of the TOTD, defaults to 1. Acceptable values are 1-31. If the day is -1 then all totds of the month are returned.
-    :type day: int, optional
+    :param date: The date of the TOTD. If it is -1 it returns the latest totd. defaults to -1
+    :type date: datetime | int, optional
+    :param month: If to return all totds of the given month, defaults to False
+    :type month: bool, optional
     :param leaderboard_flag: Whether to add the top 100 leaderboard to the data. If set to True, it makes another api request. Defaults to False
     :type leaderboard_flag: bool, optional
+    :raises ValueError: Year must be [2020, 2021, 2022]
+    :raises ValueError: TM2020 Released on July 1st.
+    :return: The :class:`TOTD` object.
+    :rtype: :class:`TOTD` | :class:`List`[:class:`Dict`]
     """
+
+    if isinstance(date, int):
+        if date == -1:
+            return await _latest_totd(leaderboard_flag)
+        else:
+            raise ValueError("date must be a datetime object or -1")
 
     # Date Checks
     today_date = datetime.utcnow()
 
-    if year not in (2020, 2021, 2022):
+    if date.year not in (2020, 2021, 2022):
         raise ValueError("Year must be 2020, 2021 or 2022")
-    if month not in range(1, 13):
-        raise ValueError("Month must be in the range 1-12")
-    if day not in range(-1, 31) or day == 0:
-        raise ValueError("Day cannot be greater than 31")
-    if today_date.year == year and today_date.month < month:
-        raise ValueError("Month must be in the past")
-    if today_date.year == year and today_date.month == month and today_date.day < day:
-        raise ValueError("Day must be in the past.")
-    if month == 2 and year % 4 != 0 and day > 28:
-        raise ValueError("February only has 28 days in a non-leap year.")
-    if month == 2 and year % 4 == 0 and day > 29:
-        raise ValueError("February only has 29 days in a leap year.")
-    if month % 2 == 0 and day > 30:
-        raise ValueError("This month (%s) only has 30 days." % month)
-    if year == 2020 and month < 7:
+    if date.year == 2020 and date.month < 7:
         raise ValueError("TM2020 Released on July 1st.")
 
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        if day == -1 and cache_client.exists(f"totd|{year}|{month}|-1"):
-            return json.loads(cache_client.get(f"totd|{year}|{month}|-1"))
+        if date.day == -1 and cache_client.exists(f"totd|{date.year}|{date.month}|-1"):
+            return json.loads(cache_client.get(f"totd|{date.year}|{date.month}|-1"))
 
-        if cache_client.exists(f"totd|{year}|{month}|{day}"):
-            totd = cache_client.get(f"totd|{year}|{month}|{day}")
+        if cache_client.exists(f"totd|{date.year}|{date.month}|{date.day}"):
+            totd = cache_client.get(f"totd|{date.year}|{date.month}|{date.day}")
             return map_parsers.parse_totd_map(json.loads(totd, totd["leaderboard"]))
 
     # Find how many months ago the given month is.
     count = 0
 
-    if year == 2020:
-        count = (12 - month) + 12 + today_date.month
-    elif year == 2021:
-        count = (12 - month) + today_date.month
+    if date.year == 2020:
+        count = (12 - date.month) + 12 + today_date.month
+    elif date.year == 2021:
+        count = (12 - date.month) + today_date.month
     else:
-        count = today_date.month - month
+        count = today_date.month - date.month
 
     api_client = APIClient()
     month_data = await api_client.get(TMIO.build([TMIO.tabs.totd, str(count)]))
 
-    if day == -1:
+    if date.day == -1:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             cache_client.set(
-                f"totd|{year}|{month}|-1",
+                f"totd|{date.year}|{date.month}|-1",
                 json.dumps(month_data),
                 ex=None if count != 0 else 14400,
             )
@@ -158,7 +152,7 @@ async def totd(
                 [
                     TMIO.tabs.leaderboard,
                     TMIO.tabs.map,
-                    month_data["days"][day - 1]["map"]["mapUid"],
+                    month_data["days"][date.day - 1]["map"]["mapUid"],
                 ]
             )
             + "?offset=0&length=100"
@@ -168,12 +162,12 @@ async def totd(
         leaderboard = None
     await api_client.close()
 
-    month_data["days"][day - 1].update({"leaderboard": leaderboard})
+    month_data["days"][date.day - 1].update({"leaderboard": leaderboard})
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         cache_client.set(
-            f"totd|{year}|{month}|{day}",
-            json.dumps(month_data["days"][day - 1]),
+            f"totd|{date.year}|{month}|{date.day}",
+            json.dumps(month_data["days"][date.day - 1]),
             ex=None if count != 0 else 14400,
         )
-    return map_parsers.parse_totd_map(month_data["days"][day - 1], leaderboard)
+    return map_parsers.parse_totd_map(month_data["days"][date.day - 1], leaderboard)
