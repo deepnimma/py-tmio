@@ -1,5 +1,4 @@
-"""
-MIT License
+"""MIT License
 
 Copyright (c) 2022-present Deepesh Nimma
 
@@ -99,16 +98,14 @@ class PlayerMetaInfo:
 class PlayerTrophies:
     """Represents Player Trophies
 
-    :param echelon: The trophy echelon of the player.
-    :type echelon: int
-    :param last_change: The date of the last change of the player's self.
-    :type last_change: str
-    :param points: The number of points of the player.
-    :type points: int
-    :param trophies: The number of trophies of the player.
-    :type trophies: :class:`List`[int]
-    :param player_id: The Trackmania ID of the player
-    :type player_id: str, optional
+    Args:
+        echelon (int): The trophy echelon of the player.
+        last_change (str): The date of the last change of the player's
+            self.
+        points (int): The number of points of the player.
+        trophies (:class:`List`[int]): The number of trophies of the
+            player.
+        player_id (str, optional): The Trackmania ID of the player
     """
 
     # Add a last_change str to datetime converter
@@ -121,9 +118,7 @@ class PlayerTrophies:
         trophies: List[int],
         player_id: str = None,
     ):
-        """
-        Constructor for the class.
-        """
+        """Constructor for the class."""
         self.echelon = echelon
         self._last_change = last_change
         self.points = points
@@ -162,23 +157,21 @@ class PlayerTrophies:
             raise InvalidIDError(f"Player ID {self.player_id} does not exist")
 
     def set_id(self, player_id: str):
-        """
-        Sets the ID of the player.
+        """Sets the ID of the player.
 
-        :param player_id: The Trackmania ID of the player.
-        :type player_id: str
+        Args:
+            player_id (str): The Trackmania ID of the player.
         """
         self.player_id = player_id
 
     def trophy(self, number: int) -> int:
-        """
-        Returns the trophies by tier.
+        """Returns the trophies by tier.
 
-        :param number: The trophy number, from 1 (T1) to 9 (T9).
-        :type number: int
-        :raises :class:`InvalidTrophyNumber`: If the number is not between 1 and 9.
-        :return: the number of trophies for that specific tier.
-        :rtype: int
+        Args:
+            number (int): The trophy number, from 1 (T1) to 9 (T9).
+
+        Returns:
+            int: the number of trophies for that specific tier.
         """
 
         if number > 9 or number < 1:
@@ -203,15 +196,12 @@ class PlayerTrophies:
 
 
 class PlayerZone:
-    """
-    Class that represents the player zone
+    """Class that represents the player zone
 
-    :param flag: The flag of the zone
-    :type flag: str
-    :param zone: The zone name
-    :type zone: str
-    :param rank: The rank of the player in the zone
-    :type rank: int
+    Args:
+        flag (str): The flag of the zone
+        zone (str): The zone name
+        rank (int): The rank of the player in the zone
     """
 
     def __init__(self, flag: str, zone: str, rank: int):
@@ -224,24 +214,20 @@ class PlayerZone:
 class PlayerMatchmaking:
     """Class that represents the player matchmaking details
 
-    :param type: The type of matchmaking, either "3v3" or "Royal"
-    :type type: str
-    :param type_id: The type of matchmaking as 0 or 1, 0 for "3v3" and 1 for "Royal"
-    :type type_id: int
-    :param progression: The progression of the player's score in matchmaking
-    :type progression: int
-    :param rank: The rank of the player in matchmaking
-    :type rank: int
-    :param score: The score of the player in matchmaking
-    :type score: int
-    :param division: The division of the player in matchmaking
-    :type division: int
-    :param division_str: The division of the player in matchmaking as a string
-    :type division_str: str
-    :param min_points: The points required to reach the current division.
-    :type min_points: int
-    :param max_points: The points required to move up the rank.
-    :type max_points: int
+    Args:
+        type (str): The type of matchmaking, either "3v3" or "Royal"
+        type_id (int): The type of matchmaking as 0 or 1, 0 for "3v3"
+            and 1 for "Royal"
+        progression (int): The progression of the player's score in
+            matchmaking
+        rank (int): The rank of the player in matchmaking
+        score (int): The score of the player in matchmaking
+        division (int): The division of the player in matchmaking
+        division_str (str): The division of the player in matchmaking as
+            a string
+        min_points (int): The points required to reach the current
+            division.
+        max_points (int): The points required to move up the rank.
     """
 
     def __init__(
@@ -255,9 +241,7 @@ class PlayerMatchmaking:
         min_points: int,
         max_points: int,
     ):
-        """
-        Constructor for the class.
-        """
+        """Constructor for the class."""
         matchmaking_string = {
             1: "Bronze 3",
             2: "Bronze 2",
@@ -305,28 +289,24 @@ class PlayerMatchmaking:
 class Player:
     """Represents a Player in Trackmania
 
-    :param club_tag: The club tag of the player, :class:`NoneType` if the player is not in a club.
-    :type club_tag: str | None.
-    :param first_login: The date of the first login of the player.
-    :type first_login: str
-    :param player_id: The Trackmania ID of the player.
-    :type player_id: str
-    :param last_club_tag_change: The date of the last club tag change of the player.
-    :type last_club_tag_change: str
-    :param login: Login of the player.
-    :type login: str
-    :param meta: Meta data of the player.
-    :type meta: :class:`PlayerMetaInfo`.
-    :param name: Name of the player.
-    :type name: str
-    :param trophies: The trophies of the player.
-    :type trophies: :class:`PlayerTrophies`, optional
-    :param zone: The zone of the player as a list.
-    :type zone: :class:`List[PlayerZone]`, optional
-    :param m3v3_data: The 3v3 data of the player.
-    :type m3v3_data: :class:`PlayerMatchmaking`, optional
-    :param royal_data: The royal data of the player.
-    :type royal_data: :class:`PlayerMatchmaking`, optional
+    Args:
+        club_tag (str | None.): The club tag of the player,
+            :class:`NoneType` if the player is not in a club.
+        first_login (str): The date of the first login of the player.
+        player_id (str): The Trackmania ID of the player.
+        last_club_tag_change (str): The date of the last club tag change
+            of the player.
+        login (str): Login of the player.
+        meta (:class:`PlayerMetaInfo`.): Meta data of the player.
+        name (str): Name of the player.
+        trophies (:class:`PlayerTrophies`, optional): The trophies of
+            the player.
+        zone (:class:`List[PlayerZone]`, optional): The zone of the
+            player as a list.
+        m3v3_data (:class:`PlayerMatchmaking`, optional): The 3v3 data
+            of the player.
+        royal_data (:class:`PlayerMatchmaking`, optional): The royal
+            data of the player.
     """
 
     def __init__(
@@ -343,9 +323,7 @@ class Player:
         m3v3_data: PlayerMatchmaking = None,
         royal_data: PlayerMatchmaking = None,
     ):
-        """
-        Constructor of the class.
-        """
+        """Constructor of the class."""
         self.club_tag = club_tag
         self._first_login = first_login
         self._id = player_id
@@ -359,9 +337,7 @@ class Player:
         self.royal_data = royal_data
 
     def __str__(self):
-        """
-        String representation of the class.
-        """
+        """String representation of the class."""
         return f"Player: {self.name} ({self.login})"
 
     @property
@@ -378,18 +354,17 @@ class Player:
 class PlayerSearchResult:
     """Represents 1 Player from a Search Result
 
-    :param club_tag: The club tag of the player, :class:`NoneType` if the player is not in a club.
-    :type club_tag: str | None.
-    :param name: Name of the player.
-    :type name: str
-    :param player_id: The Trackmania ID of the player.
-    :type player_id: str
-    :param zone: The zone of the player as a list.
-    :type zone: :class:`List[PlayerZone]`, optional
-    :param threes: The 3v3 data of the player.
-    :type threes: :class:`PlayerMatchmaking`, optional
-    :param royals: The royal data of the player.
-    :type royals: :class:`PlayerMatchmaking`, optional
+    Args:
+        club_tag (str | None.): The club tag of the player,
+            :class:`NoneType` if the player is not in a club.
+        name (str): Name of the player.
+        player_id (str): The Trackmania ID of the player.
+        zone (:class:`List[PlayerZone]`, optional): The zone of the
+            player as a list.
+        threes (:class:`PlayerMatchmaking`, optional): The 3v3 data of
+            the player.
+        royals (:class:`PlayerMatchmaking`, optional): The royal data of
+            the player.
     """
 
     def __init__(

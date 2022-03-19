@@ -2,25 +2,22 @@ from typing import List
 
 
 class _BestData:
-    """
-    Data representing the best scores of the specific fields of a player.
+    """Data representing the best scores of the specific fields of a player.
 
-    :param best_rank: The best rank of the player.
-    :type best_rank: int
-    :param best_rank_time: The time of the best rank of the player.
-    :type best_rank_time: str
-    :param best_rank_div_rank: The best rank of the player in the division.
-    :type best_rank_div_rank: int
-    :param best_div: The best division of the player.
-    :type best_div: int
-    :param best_div_time: The time of the best division of the player.
-    :type best_div_time: str
-    :param best_rank_in_div: The best rank of the player in the division.
-    :type best_rank_in_div: int
-    :param best_rank_in_div_time: The time of the best rank of the player in the division.
-    :type best_rank_in_div_time: str
-    :param best_rank_in_div_div: The division of the player best rank in division.
-    :type best_rank_in_div_div: int
+    Args:
+        best_rank (int): The best rank of the player.
+        best_rank_time (str): The time of the best rank of the player.
+        best_rank_div_rank (int): The best rank of the player in the
+            division.
+        best_div (int): The best division of the player.
+        best_div_time (str): The time of the best division of the
+            player.
+        best_rank_in_div (int): The best rank of the player in the
+            division.
+        best_rank_in_div_time (str): The time of the best rank of the
+            player in the division.
+        best_rank_in_div_div (int): The division of the player best rank
+            in division.
     """
 
     def __init__(
@@ -45,25 +42,19 @@ class _BestData:
 
 
 class _COTDStats:
-    """
-    Represents the COTD stats of a player.
+    """Represents the COTD stats of a player.
 
-    :param best_primary: The best primary stats of the player.
-    :type best_primary: _BestData
-    :param best_overall: The best overall stats of the player.
-    :type best_overall: _BestData
-    :param total_wins: The total wins of the player.
-    :type total_wins: int
-    :param total_div_wins: The total wins of the player in the division.
-    :type total_div_wins: int
-    :param avg_rank: The average rank of the player.
-    :type avg_rank: float
-    :param avg_div_rank: The average rank of the player in the division.
-    :type avg_div_rank: float
-    :param avg_div: The average division of the player.
-    :type avg_div: float
-    :param win_streak: The win streak of the player.
-    :type win_streak: int
+    Args:
+        best_primary (_BestData): The best primary stats of the player.
+        best_overall (_BestData): The best overall stats of the player.
+        total_wins (int): The total wins of the player.
+        total_div_wins (int): The total wins of the player in the
+            division.
+        avg_rank (float): The average rank of the player.
+        avg_div_rank (float): The average rank of the player in the
+            division.
+        avg_div (float): The average division of the player.
+        win_streak (int): The win streak of the player.
     """
 
     def __init__(
@@ -90,27 +81,18 @@ class _COTDStats:
 
 
 class COTD:
-    """
-    Represents a single COTD result of a player.
+    """Represents a single COTD result of a player.
 
-    :param cotd_id: The COTD ID.
-    :type cotd_id: int
-    :param timestamp: The timestamp of the COTD.
-    :type timestamp: str
-    :param name: The name of the COTD.
-    :type name: str
-    :param div: The division of the player.
-    :type div: int
-    :param rank: The rank of the player.
-    :type rank: int
-    :param div_rank: The rank of the player in the division.
-    :type div_rank: int
-    :param score: The score of the player.
-    :type score: int
-    :param total_players: The total players playing the COTD.
-    :type total_players: int
-    :param rerun: Whether the COTD is a rerun.
-    :type rerun: bool
+    Args:
+        cotd_id (int): The COTD ID.
+        timestamp (str): The timestamp of the COTD.
+        name (str): The name of the COTD.
+        div (int): The division of the player.
+        rank (int): The rank of the player.
+        div_rank (int): The rank of the player in the division.
+        score (int): The score of the player.
+        total_players (int): The total players playing the COTD.
+        rerun (bool): Whether the COTD is a rerun.
     """
 
     def __init__(

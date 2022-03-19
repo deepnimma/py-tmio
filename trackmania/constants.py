@@ -1,5 +1,4 @@
-"""
-MIT License
+"""MIT License
 
 Copyright (c) 2022-present Deepesh Nimma
 
@@ -51,14 +50,12 @@ class TMIOTabs:
 class TMIO:
     """Basic TMIO Api Details
 
-    :param protocol: The protocol to use for the api. Equal to "https"
-    :type protocol: str
-    :param base: The base url for the api. Equal to "trackmania.io"
-    :type base: str
-    :param api: The api endpoint for `trackmania.io`. Equal to "api".
-    :type api: str
-    :param tabs: The tabs for the api.
-    :type tabs: :class:`TMIOTabs`
+    Args:
+        protocol (str): The protocol to use for the api. Equal to
+            "https"
+        base (str): The base url for the api. Equal to "trackmania.io"
+        api (str): The api endpoint for `trackmania.io`. Equal to "api".
+        tabs (:class:`TMIOTabs`): The tabs for the api.
     """
 
     protocol: str = "https"
@@ -69,13 +66,13 @@ class TMIO:
 
     @staticmethod
     def build(endpoints: List[str]) -> str:
-        """
-        Builds a TMIO endpoint url.
+        """Builds a TMIO endpoint url.
 
-        :param endpoints: The endpoints to build the url with.
-        :type endpoints: List[str]
-        :return: The built endpoint url.
-        :rtype: str
+        Args:
+            endpoints (List[str]): The endpoints to build the url with.
+
+        Returns:
+            str: The built endpoint url.
         """
         url = f"{TMIO.protocol}://{TMIO.base}/{TMIO.api}/"
 
@@ -94,12 +91,13 @@ class TMIO:
 class TMX:
     """Basic TMX Api Details
 
-    :param protocol: The protocol to use for the api. Equal to "https"
-    :type protocol: str
-    :param base: The base url for the api. Equal to "trackmania.exchange"
-    :type base: str
-    :param api: The api endpoint for `trackmania.exchange`. Equal to "api".
-    :type api: str
+    Args:
+        protocol (str): The protocol to use for the api. Equal to
+            "https"
+        base (str): The base url for the api. Equal to
+            "trackmania.exchange"
+        api (str): The api endpoint for `trackmania.exchange`. Equal to
+            "api".
     """
 
     protocol: str = "https"
@@ -108,13 +106,13 @@ class TMX:
 
     @staticmethod
     def build(endpoints: List[str]) -> str:
-        """
-        URL Builder for TMX API
+        """URL Builder for TMX API
 
-        :param endpoints: The endpoints as a list.
-        :type endpoints: :class:`List`[str]
-        :return: The URL.
-        :rtype: str
+        Args:
+            endpoints (:class:`List`[str]): The endpoints as a list.
+
+        Returns:
+            str: The URL.
         """
         url = f"{TMX.protocol}://{TMX.base}/{TMX.api}/"
 

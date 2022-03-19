@@ -1,5 +1,4 @@
-"""
-MIT License
+"""MIT License
 
 Copyright (c) 2022-present Deepesh Nimma
 
@@ -61,9 +60,7 @@ class ResponseCodeError(ValueError):
 
 # pylint: disable=W0612
 class APIClient:
-    """
-    API Wrappers
-    """
+    """API Wrappers"""
 
     def __init__(self, **session_kwargs):
         if Client.user_agent is None:
