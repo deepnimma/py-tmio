@@ -23,7 +23,7 @@ SOFTWARE.
 """
 import json
 from contextlib import suppress
-from datetime import datetime
+from datetime import date, datetime
 from typing import Dict, List
 
 import redis
@@ -83,7 +83,7 @@ async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
 
 
 async def totd(
-    date: datetime | int = -1, month: bool = False, leaderboard_flag: bool = False
+    date: date | int = -1, month: bool = False, leaderboard_flag: bool = False
 ) -> TOTD | List[Dict]:
     """
     Gets the TOTD of a specific day.
