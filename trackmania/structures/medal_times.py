@@ -43,10 +43,18 @@ class MedalTimes:
         """
         Formats the number from milliseconds to minute:sec:millisecond format.
 
-        :param score: The number in milliseconds.
-        :type score: int
-        :return: The number formatted.
-        :rtype: str
+        Parameters
+        ----------
+        score : int
+            The number in milliseconds.
+        score: int :
+            
+
+        Returns
+        -------
+        str
+            The number formatted.
+
         """
         sec, millisecond = divmod(score, 1000)
         minute, sec = divmod(sec, 60)
@@ -57,8 +65,14 @@ class MedalTimes:
         """
         Gets the bronze medal time as a string.
 
-        :return: The bronze score as a string.
-        :rtype: str
+        Parameters
+        ----------
+
+        Returns
+        -------
+        str
+            The bronze score as a string.
+
         """
         return self._format_seconds(self.bronze_score)
 
@@ -66,8 +80,14 @@ class MedalTimes:
         """
         Gets the silver medal time as a string.
 
-        :return: The silver score as a string.
-        :rtype: str
+        Parameters
+        ----------
+
+        Returns
+        -------
+        str
+            The silver score as a string.
+
         """
         return self._format_seconds(self.silver_score)
 
@@ -75,8 +95,14 @@ class MedalTimes:
         """
         Gets the gold medal time as a string.
 
-        :return: The gold score as a string.
-        :rtype: str
+        Parameters
+        ----------
+
+        Returns
+        -------
+        str
+            The gold score as a string.
+
         """
         return self._format_seconds(self.gold_score)
 
@@ -84,7 +110,13 @@ class MedalTimes:
         """
         Gets the author medal time as a string.
 
-        :return: The author score as a string.
-        :rtype: str
+        Parameters
+        ----------
+
+        Returns
+        -------
+        str
+            The author score as a string.
+
         """
         return self._format_seconds(self.author_score)

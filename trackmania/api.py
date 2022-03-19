@@ -32,14 +32,21 @@ __all__ = ("ResponseCodeError", "APIClient")
 
 
 class ResponseCodeError(ValueError):
-    """Raised when a non-OK HTTP Response is received
+    """
+    Raised when a non-OK HTTP Response is received
 
-    :param response: The response object
-    :type response: aiohttp.ClientResponse
-    :param response_json: The response json
-    :type response_json: dict
-    :param response_text: The response text
-    :type response_text: str
+    Parameters
+    ----------
+    response : aiohttp.ClientResponse
+        The response object
+    response_json : dict
+        The response json
+    response_text : str
+        The response text
+
+    Returns
+    -------
+
     """
 
     def __init__(
@@ -61,9 +68,7 @@ class ResponseCodeError(ValueError):
 
 # pylint: disable=W0612
 class APIClient:
-    """
-    API Wrappers
-    """
+    """API Wrappers"""
 
     def __init__(self, **session_kwargs):
         if Client.user_agent is None:

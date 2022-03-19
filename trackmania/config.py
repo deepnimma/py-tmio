@@ -31,12 +31,18 @@ class Client:
     """
     Client class to manage user defined constants
 
-    :param user_agent: The user_agent to be used for the bot
-    :type user_agent: str
-    :param redis_host: The host of the redis server
-    :type redis_host: str
-    :param redis_port: The port of the redis server
-    :type redis_port: int
+    Parameters
+    ----------
+    user_agent : str
+        The user_agent to be used for the bot
+    redis_host : str
+        The host of the redis server
+    redis_port : int
+        The port of the redis server
+
+    Returns
+    -------
+
     """
 
     user_agent = None

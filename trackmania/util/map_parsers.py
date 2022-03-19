@@ -31,10 +31,20 @@ def parse_totd_map(map_data: Dict, leaderboard: List[Dict] | None = None) -> TOT
     """
     Parses TOTD Map Data.
 
-    :param map_data: The map data as a dict or json.
-    :type map_data: :class:`Dict`
-    :return: The TOTD object for the map.
-    :rtype: :class:`TOTD`
+    Parameters
+    ----------
+    map_data : class:`Dict`
+        The map data as a dict or json.
+    map_data: Dict :
+        
+    leaderboard: List[Dict] | None :
+         (Default value = None)
+
+    Returns
+    -------
+    class:`TOTD`
+        The TOTD object for the map.
+
     """
     campaign_id = map_data["campaignid"]
     map_author_id = map_data["map"]["author"]

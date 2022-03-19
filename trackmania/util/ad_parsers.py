@@ -30,10 +30,18 @@ def parse_ad(ad: Dict) -> Ad:
     """
     Parses an AD dict to an :class:`Ad` class object.
 
-    :param ad: The ad data as a dict.
-    :type ad: :class:`Dict`
-    :return: The ad data as an :class:`Ad` object.
-    :rtype: :class:`Ad`
+    Parameters
+    ----------
+    ad : class:`Dict`
+        The ad data as a dict.
+    ad: Dict :
+        
+
+    Returns
+    -------
+    class:`Ad`
+        The ad data as an :class:`Ad` object.
+
     """
     ad_data = {
         "cp_image": ad["img64x10"],
