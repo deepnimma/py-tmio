@@ -113,6 +113,12 @@ async def totd(
         raise ValueError("Year must be 2020, 2021 or 2022")
     if date.year == 2020 and date.month < 7:
         raise ValueError("TM2020 Released on July 1st.")
+    if (
+        date.year == today_date.year
+        and date.month == today_date.month
+        and date.day > today_date.day
+    ):
+        raise ValueError("Date cannot be in the future")
 
     cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
 
