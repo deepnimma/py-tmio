@@ -16,7 +16,7 @@ class TestLatestTOTD(unittest.TestCase):
             mocked.get("https://trackmania.io/api/totd/0", payload=json.load(file))
 
         loop = asyncio.get_event_loop()
-        resp = loop.run_until_complete(totd_manager.latest_totd())
+        resp = loop.run_until_complete(totd_manager.totd())
 
         self.assertEqual(resp.campaign_id, 21912)
         self.assertEqual(resp.map_author_id, "711036bf-d90b-4fa4-9be5-964eb3912256")
