@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2022-present Deepesh Nimma
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 # pylint: disable=too-many-arguments,too-few-public-methods,too-many-instance-attributes
 
 from typing import Dict, List
@@ -135,9 +112,7 @@ class PlayerTrophies:
         trophies: List[int],
         player_id: str = None,
     ):
-        """
-        Constructor for the class.
-        """
+        """Constructor for the class."""
         self.echelon = echelon
         self._last_change = last_change
         self.points = points
@@ -176,8 +151,7 @@ class PlayerTrophies:
             raise InvalidIDError(f"Player ID {self.player_id} does not exist")
 
     def set_id(self, player_id: str):
-        """
-        Sets the ID of the player.
+        """Sets the ID of the player.
 
         Parameters
         ----------
@@ -193,8 +167,7 @@ class PlayerTrophies:
         self.player_id = player_id
 
     def trophy(self, number: int) -> int:
-        """
-        Returns the trophies by tier.
+        """Returns the trophies by tier.
 
         Parameters
         ----------
@@ -233,8 +206,7 @@ class PlayerTrophies:
 
 
 class PlayerZone:
-    """
-    Class that represents the player zone
+    """Class that represents the player zone
 
     Parameters
     ----------
@@ -298,9 +270,7 @@ class PlayerMatchmaking:
         min_points: int,
         max_points: int,
     ):
-        """
-        Constructor for the class.
-        """
+        """Constructor for the class."""
         matchmaking_string = {
             1: "Bronze 3",
             2: "Bronze 2",
@@ -393,9 +363,7 @@ class Player:
         m3v3_data: PlayerMatchmaking = None,
         royal_data: PlayerMatchmaking = None,
     ):
-        """
-        Constructor of the class.
-        """
+        """Constructor of the class."""
         self.club_tag = club_tag
         self._first_login = first_login
         self._id = player_id
@@ -409,9 +377,7 @@ class Player:
         self.royal_data = royal_data
 
     def __str__(self):
-        """
-        String representation of the class.
-        """
+        """String representation of the class."""
         return f"Player: {self.name} ({self.login})"
 
     @property

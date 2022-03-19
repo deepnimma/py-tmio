@@ -1,26 +1,3 @@
-"""
-MIT License
-
-Copyright (c) 2022-present Deepesh Nimma
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
 # pylint: disable=too-many-locals
 
 from __future__ import division
@@ -38,8 +15,11 @@ from ..structures.player import (
 
 
 def parse_player(data: Dict) -> Tuple:
-    """
-    Parses the JSON data into the required data types for the Player constructor.
+    """Parses the JSON data into the required data types for the Player constructor.
+
+    :param data (: class:`Dict`): The JSON data to parse.
+    :param data: Dict:
+    :returns: class:`Tuple`: the parsed data as a Tuple.
 
     Parameters
     ----------
@@ -101,8 +81,7 @@ def parse_player(data: Dict) -> Tuple:
 
 
 def _parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
-    """
-    Parses the Data from the API into a list of PlayerZone objects.
+    """Parses the Data from the API into a list of PlayerZone objects.
 
     Parameters
     ----------
@@ -199,8 +178,11 @@ def _parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
 
 
 def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
-    """
-    Parses the Meta Data from the API into a PlayerMetaInfo object.
+    """Parses the Meta Data from the API into a PlayerMetaInfo object.
+
+    :param metadata (: class:`Dict`): The metadata data from the API.
+    :param metadata: Dict:
+    :returns: class:`PlayerMetaInfo`: The parsed data
 
     Parameters
     ----------
@@ -279,8 +261,7 @@ def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
 
 
 def _parse_matchmaking(data: List[Dict]) -> List[PlayerMatchmaking]:
-    """
-    Parses the Matchmaking data of the player and returns 2 PlayerMatchmaking objects.\
+    """Parses the Matchmaking data of the player and returns 2 PlayerMatchmaking objects.\
         One for 3v3 Matchmaking and One for Royal Matchmaking.
 
     Parameters
@@ -312,13 +293,13 @@ def _parse_matchmaking(data: List[Dict]) -> List[PlayerMatchmaking]:
 
 
 def __parse_3v3(data: Dict) -> PlayerMatchmaking:
-    """
-    Parses matchmaking data for 3v3 and royal type matchmaking.
+    """Parses matchmaking data for 3v3 and royal type matchmaking.
 
-    :param data: The matchmaking data only.
-    :type data: :class:`Dict`
-    :return: The parsed data.
-    :rtype: :class:`PlayerMatchmaking`
+    Args:
+        data (:class:`Dict`): The matchmaking data only.
+
+    Returns:
+        :class:`PlayerMatchmaking`: The parsed data.
     """
     typename = data["info"]["typename"]
     typeid = data["info"]["typeid"]
@@ -335,8 +316,11 @@ def __parse_3v3(data: Dict) -> PlayerMatchmaking:
 
 
 def _parse_search_results(data: Dict) -> PlayerSearchResult:
-    """
-    Parses the search result of a single player.
+    """Parses the search result of a single player.
+
+    :param data (: class:`Dict`): Player data.
+    :param data: Dict:
+    :returns: class:`PlayerSearchResult`: Parsed data in a
 
     Parameters
     ----------
@@ -385,8 +369,7 @@ def _parse_search_results(data: Dict) -> PlayerSearchResult:
 
 
 def _parse_search_zones(zones: Dict) -> List[PlayerZone]:
-    """
-    Parses the zones for search result. A seperate function because search result does not have the zone positions.
+    """Parses the zones for search result. A seperate function because search result does not have the zone positions.
 
     Parameters
     ----------
