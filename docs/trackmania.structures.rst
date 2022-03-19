@@ -12,6 +12,14 @@ trackmania.structures.ad module
    :undoc-members:
    :show-inheritance:
 
+trackmania.structures.cotd module
+---------------------------------
+
+.. automodule:: trackmania.structures.cotd
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 trackmania.structures.map module
 --------------------------------
 
