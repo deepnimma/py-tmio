@@ -6,11 +6,7 @@
 Welcome to py-tmio's documentation!
 ============================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   modules
+.. include:: trackmania.rst
 
 Indices and tables
 ==================
