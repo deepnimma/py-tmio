@@ -17,7 +17,7 @@ def parse_totd_map(map_data: Dict, leaderboard: List[Dict] | None = None) -> TOT
     map_data : class:`Dict`
         The map data as a dict or json.
     map_data: Dict :
-        
+
     leaderboard: List[Dict] | None :
          (Default value = None)
 

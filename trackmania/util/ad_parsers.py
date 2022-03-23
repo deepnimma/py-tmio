@@ -15,7 +15,7 @@ def parse_ad(ad: Dict) -> Ad:
     ad : class:`Dict`
         The ad data as a dict.
     ad: Dict :
-        
+
 
     Returns
     -------

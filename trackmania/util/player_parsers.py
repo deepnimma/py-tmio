@@ -26,7 +26,7 @@ def parse_player(data: Dict) -> Tuple:
     data : class:`Dict`
         The JSON data to parse.
     data: Dict :
-        
+
 
     Returns
     -------
@@ -90,9 +90,9 @@ def _parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
     zone_positions : class:`List`[int]
         The zone positions data from the API.
     zones: Dict :
-        
+
     zone_positions: List[int] :
-        
+
 
     Returns
     -------
@@ -189,7 +189,7 @@ def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
     metadata : class:`Dict`
         The metadata data from the API.
     metadata: Dict :
-        
+
 
     Returns
     -------
@@ -269,7 +269,7 @@ def _parse_matchmaking(data: List[Dict]) -> List[PlayerMatchmaking]:
     data : class:`List`[:class:`Dict`]
         The matchmaking data.
     data: List[Dict] :
-        
+
 
     Returns
     -------
@@ -327,7 +327,7 @@ def _parse_search_results(data: Dict) -> PlayerSearchResult:
     data : class:`Dict`
         Player data.
     data: Dict :
-        
+
 
     Returns
     -------
@@ -376,7 +376,7 @@ def _parse_search_zones(zones: Dict) -> List[PlayerZone]:
     zones : Dict
         Zone data
     zones: Dict :
-        
+
 
     Returns
     -------

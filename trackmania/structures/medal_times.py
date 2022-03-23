@@ -23,7 +23,7 @@ class MedalTimes:
         score : int
             The number in milliseconds.
         score: int :
-            
+
 
         Returns
         -------

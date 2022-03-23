@@ -60,7 +60,7 @@ class TMIO:
         endpoints : List[str]
             The endpoints to build the url with.
         endpoints: List[str] :
-            
+
 
         Returns
         -------
@@ -113,7 +113,7 @@ class TMX:
         endpoints : class:`List`[str]
             The endpoints as a list.
         endpoints: List[str] :
-            
+
 
         Returns
         -------

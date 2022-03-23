@@ -158,7 +158,7 @@ class PlayerTrophies:
         player_id : str
             The Trackmania ID of the player.
         player_id: str :
-            
+
 
         Returns
         -------
@@ -174,7 +174,7 @@ class PlayerTrophies:
         number : int
             The trophy number, from 1 (T1) to 9 (T9).
         number: int :
-            
+
 
         Returns
         -------
