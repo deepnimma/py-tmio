@@ -55,6 +55,13 @@ Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 Caching is not *required* but is highly recommended.
 
 ## Changelog
+**v0.2.0**
+
+<small>**23rd March, 2022**</small>
+* Option to return raw data alongside the parsed data.
+* All classes previously in `trackmania.structures` have been moved to `trackmania`.
+* Update and fix lots of the problems I made.
+
 **v0.1.0**
 
 <small>**15th March, 2022**</small>
