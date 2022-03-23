@@ -33,13 +33,13 @@ async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
             return map_parsers.parse_totd_map(latest_totd, latest_totd["leaderboard"])
 
     api_client = APIClient()
-    latest_totd = await api_client.get(TMIO.build([TMIO.tabs.totd, "0"]))
+    latest_totd = await api_client.get(TMIO.build([TMIO.TABS.TOTD, "0"]))
     latest_totd: dict = latest_totd["days"][-1]
 
     if leaderboard_flag:
         raw_lb_data = await api_client.get(
             TMIO.build(
-                [TMIO.tabs.leaderboard, TMIO.tabs.map, latest_totd["map"]["mapUid"]]
+                [TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, latest_totd["map"]["mapUid"]]
             )
             + "?offset=0&length=100"
         )
@@ -118,7 +118,7 @@ async def totd(
         count = today_date.month - date.month
 
     api_client = APIClient()
-    month_data = await api_client.get(TMIO.build([TMIO.tabs.totd, str(count)]))
+    month_data = await api_client.get(TMIO.build([TMIO.TABS.TOTD, str(count)]))
 
     if date.day == -1:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
@@ -133,8 +133,8 @@ async def totd(
         raw_lb_data = await api_client.get(
             TMIO.build(
                 [
-                    TMIO.tabs.leaderboard,
-                    TMIO.tabs.map,
+                    TMIO.TABS.LEADERBOARD,
+                    TMIO.TABS.MAP,
                     month_data["days"][date.day - 1]["map"]["mapUid"],
                 ]
             )

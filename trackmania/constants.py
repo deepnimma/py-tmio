@@ -8,20 +8,20 @@ class TMIOTabs:
     """TMIO Endpoints"""
 
     def __init__(self):
-        self.player: str = "player"
-        self.players: str = "players"
-        self.trophies: str = "trophies"
-        self.map: str = "map"
-        self.leaderboard: str = "leaderboard"
+        self.PLAYER: str = "player"
+        self.PLAYERS: str = "players"
+        self.TROPHIES: str = "trophies"
+        self.MAP: str = "map"
+        self.LEADERBOARD: str = "leaderboard"
 
-        self.top_matchmaking: str = "top/matchmaking"
-        self.top_trophies: str = "top/trophies"
+        self.TOP_MATCHMAKING: str = "top/matchmaking"
+        self.TOP_TROPHIES: str = "top/trophies"
 
-        self.matchmaking_id: int = 2
-        self.royal_id: int = 3
+        self.MATCHMAKING_ID: int = 2
+        self.ROYAL_ID: int = 3
 
-        self.totd: str = "totd"
-        self.ads: str = "ads"
+        self.TOTD: str = "totd"
+        self.ADS: str = "ads"
 
 
 # pylint: disable=too-few-public-methods
@@ -31,25 +31,25 @@ class TMIO:
 
     Parameters
     ----------
-    protocol : str
-        The protocol to use for the api. Equal to "https"
-    base : str
-        The base url for the api. Equal to "trackmania.io"
+    PROTOCOL : str
+        The PROTOCOL to use for the api. Equal to "https"
+    BASE : str
+        The BASE url for the api. Equal to "trackmania.io"
     api : str
         The api endpoint for `trackmania.io`. Equal to "api".
-    tabs : class:`TMIOTabs`
-        The tabs for the api.
+    TABS : class:`TMIOTabs`
+        The TABS for the api.
 
     Returns
     -------
 
     """
 
-    protocol: str = "https"
-    base: str = "trackmania.io"
-    api: str = "api"
+    PROTOCOL: str = "https"
+    BASE: str = "trackmania.io"
+    API: str = "api"
 
-    tabs: TMIOTabs = TMIOTabs()
+    TABS: TMIOTabs = TMIOTabs()
 
     @staticmethod
     def build(endpoints: List[str]) -> str:
@@ -68,7 +68,7 @@ class TMIO:
             The built endpoint url.
 
         """
-        url = f"{TMIO.protocol}://{TMIO.base}/{TMIO.api}/"
+        url = f"{TMIO.PROTOCOL}://{TMIO.BASE}/{TMIO.API}/"
 
         if len(endpoints) == 0:
             return url
@@ -88,10 +88,10 @@ class TMX:
 
     Parameters
     ----------
-    protocol : str
-        The protocol to use for the api. Equal to "https"
-    base : str
-        The base url for the api. Equal to "trackmania.exchange"
+    PROTOCOL : str
+        The PROTOCOL to use for the api. Equal to "https"
+    BASE : str
+        The BASE url for the api. Equal to "trackmania.exchange"
     api : str
         The api endpoint for `trackmania.exchange`. Equal to "api".
 
@@ -100,9 +100,9 @@ class TMX:
 
     """
 
-    protocol: str = "https"
-    base: str = "trackmania.exchange"
-    api: str = "api"
+    PROTOCOL: str = "https"
+    BASE: str = "trackmania.exchange"
+    API: str = "api"
 
     @staticmethod
     def build(endpoints: List[str]) -> str:
@@ -121,7 +121,7 @@ class TMX:
             The URL.
 
         """
-        url = f"{TMX.protocol}://{TMX.base}/{TMX.api}/"
+        url = f"{TMX.PROTOCOL}://{TMX.BASE}/{TMX.API}/"
 
         if len(endpoints) == 0:
             return url

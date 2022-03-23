@@ -48,7 +48,7 @@ async def get_player(
             if raw:
                 return player, json.loads(cache_client.get(f"{player_id}|data"))
     api_client = APIClient()
-    player_resp = await api_client.get(TMIO.build([TMIO.tabs.player, player_id]))
+    player_resp = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, player_id]))
     await api_client.close()
 
     player_data = player_parsers.parse_player(player_resp)
@@ -83,7 +83,7 @@ async def search_player(
 
     api_client = APIClient()
     search_result = await api_client.get(
-        TMIO.build([TMIO.tabs.players]) + f"/find?search={username}"
+        TMIO.build([TMIO.TABS.PLAYERS]) + f"/find?search={username}"
     )
     await api_client.close()
 
@@ -196,7 +196,7 @@ async def top_matchmaking(group: int, page: int = 0):
 
     api_client = APIClient()
     matchmaking_resp = await api_client.get(
-        TMIO.build([TMIO.tabs.top_matchmaking, group, page])
+        TMIO.build([TMIO.TABS.TOP_MATCHMAKING, group, page])
     )
     await api_client.close()
 
@@ -226,7 +226,7 @@ async def top_trophies(page: int = 0):
             return json.loads(cache_client.get(f"trophies|{page}"))
 
     api_client = APIClient()
-    trophies_resp = await api_client.get(TMIO.build([TMIO.tabs.top_trophies, page]))
+    trophies_resp = await api_client.get(TMIO.build([TMIO.TABS.TOP_TROPHIES, page]))
     await api_client.close()
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):

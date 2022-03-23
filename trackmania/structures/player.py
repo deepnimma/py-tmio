@@ -140,7 +140,7 @@ class PlayerTrophies:
             raise InvalidIDError("ID Has not been set for the Object")
 
         history = await api_client.get(
-            TMIO.build([TMIO.tabs.player, self.player_id, TMIO.tabs.trophies, page])
+            TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, page])
         )
 
         await api_client.close()

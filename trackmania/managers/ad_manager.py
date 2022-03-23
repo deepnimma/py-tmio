@@ -26,7 +26,7 @@ async def get_ad(ad_uid: str) -> Ad:
             return ad_parsers.parse_ad(json.loads(cache_client.get(f"ad|{ad_uid}")))
 
     api_client = APIClient()
-    ad_resp = await api_client.get(TMIO.build([TMIO.tabs.ads]))
+    ad_resp = await api_client.get(TMIO.build([TMIO.TABS.ADS]))
     await api_client.close()
 
     if len(ad_resp) > 1:
