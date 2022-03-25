@@ -66,6 +66,8 @@ class _COTDStats:
         The average division of the player
     win_streak : int
         The win streak of the player
+    div_win_streak: int
+        The division win streak of the player.
     """
 
     def __init__(
