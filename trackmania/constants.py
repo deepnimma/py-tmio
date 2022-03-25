@@ -21,6 +21,7 @@ class TMIOTabs:
         self.ROYAL_ID: int = 3
 
         self.TOTD: str = "totd"
+        self.COTD: str = "cotd"
         self.ADS: str = "ads"
 
 
