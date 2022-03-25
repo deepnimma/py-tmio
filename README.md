@@ -30,12 +30,14 @@ from trackmania import Client
 Client.USER_AGENT = "NottCurious#4351 | TMIndiaBot"
 ```
 
-#### How to set Redis Server host and port
+#### How to set Redis Server Settings
 ```python
 from trackmania import Client
 
-Client.REDIS_HOST = "127.0.0.1"
-Client.REDIS_PORT = 6379
+Client.REDIS_HOST = "127.0.0.1" # 127.0.0.1 is default
+Client.REDIS_PORT = 6379 # 6379 is default
+Client.REDIS_DB = 0 # 0 is default
+Client.REDIS_PASSWORD = "yadayadayada" # Defaults to None. Don't need to change this if your redis server does not have a password.
 ```
 
 ## Docs
