@@ -16,20 +16,24 @@ async def get_player(
     player_id: str, raw: bool = False
 ) -> Player | Tuple[Player, Dict] | None:
     """
-    Retrieves a player's information using their player_id
+    Retrieves a player's information using their player_id.
 
-    :param player_id: The player id to get information for.
-    :type player_id: str
-    :param raw: Whether to return the raw data from the API.
-    :type raw: bool
-    :raises :class:`InvalidIDError`: if the player id is empty, or no player exists with that player_id.
-    :return: The player's information
-    :rtype: :class:`Player` | :class:`Tuple`[:class:`Player`, :class:`Dict`] | None
+    Parameters
+    ----------
+    player_id : str
+        The player_id to get the information for.
+    raw : bool, optional
+        Whether to return the raw data from the API alongside the parsed one, by default False
 
-    Caching
-    * Caches the player information for 10 minutes.
-    * Caches `username:player_id` pair forever.
-    * Caches `player_id:username` pair forever.
+    Returns
+    -------
+    :class:`Player` | :class:`Tuple`[:class:`Player`, :class:`Dict`] | None
+        The player's information.
+
+    Raises
+    ------
+    :class:`InvalidIDError`
+        If the player_id is empty, or no player exists with that player_id.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
@@ -68,16 +72,23 @@ async def search_player(
     username: str,
 ) -> None | PlayerSearchResult | List[PlayerSearchResult]:
     """
-    Searches for a player's information
+    Searches for a player's information using their username.
 
-    :param username: The player's username to search for.
-    :type username: str
-    :raises :class:`InvalidUsernameError`: If the username is empty or if there is no users with this username.
-    :return: None if no players. :class:`PlayerSearchResult` if one player. List of :class:`PlayerSearchResult` if multiple players.
-    :rtype: None|:class:`PlayerSearchResult`|:class:`List`[:class:`PlayerSearchResult`]
+    Parameters
+    ----------
+    username : str
+        The player's username to search for.
+
+    Returns
+    -------
+    None | :class:`PlayerSearchResult` | :class:`List`[:class:`PlayerSearchResult`]
+        None if no players. :class:`PlayerSearchResult` if only one player. :class:`List`[:class:`PlayerSearchResult`] if multiple players.
+
+    Raises
+    ------
+    :class:`InvalidUsernameError`
+        if the username is empty.
     """
-    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
-
     if username == "":
         raise InvalidUsernameError("Usernmae cannot be empty.")
 
@@ -110,17 +121,17 @@ async def search_player(
 
 async def to_account_id(username: str) -> str | None:
     """
-    Returns the account id of the given username
+    Returns the account id of the given username.
 
-    :param username: The username of the player.
-    :type username: str
-    :return: The id of the player.
-    :rtype: str | None
+    Parameters
+    ----------
+    username : str
+        The username of the player.
 
-    Caching
-
-    * Caches `username:player_id` pair forever.
-    * Caches `player_id:username` pair forever.
+    Returns
+    -------
+    str | None
+        The id of the player.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
@@ -151,10 +162,15 @@ async def to_username(player_id: str) -> str | None:
     """
     Gets a player's username from their ID.
 
-    :param player_id: The ID of the player.
-    :type player_id: str
-    :return: The player's username, None if the player does not exist.
-    :rtype: str | None
+    Parameters
+    ----------
+    player_id : str
+        The ID of the player.
+
+    Returns
+    -------
+    str | None
+        The username of the player. `None` if the player doesn't exist.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
@@ -172,18 +188,26 @@ async def to_username(player_id: str) -> str | None:
     return None
 
 
-async def top_matchmaking(group: int, page: int = 0):
+async def top_matchmaking(group: int, page: int = 0) -> Dict:
     """
-    Retrieves the Matchmaking leaderboard.
+    Retrieves the
 
-    :param group: The group id, 2 is 3v3 matchmaking and 3 is royal matchmaking.
-    :type group: int
-    :param page: The page of the leaderboard. Each number is 50 users, defaults to 0
-    :type page: int, optional
+    Parameters
+    ----------
+    group : int
+        The group id. 2 for 3v3 matchmaking and 3 for royal.
+    page : int, optional
+        The page of the leaderboard. Each page has 50 players. by default 0
 
-    Caching
+    Returns
+    -------
+    :class:`Dict`
+        The matchmaking data.
 
-    Caches each page for 1 hour.
+    Raises
+    ------
+    :class:`InvalidMatchmakingGroupError`
+        If the group is not 2 or 3.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
@@ -208,16 +232,19 @@ async def top_matchmaking(group: int, page: int = 0):
     return matchmaking_resp
 
 
-async def top_trophies(page: int = 0):
+async def top_trophies(page: int = 0) -> Dict:
     """
-    Gets the Trophy leaderboard.
+    Gets the trophy leaderboard.
 
-    :param page: Page for the leaderboard, each page contains 50 players. defaults to 0
-    :type page: int, optional
+    Parameters
+    ----------
+    page : int, optional
+        Page for the leaderboard, each page contains 50 players. by default 0
 
-    Caching
-
-    Caches trophy leaderboard page for 3 hr
+    Returns
+    -------
+    :class:`Dict`
+        The trophy leaderboard data.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 

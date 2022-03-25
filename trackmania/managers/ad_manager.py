@@ -14,10 +14,15 @@ async def get_ad(ad_uid: str) -> Ad:
     """
     Retrieves the Trackmania Maniapub of the given ad uid.
 
-    :param ad_uid: The ad uid
-    :type ad_uid: str
-    :return: The maniapub.
-    :rtype: :class:`Ad`
+    Parameters
+    ----------
+    ad_uid : str
+        The ad uid
+
+    Returns
+    -------
+    :class:`Ad`
+        The maniapub.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 

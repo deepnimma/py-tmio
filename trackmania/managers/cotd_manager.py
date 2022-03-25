@@ -12,8 +12,16 @@ async def get_player_cotd(page: int = 0):
     """
     Gets the player cotd data.
 
-    :param page: Which page of cotd data to get. If set to -1 it returns ALL cotd data. WARNING: Uses alot of requests. defaults to 0
-    :type page: int, optional
+    Parameters
+    ----------
+    page : int, optional
+        Which page of cotd data to get. If set to -1 it returns ALL cotd data. WARNING: Uses a lot of requests.
+        defaults to 0
+
+    Returns
+    -------
+    _type_
+        _description_
     """
 
     # Will start later.

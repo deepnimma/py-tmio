@@ -15,15 +15,17 @@ from ..util import map_parsers
 
 async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
     """
-    Fetches the current TOTD Map.
+    Fetches the current TOTD map.
 
-    :param leaderboard_flag: Whether to add the top 100 leaderboard to the data. If set to True, it makes another api request. Defaults to False
-    :type leaderboard_flag: bool, optional
-    :return: TOTD object
-    :rtype: :class:`TOTD`
+    Parameters
+    ----------
+    leaderboard_flag : bool, optional
+        Whether to add the top 100 leaderboard to the data. If set to `True`, makes another api request. defaults to `False`
 
-    Caching
-    * Caches the latest_totd data for 1 hour unless it is past 5pm and before 6am. UTC
+    Returns
+    -------
+    :class:`TOTD`
+        The :class:`TOTD` Object.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
@@ -63,18 +65,28 @@ async def totd(
     date: date | int = -1, month: bool = False, leaderboard_flag: bool = False
 ) -> TOTD | List[Dict]:
     """
-    Gets the TOTD of a specific day.
+    Gets the TOTD of a specific date.
 
-    :param date: The date of the TOTD. If it is -1 it returns the latest totd. defaults to -1
-    :type date: datetime | int, optional
-    :param month: If to return all totds of the given month, defaults to False
-    :type month: bool, optional
-    :param leaderboard_flag: Whether to add the top 100 leaderboard to the data. If set to True, it makes another api request. Defaults to False
-    :type leaderboard_flag: bool, optional
-    :raises ValueError: Year must be [2020, 2021, 2022]
-    :raises ValueError: TM2020 Released on July 1st.
-    :return: The :class:`TOTD` object.
-    :rtype: :class:`TOTD` | :class:`List`[:class:`Dict`]
+    Parameters
+    ----------
+    date : :class:`date` | int, optional
+        The date of the TOTD. If it is -1 it returns the latest totd. defaults to -1
+    month : bool, optional
+        If to return all totds of a given month. defaults to `False`
+    leaderboard_flag : bool, optional
+        Whether to add the top 100 leaderboard to the data. If set to `True`, makes another api request. defaults to `False`
+
+    Returns
+    -------
+    :class:`TOTD` | :class:`List`[:class:`Dict`]
+        The :class:`TOTD` Object or a list of TOTD maps.
+
+    Raises
+    ------
+    ValueError
+        Year must be in [2020, 2021, 2022]
+    ValueError
+        TM2020 Released on July 1st.
     """
 
     if isinstance(date, int):
@@ -91,9 +103,13 @@ async def totd(
     if date.year == 2020 and date.month < 7:
         raise ValueError("TM2020 Released on July 1st.")
     if (
-        date.year == today_date.year
-        and date.month == today_date.month
-        and date.day > today_date.day
+        (
+            date.year == today_date.year
+            and date.month == today_date.month
+            and date.day > today_date.day
+        )
+        or (date.year > today_date.year)
+        or (date.year == today_date.year and date.month > today_date.month)
     ):
         raise ValueError("Date cannot be in the future")
 
