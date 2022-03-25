@@ -37,12 +37,8 @@ class TMIO:
         The BASE url for the api. Equal to "trackmania.io"
     api : str
         The api endpoint for `trackmania.io`. Equal to "api".
-    TABS : class:`TMIOTabs`
+    TABS : :class:`TMIOTabs`
         The TABS for the api.
-
-    Returns
-    -------
-
     """
 
     PROTOCOL: str = "https"
@@ -59,8 +55,6 @@ class TMIO:
         ----------
         endpoints : List[str]
             The endpoints to build the url with.
-        endpoints: List[str] :
-
 
         Returns
         -------
@@ -95,9 +89,6 @@ class TMX:
     api : str
         The api endpoint for `trackmania.exchange`. Equal to "api".
 
-    Returns
-    -------
-
     """
 
     PROTOCOL: str = "https"
@@ -112,14 +103,11 @@ class TMX:
         ----------
         endpoints : class:`List`[str]
             The endpoints as a list.
-        endpoints: List[str] :
-
 
         Returns
         -------
         str
             The URL.
-
         """
         url = f"{TMX.PROTOCOL}://{TMX.BASE}/{TMX.API}/"
 

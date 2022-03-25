@@ -2,7 +2,20 @@ __all__ = ("MedalTimes",)
 
 
 class MedalTimes:
-    """Represents the MedalTimes of a map."""
+    """
+    Represents the MedalTimes of a map.
+
+    Parameters
+    ----------
+    bronze_score : int
+        The bronze medal time of the map
+    silver_score : int
+        The silver medal time of the map
+    gold_score : int
+        The gold medal time of the map
+    author_score : int
+        The author medal time of the map
+    """
 
     def __init__(
         self, bronze_score: int, silver_score: int, gold_score: int, author_score: int
@@ -22,8 +35,6 @@ class MedalTimes:
         ----------
         score : int
             The number in milliseconds.
-        score: int :
-
 
         Returns
         -------
@@ -39,9 +50,6 @@ class MedalTimes:
     def bronze_string(self) -> str:
         """Gets the bronze medal time as a string.
 
-        Parameters
-        ----------
-
         Returns
         -------
         str
@@ -52,9 +60,6 @@ class MedalTimes:
 
     def silver_string(self) -> str:
         """Gets the silver medal time as a string.
-
-        Parameters
-        ----------
 
         Returns
         -------
@@ -67,9 +72,6 @@ class MedalTimes:
     def gold_string(self) -> str:
         """Gets the gold medal time as a string.
 
-        Parameters
-        ----------
-
         Returns
         -------
         str
@@ -80,9 +82,6 @@ class MedalTimes:
 
     def author_string(self) -> str:
         """Gets the author medal time as a string.
-
-        Parameters
-        ----------
 
         Returns
         -------

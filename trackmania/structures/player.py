@@ -37,13 +37,13 @@ class PlayerMetaInfo:
     sponsor_level : int | None
         The sponsor level of the player
     twitch : str | None
-        The Twitch URL of the player, :class:`NoneType` if the player has no Twitch
+        The Twitch URL of the player, `NoneType` if the player has no Twitch
     twitter : str | None
-        The Twitter URL of the player, :class:`NoneType` if the player has no Twitter
+        The Twitter URL of the player, `NoneType` if the player has no Twitter
     youtube : str | None
-        The YouTube URL of the player, :class:`NoneType` if the player has no YouTube
+        The YouTube URL of the player, `NoneType` if the player has no YouTube
     vanity : str | None
-        The TMIO Vanity URL of the player, :class:`NoneType` if the player has no TMIO Vanity URL
+        The TMIO Vanity URL of the player, `NoneType` if the player has no TMIO Vanity URL
 
     Returns
     -------
@@ -92,13 +92,10 @@ class PlayerTrophies:
         The date of the last change of the player's self.
     points : ints: int
         The number of points of the player.
-    trophies : class:`List`[int]
+    trophies : :class:`List[int]`
         The number of trophies of the player.
     player_id : str, optional
         The Trackmania ID of the player
-
-    Returns
-    -------
 
     """
 
@@ -128,11 +125,22 @@ class PlayerTrophies:
         """
         Retrieves Trophy Gain and Loss history of a player.
 
-        :param page: Page number of trophy history, defaults to 0
-        :type page: int, optional
-        :raises :class:`InvalidIDError`: If an ID has not been set for the object or an invalid id has been given to the player object.
-        :return: Trophy history data.
-        :rtype: :class:`Dict`
+        Parameters
+        ----------
+        page : int, optional
+            page number of trophy history, by default 0
+
+        Returns
+        -------
+        :class:`Dict`
+            Trophy history data.
+
+        Raises
+        ------
+        InvalidIDError
+            If an ID has not been set for the object.
+        InvalidIDError
+            If an invalid id has been set for the object.
         """
         api_client = APIClient()
 
@@ -157,12 +165,6 @@ class PlayerTrophies:
         ----------
         player_id : str
             The Trackmania ID of the player.
-        player_id: str :
-
-
-        Returns
-        -------
-
         """
         self.player_id = player_id
 
@@ -173,14 +175,11 @@ class PlayerTrophies:
         ----------
         number : int
             The trophy number, from 1 (T1) to 9 (T9).
-        number: int :
-
 
         Returns
         -------
         int
             the number of trophies for that specific tier.
-
         """
 
         if number > 9 or number < 1:
@@ -191,7 +190,7 @@ class PlayerTrophies:
         return self.trophies[number - 1]
 
     def score(self) -> int:
-        """ """
+        """Returns the trophy score of the player."""
         return (
             0
             + self.trophy(1) * 1
@@ -216,9 +215,6 @@ class PlayerZone:
         The zone name
     rank : int
         The rank of the player in the zone
-
-    Returns
-    -------
 
     """
 
@@ -253,10 +249,6 @@ class PlayerMatchmaking:
         The points required to reach the current division.
     max_points : ints: int
         The points required to move up the rank.
-
-    Returns
-    -------
-
     """
 
     def __init__(
@@ -322,7 +314,7 @@ class Player:
     Parameters
     ----------
     club_tag : str | None.
-        The club tag of the player, :class:`NoneType` if the player is not in a club.
+        The club tag of the player, `NoneType` if the player is not in a club.
     first_login : str
         The date of the first login of the player.
     player_id : str
@@ -331,22 +323,18 @@ class Player:
         The date of the last club tag change of the player.
     login : str
         Login of the player.
-    meta : class:`PlayerMetaInfo`.
+    meta : :class:`PlayerMetaInfo`.
         Meta data of the player.
     name : str
         Name of the player.
-    trophies : class:`PlayerTrophies`, optional
+    trophies : :class:`PlayerTrophies`, optional
         The trophies of the player.
-    zone : class:`List[PlayerZone]`, optional
+    zone : :class:`List[PlayerZone]`, optional
         The zone of the player as a list.
-    m3v3_data : class:`PlayerMatchmaking`, optional
+    m3v3_data : :class:`PlayerMatchmaking`, optional
         The 3v3 data of the player.
-    royal_data : class:`PlayerMatchmaking`, optional
+    royal_data : :class:`PlayerMatchmaking`, optional
         The royal data of the player.
-
-    Returns
-    -------
-
     """
 
     def __init__(
@@ -398,16 +386,16 @@ class PlayerSearchResult:
     Parameters
     ----------
     club_tag : str | None.
-        The club tag of the player, :class:`NoneType` if the player is not in a club.
+        The club tag of the player, `NoneType` if the player is not in a club.
     name : str
         Name of the player.
     player_id : str
         The Trackmania ID of the player.
-    zone : class:`List[PlayerZone]`, optional
+    zone : :class:`List[PlayerZone]`, optional
         The zone of the player as a list.
-    threes : class:`PlayerMatchmaking`, optional
+    threes : :class:`PlayerMatchmaking`, optional
         The 3v3 data of the player.
-    royals : class:`PlayerMatchmaking`, optional
+    royals : :class:`PlayerMatchmaking`, optional
         The royal data of the player.
 
     Returns

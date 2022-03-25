@@ -69,7 +69,7 @@ async def totd(
 
     Parameters
     ----------
-    date : :class:`date` | int, optional
+    date : `date` | int, optional
         The date of the TOTD. If it is -1 it returns the latest totd. defaults to -1
     month : bool, optional
         If to return all totds of a given month. defaults to `False`
@@ -78,8 +78,8 @@ async def totd(
 
     Returns
     -------
-    :class:`TOTD` | :class:`List`[:class:`Dict`]
-        The :class:`TOTD` Object or a list of TOTD maps.
+    `TOTD` | `List`[`Dict`]
+        The `TOTD` Object or a list of TOTD maps.
 
     Raises
     ------

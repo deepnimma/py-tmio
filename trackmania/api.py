@@ -14,15 +14,12 @@ class ResponseCodeError(ValueError):
 
     Parameters
     ----------
-    response : aiohttp.ClientResponse
+    response : :class:`aiohttp.ClientResponse`
         The response object
-    response_json : dict
+    response_json : :class:`Dict`
         The response json
     response_text : str
         The response text
-
-    Returns
-    -------
 
     """
 

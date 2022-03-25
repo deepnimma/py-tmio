@@ -6,7 +6,40 @@ __all__ = ("TOTD",)
 
 # pylint: disable=too-many-arguments, too-many-instance-attributes, too-few-public-methods
 class TOTD:
-    """Class that represents a totd map"""
+    """
+    Class that represents a totd map
+
+    Parameters
+    ----------
+    campaign_id : int
+        The campaign id of the map
+    map_author_id : str
+        The id of the author of the map
+    map_name : str
+        The name of the map
+    map_type : str
+        The type of the map
+    medal_times : :class:`MedalTimes`
+        The medal times of the map
+    map_id : str
+        The id of the map
+    map_uid : str
+        The uid of the map
+    timestamp : str
+        The timestamp of the map
+    file_url : str
+        The url of the map file
+    thumbnail_url : str
+        The url of the map thumbnail
+    week_day : int
+        The week day of the map
+    month_day : int
+        The month day of the map
+    leaderboard_uid : str
+        The uid of the leaderboard
+    leaderboard : :class:`List[Dict]` | None
+        The leaderboard of the map. Defaults to None
+    """
 
     def __init__(
         self,

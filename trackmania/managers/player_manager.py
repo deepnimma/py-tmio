@@ -27,12 +27,12 @@ async def get_player(
 
     Returns
     -------
-    :class:`Player` | :class:`Tuple`[:class:`Player`, :class:`Dict`] | None
+    :class:`Player` | :class:`Tuple[Player, Dict]` | None
         The player's information.
 
     Raises
     ------
-    :class:`InvalidIDError`
+    `InvalidIDError`
         If the player_id is empty, or no player exists with that player_id.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
@@ -81,12 +81,12 @@ async def search_player(
 
     Returns
     -------
-    None | :class:`PlayerSearchResult` | :class:`List`[:class:`PlayerSearchResult`]
-        None if no players. :class:`PlayerSearchResult` if only one player. :class:`List`[:class:`PlayerSearchResult`] if multiple players.
+    None | :class:`PlayerSearchResult` | :class:`List[PlayerSearchResult]`
+        None if no players. `PlayerSearchResult` if only one player. `List`[`PlayerSearchResult`] if multiple players.
 
     Raises
     ------
-    :class:`InvalidUsernameError`
+    `InvalidUsernameError`
         if the username is empty.
     """
     if username == "":
@@ -206,7 +206,7 @@ async def top_matchmaking(group: int, page: int = 0) -> Dict:
 
     Raises
     ------
-    :class:`InvalidMatchmakingGroupError`
+    `InvalidMatchmakingGroupError`
         If the group is not 2 or 3.
     """
     cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)

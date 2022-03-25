@@ -15,24 +15,18 @@ from ..structures.player import (
 
 
 def parse_player(data: Dict) -> Tuple:
-    """Parses the JSON data into the required data types for the Player constructor.
-
-    :param data (: class:`Dict`): The JSON data to parse.
-    :param data: Dict:
-    :returns: class:`Tuple`: the parsed data as a Tuple.
+    """
+    Parses the JSON data into the required data types for the :class:`Player` constructor.
 
     Parameters
     ----------
-    data : class:`Dict`
+    data : :class:`Dict`
         The JSON data to parse.
-    data: Dict :
-
 
     Returns
     -------
-    class:`Tuple`
-        the parsed data as a Tuple.
-
+    :class:`Tuple`
+        The parsed data as a tuple.
     """
 
     display_name = data["displayname"]
@@ -85,18 +79,14 @@ def _parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
 
     Parameters
     ----------
-    zones : Dict
+    zones : :class:`Dict`
         the zones data from the API.
-    zone_positions : class:`List`[int]
+    zone_positions : :class:`List[int]`
         The zone positions data from the API.
-    zones: Dict :
-
-    zone_positions: List[int] :
-
 
     Returns
     -------
-    class:`List`[:class:`PlayerZone`]
+    class:`List[PlayerZone]`
         The list of :class:`PlayerZone` objects.
 
     """
@@ -178,24 +168,18 @@ def _parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
 
 
 def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
-    """Parses the Meta Data from the API into a PlayerMetaInfo object.
-
-    :param metadata (: class:`Dict`): The metadata data from the API.
-    :param metadata: Dict:
-    :returns: class:`PlayerMetaInfo`: The parsed data
+    """
+    Parses the Meta Data from the API into a :class:`PlayerMetaInfo` object.
 
     Parameters
     ----------
-    metadata : class:`Dict`
-        The metadata data from the API.
-    metadata: Dict :
-
+    metadata : :class:`Dict`
+        The meta data from the api.
 
     Returns
     -------
-    class:`PlayerMetaInfo`
-        The parsed data
-
+    :class:`PlayerMetaInfo`
+        The parsed data.
     """
     # Please someone teach me a better way of doing this...
     try:
@@ -261,21 +245,19 @@ def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
 
 
 def _parse_matchmaking(data: List[Dict]) -> List[PlayerMatchmaking]:
-    """Parses the Matchmaking data of the player and returns 2 PlayerMatchmaking objects.\
-        One for 3v3 Matchmaking and One for Royal Matchmaking.
+    """
+    Parses the matchmaking data of the player and returns 2 :class:`PlayerMatchmaking` objects.
+        One for 3v3 Matchmaking and the other for Royal matchmaking.
 
     Parameters
     ----------
-    data : class:`List`[:class:`Dict`]
+    data : :class:`List[Dict]`
         The matchmaking data.
-    data: List[Dict] :
-
 
     Returns
     -------
-    class:`List`[:class:`PlayerMatchmaking`]
-        The list of matchmaking data, one for 3v3 and the other for royal.
-
+    :class:`List[PlayerMatchmaking]`
+        The list of matchmaking data, one for 3v3 and other other one for royal.
     """
     matchmaking_data = []
 
@@ -293,13 +275,18 @@ def _parse_matchmaking(data: List[Dict]) -> List[PlayerMatchmaking]:
 
 
 def __parse_3v3(data: Dict) -> PlayerMatchmaking:
-    """Parses matchmaking data for 3v3 and royal type matchmaking.
+    """
+    Parses matchmaking data for 3v3 and royal type matchmaking.
 
-    Args:
-        data (:class:`Dict`): The matchmaking data only.
+    Parameters
+    ----------
+    data : :class:`Dict`
+        The matchmaking data only.
 
-    Returns:
-        :class:`PlayerMatchmaking`: The parsed data.
+    Returns
+    -------
+    :class:`PlayerMatchmaking`
+        The parsed data.
     """
     typename = data["info"]["typename"]
     typeid = data["info"]["typeid"]
@@ -316,24 +303,18 @@ def __parse_3v3(data: Dict) -> PlayerMatchmaking:
 
 
 def _parse_search_results(data: Dict) -> PlayerSearchResult:
-    """Parses the search result of a single player.
-
-    :param data (: class:`Dict`): Player data.
-    :param data: Dict:
-    :returns: class:`PlayerSearchResult`: Parsed data in a
+    """
+    Parses the search result of a single player.
 
     Parameters
     ----------
-    data : class:`Dict`
+    data : :class:`Dict`
         Player data.
-    data: Dict :
-
 
     Returns
     -------
-    class:`PlayerSearchResult`
-        Parsed data in a :class:`PlayerSearchResult` object.
-
+    :class:`PlayerSearchResult`
+        Parsed player data.
     """
     name = data["player"]["name"]
     player_id = data["player"]["id"]
@@ -373,16 +354,13 @@ def _parse_search_zones(zones: Dict) -> List[PlayerZone]:
 
     Parameters
     ----------
-    zones : Dict
+    zones : :class:`Dict`
         Zone data
-    zones: Dict :
-
 
     Returns
     -------
-    class:`List`[:class:`PlayerZone`]
+    :class:`List[PlayerZone]`
         The list of PlayerZone objects to represent the zone data. Zone positions are set as -1.
-
     """
     player_zone_list = []
 
