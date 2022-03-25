@@ -48,11 +48,11 @@ class APIClient:
     """API Wrappers"""
 
     def __init__(self, **session_kwargs):
-        if Client.user_agent is None:
+        if Client.USER_AGENT is None:
             raise NoUserAgentSetError()
 
         self.session = aiohttp.ClientSession(
-            headers={"User-Agent": Client.user_agent + " | via py-tmio"},
+            headers={"User-Agent": Client.USER_AGENT + " | via py-tmio"},
             **session_kwargs,
         )
 

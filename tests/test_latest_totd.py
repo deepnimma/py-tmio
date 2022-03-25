@@ -11,7 +11,7 @@ from trackmania.managers import totd_manager
 class TestLatestTOTD(unittest.TestCase):
     @aioresponses()
     def test_latest(self, mocked):
-        Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
+        Client.USER_AGENT = "NottCurious#4351 | py-trackmania.io Testing Suite"
         with open("./tests/data/latest_totd.json", "r", encoding="UTF-8") as file:
             mocked.get("https://trackmania.io/api/totd/0", payload=json.load(file))
 

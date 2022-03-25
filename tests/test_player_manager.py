@@ -11,7 +11,7 @@ from trackmania.managers import player_manager
 class TestPlayerManager(unittest.TestCase):
     @aioresponses()
     def test_get(self, mocked):
-        Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
+        Client.USER_AGENT = "NottCurious#4351 | py-trackmania.io Testing Suite"
         with open("./tests/data/player_get.json", "r", encoding="UTF-8") as file:
             mocked.get(
                 "https://trackmania.io/api/player/b73fe3d7-a92a-4a6d-ab9d-49005caec499",
@@ -72,7 +72,7 @@ class TestPlayerManager(unittest.TestCase):
 
     @aioresponses()
     def test_to_account_id(self, mocked):
-        Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
+        Client.USER_AGENT = "NottCurious#4351 | py-trackmania.io Testing Suite"
 
         with open("./tests/data/account_id_one.json", "r", encoding="UTF-8") as file:
             mocked.get(
@@ -101,7 +101,7 @@ class TestPlayerManager(unittest.TestCase):
 
     @aioresponses()
     def test_to_username(self, mocked):
-        Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
+        Client.USER_AGENT = "NottCurious#4351 | py-trackmania.io Testing Suite"
 
         with open("./tests/data/to_username_one.json", "r", encoding="UTF-8") as file:
             mocked.get(
@@ -133,5 +133,5 @@ class TestPlayerManager(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    Client.user_agent = "NottCurious#4351 | py-trackmania.io Testing Suite"
+    Client.USER_AGENT = "NottCurious#4351 | py-trackmania.io Testing Suite"
     unittest.main()

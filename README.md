@@ -12,7 +12,7 @@ An Asyncio Friendly Trackmania API Wrapper for Python!
 </div>
 
 ## Important - [Trackmania.io API for my own project?](https://openplanet.dev/tmio/api)
-*See below on how to set your user_agent*
+*See below on how to set your user agent*
 
 Your User-Agent Must Have:
 1. Your Discord Username
@@ -21,21 +21,21 @@ Your User-Agent Must Have:
 Example:
 `NottCurious#4351 | TMIndiaBot`
 
-*" | via py-tmio" is automatically appended to your user_agent*
+*" | via py-tmio" is automatically appended to your user agent*
 
-#### How to set user_agent
+#### How to set user agent.
 ```python
 from trackmania import Client
 
-Client.user_agent = "NottCurious#4351 | TMIndiaBot"
+Client.USER_AGENT = "NottCurious#4351 | TMIndiaBot"
 ```
 
 #### How to set Redis Server host and port
 ```python
 from trackmania import Client
 
-Client.redis_host = "127.0.0.1"
-Client.redis_port = 6379
+Client.REDIS_HOST = "127.0.0.1"
+Client.REDIS_PORT = 6379
 ```
 
 ## Docs

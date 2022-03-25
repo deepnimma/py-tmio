@@ -31,7 +31,7 @@ async def get_player(
     * Caches `username:player_id` pair forever.
     * Caches `player_id:username` pair forever.
     """
-    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
     if player_id == "":
         raise InvalidIDError("The player id cannot be empty.")
@@ -76,7 +76,7 @@ async def search_player(
     :return: None if no players. :class:`PlayerSearchResult` if one player. List of :class:`PlayerSearchResult` if multiple players.
     :rtype: None|:class:`PlayerSearchResult`|:class:`List`[:class:`PlayerSearchResult`]
     """
-    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
     if username == "":
         raise InvalidUsernameError("Usernmae cannot be empty.")
@@ -122,7 +122,7 @@ async def to_account_id(username: str) -> str | None:
     * Caches `username:player_id` pair forever.
     * Caches `player_id:username` pair forever.
     """
-    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{username.lower()}|id"):
@@ -156,7 +156,7 @@ async def to_username(player_id: str) -> str | None:
     :return: The player's username, None if the player does not exist.
     :rtype: str | None
     """
-    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|username"):
@@ -185,7 +185,7 @@ async def top_matchmaking(group: int, page: int = 0):
 
     Caches each page for 1 hour.
     """
-    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
     if int(group) not in (2, 3):
         raise InvalidMatchmakingGroupError("Matchmaking group should be 2 or 3.")
@@ -219,7 +219,7 @@ async def top_trophies(page: int = 0):
 
     Caches trophy leaderboard page for 3 hr
     """
-    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"trophies|{page}"):

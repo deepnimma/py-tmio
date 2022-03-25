@@ -25,7 +25,7 @@ async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
     Caching
     * Caches the latest_totd data for 1 hour unless it is past 5pm and before 6am. UTC
     """
-    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists("latest_totd"):
@@ -97,7 +97,7 @@ async def totd(
     ):
         raise ValueError("Date cannot be in the future")
 
-    cache_client = redis.Redis(host=Client.redis_host, port=Client.redis_port)
+    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if date.day == -1 and cache_client.exists(f"totd|{date.year}|{date.month}|-1"):

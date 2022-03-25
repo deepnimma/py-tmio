@@ -29,7 +29,7 @@ class NoUserAgentSetError(Exception):
     """ """
 
     def __init__(self):
-        message = "No User Agent has been set.\nPlease read the README for instructions on how to set the user_agent."
+        message = "No User Agent has been set.\nPlease read the README for instructions on how to set the USER_AGENT."
         super().__init__(message)
 
 
