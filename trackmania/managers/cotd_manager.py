@@ -5,10 +5,11 @@ from typing import Dict, List
 
 import redis
 
-from trackmania.structures.cotd import PlayerCOTD
+from ..config import Client
+from ..structures.cotd import PlayerCOTD
 
 
-async def get_player_cotd(page: int = 0):
+async def get_player_cotd(page: int = 0) -> PlayerCOTD:
     """
     Gets the player cotd data.
 
@@ -20,9 +21,15 @@ async def get_player_cotd(page: int = 0):
 
     Returns
     -------
-    _type_
-        _description_
+    :class:`PlayerCOTD`
+        The COTD Data as a :class:`PlayerCOTD` object.
     """
+    cache_client = redis.Redis(
+        host=Client.REDIS_HOST,
+        port=Client.REDIS_PORT,
+        db=Client.REDIS_DB,
+        password=Client.REDIS_PASSWORD,
+    )
 
     # Will start later.
     return -1

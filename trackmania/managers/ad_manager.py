@@ -24,7 +24,12 @@ async def get_ad(ad_uid: str) -> Ad:
     :class:`Ad`
         The maniapub.
     """
-    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
+    cache_client = redis.Redis(
+        host=Client.REDIS_HOST,
+        port=Client.REDIS_PORT,
+        db=Client.REDIS_DB,
+        password=Client.REDIS_PASSWORD,
+    )
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"ad|{ad_uid}"):

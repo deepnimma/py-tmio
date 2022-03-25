@@ -35,7 +35,12 @@ async def get_player(
     `InvalidIDError`
         If the player_id is empty, or no player exists with that player_id.
     """
-    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
+    cache_client = redis.Redis(
+        host=Client.REDIS_HOST,
+        port=Client.REDIS_PORT,
+        db=Client.REDIS_DB,
+        password=Client.REDIS_PASSWORD,
+    )
 
     if player_id == "":
         raise InvalidIDError("The player id cannot be empty.")
@@ -133,7 +138,12 @@ async def to_account_id(username: str) -> str | None:
     str | None
         The id of the player.
     """
-    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
+    cache_client = redis.Redis(
+        host=Client.REDIS_HOST,
+        port=Client.REDIS_PORT,
+        db=Client.REDIS_DB,
+        password=Client.REDIS_PASSWORD,
+    )
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{username.lower()}|id"):
@@ -172,7 +182,12 @@ async def to_username(player_id: str) -> str | None:
     str | None
         The username of the player. `None` if the player doesn't exist.
     """
-    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
+    cache_client = redis.Redis(
+        host=Client.REDIS_HOST,
+        port=Client.REDIS_PORT,
+        db=Client.REDIS_DB,
+        password=Client.REDIS_PASSWORD,
+    )
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|username"):
@@ -209,7 +224,12 @@ async def top_matchmaking(group: int, page: int = 0) -> Dict:
     `InvalidMatchmakingGroupError`
         If the group is not 2 or 3.
     """
-    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
+    cache_client = redis.Redis(
+        host=Client.REDIS_HOST,
+        port=Client.REDIS_PORT,
+        db=Client.REDIS_DB,
+        password=Client.REDIS_PASSWORD,
+    )
 
     if int(group) not in (2, 3):
         raise InvalidMatchmakingGroupError("Matchmaking group should be 2 or 3.")
@@ -246,7 +266,12 @@ async def top_trophies(page: int = 0) -> Dict:
     :class:`Dict`
         The trophy leaderboard data.
     """
-    cache_client = redis.Redis(host=Client.REDIS_HOST, port=Client.REDIS_PORT)
+    cache_client = redis.Redis(
+        host=Client.REDIS_HOST,
+        port=Client.REDIS_PORT,
+        db=Client.REDIS_DB,
+        password=Client.REDIS_PASSWORD,
+    )
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"trophies|{page}"):
