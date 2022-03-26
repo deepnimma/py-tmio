@@ -10,16 +10,18 @@ class Client:
     Parameters
     ----------
     USER_AGENT : str
-        The USER_AGENT to be used for the bot
+        The USER_AGENT to be used for the bot.
     REDIS_HOST : str
-        The host of the redis server
+        The host of the redis server.
     REDIS_PORT : int
-        The port of the redis server
+        The port of the redis server.
     REDIS_DB : int
-        The database of the redis server
+        The database of the redis server.
     REDIS_PASSWORD : str
-        The password of the redis server
-    REMAINING_REQUESTS : int
+        The password of the redis server.
+    RATELIMIT_LIMIT: int
+        The `trackmania.io` ratelimit limit.
+    RATELIMIT_REMAINING : int
         The amount of remaining requests with `trackmania.io` api.
     """
 
@@ -28,4 +30,6 @@ class Client:
     REDIS_PORT: int = 6379
     REDIS_DB: int = 0
     REDIS_PASSWORD: str = None
-    REMAINING_REQUESTS: int = None
+
+    RATELIMIT_LIMIT: int = 40
+    RATELIMIT_REMAINING: int = None
