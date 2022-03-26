@@ -76,19 +76,42 @@ class APIClient:
                 ) from content_type_error
 
     async def request(
-        self, method: str, endpoint: str, *, raise_for_status: bool = True, **kwargs
+        self,
+        method: str,
+        endpoint: str,
+        *,
+        raise_for_status: bool = True,
+        ratelimit: bool = False,
+        **kwargs,
     ) -> dict:
         """Send an HTTP request to the site API and return the JSON response."""
         async with self.session.request(method.upper(), endpoint, **kwargs) as resp:
             await self.maybe_raise_for_status(resp, raise_for_status)
-            return await resp.json()
+
+            if not ratelimit:
+                return await resp.json()
+            else:
+                return (
+                    await resp.json(),
+                    resp.headers.get("x-ratelimit-remaining"),
+                    resp.headers.get("x-ratelimit-limit"),
+                )
 
     async def get(
-        self, endpoint: str, *, raise_for_status: bool = True, **kwargs
+        self,
+        endpoint: str,
+        *,
+        raise_for_status: bool = True,
+        ratelimit: bool = False,
+        **kwargs,
     ) -> dict:
         """Site API GET."""
         return await self.request(
-            "GET", endpoint, raise_for_status=raise_for_status, **kwargs
+            "GET",
+            endpoint,
+            raise_for_status=raise_for_status,
+            ratelimit=ratelimit,
+            **kwargs,
         )
 
     async def patch(
