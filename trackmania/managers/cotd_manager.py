@@ -22,7 +22,7 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
     player_id: str
         The player id.
     page : int, optional
-        Which page of cotd data to get. If set to -1 it returns ALL cotd data. WARNING: Uses a lot of requests.
+        Which page of cotd data to get.
         defaults to 0
 
     Returns
@@ -36,6 +36,9 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
         db=Client.REDIS_DB,
         password=Client.REDIS_PASSWORD,
     )
+    
+    if page < 0:
+        raise ValueError("Page must be greater than or equal to 0")
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|cotd|{page}"):
@@ -49,47 +52,9 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
 
     api_client = APIClient()
 
-    if page != -1:
-        cotd_page_resp = await api_client.get(
-            TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(page)])
-        )
-
-        
-    else:
-        page_one = await api_client.get(
-            TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(0)])
-        )
-        (
-            page_two,
-            Client.RATELIMIT_LIMIT,
-            Client.RATELIMIT_REMAINING,
-        ) = await api_client.get(
-            TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(1)]),
-            ratelimit=True,
-        )
-        page = 2
-
-        page_one["cotds"].append(page_two["cotds"])
-
-        while len(page_two["cotds"]) != 0:
-            print(f'{page}')
-            if Client.RATELIMIT_REMAINING <= 5:
-                print('sleeping')
-                await asyncio.sleep(120)
-
-            (
-                page_two,
-                Client.RATELIMIT_LIMIT,
-                Client.RATELIMIT_REMAINING,
-            ) = await api_client.get(
-                TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(page)]),
-                ratelimit=True,
-            )
-            
-            page += 1
-            page_one['cotds'].append(page_two['cotds'])
-        
-        cotd_page_resp = page_one
+    cotd_page_resp = await api_client.get(
+        TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(page)])
+    )
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         cache_client.set(f"{player_id}|cotd|{page}", json.dumps(cotd_page_resp))
