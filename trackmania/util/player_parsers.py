@@ -220,11 +220,6 @@ def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
         tmgl = False
 
     try:
-        tmwc21 = metadata["tmwc21"]
-    except KeyError:
-        tmwc21 = False
-
-    try:
         team = metadata["team"]
     except KeyError:
         team = False
@@ -234,7 +229,6 @@ def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
         nadeo,
         tmgl,
         team,
-        tmwc21,
         sponsor,
         sponsor_level,
         twitch,

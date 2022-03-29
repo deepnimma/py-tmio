@@ -30,8 +30,6 @@ class PlayerMetaInfo:
         Whether the player is in TMGL
     in_tmio_dev_team : bool
         Whether the player is in TMIO Dev Team
-    in_tmwc21 : bool
-        Whether the player is in TMWC21
     is_sponsor : bool
         Whether the player is a sponsor
     sponsor_level : int | None
@@ -56,7 +54,6 @@ class PlayerMetaInfo:
         in_nadeo: bool,
         in_tmgl: bool,
         in_tmio_dev_team: bool,
-        in_tmwc21: bool,
         is_sponsor: bool,
         sponsor_level: int | None,
         twitch: str | None,
@@ -71,7 +68,6 @@ class PlayerMetaInfo:
         self.in_nadeo = in_nadeo
         self.in_tmgl = in_tmgl
         self.in_tmio_dev_team = in_tmio_dev_team
-        self.in_tmwc21 = in_tmwc21
         self.is_sponsor = is_sponsor
         self.sponsor_level = sponsor_level
         self.twitch = twitch
