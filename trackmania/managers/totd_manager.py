@@ -83,7 +83,7 @@ async def totd(
 
     Returns
     -------
-    `TOTD` | `List`[`Dict`]
+    :class:`TOTD` | :class:`List[Dict]`
         The `TOTD` Object or a list of TOTD maps.
 
     Raises

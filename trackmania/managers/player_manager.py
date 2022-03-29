@@ -233,6 +233,8 @@ async def top_matchmaking(group: int, page: int = 0) -> Dict:
 
     if int(group) not in (2, 3):
         raise InvalidMatchmakingGroupError("Matchmaking group should be 2 or 3.")
+    if page < 0:
+        raise ValueError("Page must be greater than or equal to 0.")
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"matchmaking|{group}|{page}"):
@@ -266,6 +268,9 @@ async def top_trophies(page: int = 0) -> Dict:
     :class:`Dict`
         The trophy leaderboard data.
     """
+    if page < 0:
+        raise ValueError("Page cannot be less than 0.")
+
     cache_client = redis.Redis(
         host=Client.REDIS_HOST,
         port=Client.REDIS_PORT,

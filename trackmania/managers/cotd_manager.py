@@ -36,7 +36,7 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
         db=Client.REDIS_DB,
         password=Client.REDIS_PASSWORD,
     )
-    
+
     if page < 0:
         raise ValueError("Page must be greater than or equal to 0")
 
