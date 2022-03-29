@@ -15,7 +15,7 @@ from ..util.cotd_parsers import parse_cotd
 
 async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
     """
-    Gets the player cotd data. Function will sleep for 30s if it uses too many requests.
+    Gets the player cotd data. Function will sleep for 120s if it uses too many requests.
 
     Parameters
     ----------
@@ -54,8 +54,7 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
             TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(page)])
         )
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            cache_client.set(f"{player_id}|cotd|{page}", json.dumps(cotd_page_resp))
+        
     else:
         page_one = await api_client.get(
             TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(0)])
@@ -73,8 +72,27 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
         page_one["cotds"].append(page_two["cotds"])
 
         while len(page_two["cotds"]) != 0:
+            print(f'{page}')
             if Client.RATELIMIT_REMAINING <= 5:
-                await asyncio.sleep(30)
+                print('sleeping')
+                await asyncio.sleep(120)
+
+            (
+                page_two,
+                Client.RATELIMIT_LIMIT,
+                Client.RATELIMIT_REMAINING,
+            ) = await api_client.get(
+                TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(page)]),
+                ratelimit=True,
+            )
+            
+            page += 1
+            page_one['cotds'].append(page_two['cotds'])
+        
+        cotd_page_resp = page_one
+
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        cache_client.set(f"{player_id}|cotd|{page}", json.dumps(cotd_page_resp))
 
     await api_client.close()
     return PlayerCOTD(**parse_cotd(cotd_page_resp))

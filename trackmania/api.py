@@ -93,8 +93,8 @@ class APIClient:
             else:
                 return (
                     await resp.json(),
-                    resp.headers.get("x-ratelimit-remaining")[0],
-                    resp.headers.get("x-ratelimit-limit")[0],
+                    int(resp.headers.get("x-ratelimit-remaining")[0]),
+                    int(resp.headers.get("x-ratelimit-limit")[0]),
                 )
 
     async def get(
