@@ -3,10 +3,21 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to py-tmio's documentation!
-============================================
+Welcome to py-tmio!
+===================
+py-tmio is an easy to use and async-ready API wrapper for trackmania.io
+
+Logging
+=======
+- Learn how to setup logging: :doc:`/logging`
+
+
+Examples
+========
+- Learn how to use this package! :doc:`/examples`
 
 .. include:: trackmania.rst
+
 
 Indices and tables
 ==================
