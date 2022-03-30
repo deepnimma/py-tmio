@@ -81,28 +81,23 @@ class APIClient:
         endpoint: str,
         *,
         raise_for_status: bool = True,
-        ratelimit: bool = False,
         **kwargs,
     ) -> dict:
         """Send an HTTP request to the site API and return the JSON response."""
         async with self.session.request(method.upper(), endpoint, **kwargs) as resp:
             await self.maybe_raise_for_status(resp, raise_for_status)
 
-            if not ratelimit:
-                return await resp.json()
-            else:
-                return (
-                    await resp.json(),
-                    int(resp.headers.get("x-ratelimit-remaining")[0]),
-                    int(resp.headers.get("x-ratelimit-limit")[0]),
-                )
+            if 'trackmania.io' in endpoint:
+                Client.RATELIMIT_LIMIT = int(resp.headers.get("x-ratelimit-limit")[0])
+                Client.RATELIMIT_REMAINING = int(resp.headers.get("x-ratelimit-remaining")[0])
+                
+            return await resp.json()
 
     async def get(
         self,
         endpoint: str,
         *,
         raise_for_status: bool = True,
-        ratelimit: bool = False,
         **kwargs,
     ) -> dict:
         """Site API GET."""
@@ -110,7 +105,6 @@ class APIClient:
             "GET",
             endpoint,
             raise_for_status=raise_for_status,
-            ratelimit=ratelimit,
             **kwargs,
         )
 
