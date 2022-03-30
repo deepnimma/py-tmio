@@ -50,7 +50,6 @@ class TMIO:
     TABS: TMIOTabs = TMIOTabs()
 
     @staticmethod
-    @lru_cache
     def build(endpoints: List[str]) -> str:
         """Builds a TMIO endpoint url.
 
@@ -99,7 +98,6 @@ class TMX:
     API: str = "api"
 
     @staticmethod
-    @lru_cache
     def build(endpoints: List[str]) -> str:
         """URL Builder for TMX API
 
