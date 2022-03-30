@@ -1,5 +1,6 @@
 import json
 from contextlib import suppress
+from multiprocessing.sharedctypes import Value
 
 import redis
 
@@ -23,6 +24,13 @@ async def get_ad(ad_uid: str) -> Ad:
     -------
     :class:`Ad`
         The maniapub.
+        
+    Raises
+    ------
+    `ValueError`
+        If given `ad_uid` is empty or :class:`NoneType`.
+    `TypeError`
+        If given `ad_uid` is not a string.
     """
     cache_client = redis.Redis(
         host=Client.REDIS_HOST,
@@ -30,6 +38,11 @@ async def get_ad(ad_uid: str) -> Ad:
         db=Client.REDIS_DB,
         password=Client.REDIS_PASSWORD,
     )
+    
+    if ad_uid == "" or ad_uid is None:
+        raise ValueError("ad_uid cannot be NoneType or empty.")
+    if not isinstance(ad_uid, str):
+        raise TypeError("ad_uid must be a string.")
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"ad|{ad_uid}"):

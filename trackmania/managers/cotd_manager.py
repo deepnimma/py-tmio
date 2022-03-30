@@ -29,6 +29,11 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
     -------
     :class:`PlayerCOTD`
         The COTD Data as a :class:`PlayerCOTD` object.
+        
+    Raises
+    ------
+    ValueError
+        If the given page is invalid.
     """
     cache_client = redis.Redis(
         host=Client.REDIS_HOST,
@@ -42,7 +47,6 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|cotd|{page}"):
-
             if page != -1:
                 return PlayerCOTD(
                     **parse_cotd(
