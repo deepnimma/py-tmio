@@ -1,95 +1,95 @@
 {
-    "accountid": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
-    "displayname": "NottCurious",
-    "timestamp": "2021-02-12T11:04:02+00:00",
-    "clubtag": "$F63W$F971$FCBS$FFFP",
-    "clubtagtimestamp": "2022-03-06T15:35:59+00:00",
-    "trophies": {
-        "points": 3290258,
-        "timestamp": "2022-03-07T04:02:19+00:00",
-        "counts": [
-            3378,
-            3868,
-            5482,
-            570,
-            163,
-            5,
-            0,
-            0,
-            0
-        ],
-        "echelon": 6,
-        "zone": {
-            "name": "India",
-            "flag": "IND",
-            "parent": {
-                "name": "Asia",
-                "flag": "asia",
-                "parent": {
-                    "name": "World",
-                    "flag": "WOR"
-                }
-            }
-        },
-        "zonepositions": [
-            8,
-            58,
-            4259
-        ]
-    },
-    "matchmaking": [
-        {
-            "info": {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
-                "rank": 4717,
-                "score": 2000,
-                "progression": 2000,
-                "division": {
-                    "position": 7,
-                    "rule": "points_range",
-                    "minpoints": 2000,
-                    "maxpoints": 2299
-                },
-                "division_next": {
-                    "position": 8,
-                    "rule": "points_range",
-                    "minpoints": 2300,
-                    "maxpoints": 2599
-                }
-            },
-            "total": 512540
-        },
-        {
-            "info": {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
-                "rank": 30913,
-                "score": 1292,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
-            },
-            "total": 402996
-        }
+  "accountid": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
+  "displayname": "NottCurious",
+  "timestamp": "2021-02-12T11:04:02+00:00",
+  "clubtag": "$F63W$F971$FCBS$FFFP",
+  "clubtagtimestamp": "2022-03-06T15:35:59+00:00",
+  "trophies": {
+    "points": 3290258,
+    "timestamp": "2022-03-07T04:02:19+00:00",
+    "counts": [
+      3378,
+      3868,
+      5482,
+      570,
+      163,
+      5,
+      0,
+      0,
+      0
     ],
-    "meta": {
-        "twitch": "NottCurious",
-        "youtube": "UCZV9i9_sgXwIdN6cy1uFkyw",
-        "twitter": "nottcurious"
+    "echelon": 6,
+    "zone": {
+      "name": "India",
+      "flag": "IND",
+      "parent": {
+        "name": "Asia",
+        "flag": "asia",
+        "parent": {
+          "name": "World",
+          "flag": "WOR"
+        }
+      }
+    },
+    "zonepositions": [
+      8,
+      58,
+      4259
+    ]
+  },
+  "matchmaking": [
+    {
+      "info": {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
+        "rank": 4717,
+        "score": 2000,
+        "progression": 2000,
+        "division": {
+          "position": 7,
+          "rule": "points_range",
+          "minpoints": 2000,
+          "maxpoints": 2299
+        },
+        "division_next": {
+          "position": 8,
+          "rule": "points_range",
+          "minpoints": 2300,
+          "maxpoints": 2599
+        }
+      },
+      "total": 512540
+    },
+    {
+      "info": {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "b73fe3d7-a92a-4a6d-ab9d-49005caec499",
+        "rank": 30913,
+        "score": 1292,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      },
+      "total": 402996
     }
+  ],
+  "meta": {
+    "twitch": "NottCurious",
+    "youtube": "UCZV9i9_sgXwIdN6cy1uFkyw",
+    "twitter": "nottcurious"
+  }
 }

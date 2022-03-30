@@ -1,88 +1,88 @@
 {
-    "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
-    "displayname": "Kaizer_TM",
-    "timestamp": "2020-12-11T13:36:48+00:00",
-    "trophies": {
-        "points": 919302,
-        "timestamp": "2022-03-01T16:22:49+00:00",
-        "counts": [
-            1112,
-            1059,
-            1466,
-            221,
-            44,
-            1,
-            0,
-            0,
-            0
-        ],
-        "echelon": 5,
-        "zone": {
-            "name": "India",
-            "flag": "IND",
-            "parent": {
-                "name": "Asia",
-                "flag": "asia",
-                "parent": {
-                    "name": "World",
-                    "flag": "WOR"
-                }
-            }
-        },
-        "zonepositions": [
-            30,
-            212,
-            20000
-        ]
-    },
-    "matchmaking": [
-        {
-            "info": {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
-                "rank": 11058,
-                "score": 1922,
-                "progression": 1922,
-                "division": {
-                    "position": 6,
-                    "rule": "points_range",
-                    "minpoints": 1600,
-                    "maxpoints": 1999
-                },
-                "division_next": {
-                    "position": 7,
-                    "rule": "points_range",
-                    "minpoints": 2000,
-                    "maxpoints": 2299
-                }
-            },
-            "total": 512574
-        },
-        {
-            "info": {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
-                "rank": 57257,
-                "score": 1200,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
-            },
-            "total": 403038
+  "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
+  "displayname": "Kaizer_TM",
+  "timestamp": "2020-12-11T13:36:48+00:00",
+  "trophies": {
+    "points": 919302,
+    "timestamp": "2022-03-01T16:22:49+00:00",
+    "counts": [
+      1112,
+      1059,
+      1466,
+      221,
+      44,
+      1,
+      0,
+      0,
+      0
+    ],
+    "echelon": 5,
+    "zone": {
+      "name": "India",
+      "flag": "IND",
+      "parent": {
+        "name": "Asia",
+        "flag": "asia",
+        "parent": {
+          "name": "World",
+          "flag": "WOR"
         }
+      }
+    },
+    "zonepositions": [
+      30,
+      212,
+      20000
     ]
+  },
+  "matchmaking": [
+    {
+      "info": {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
+        "rank": 11058,
+        "score": 1922,
+        "progression": 1922,
+        "division": {
+          "position": 6,
+          "rule": "points_range",
+          "minpoints": 1600,
+          "maxpoints": 1999
+        },
+        "division_next": {
+          "position": 7,
+          "rule": "points_range",
+          "minpoints": 2000,
+          "maxpoints": 2299
+        }
+      },
+      "total": 512574
+    },
+    {
+      "info": {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
+        "rank": 57257,
+        "score": 1200,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      },
+      "total": 403038
+    }
+  ]
 }

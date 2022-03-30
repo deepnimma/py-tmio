@@ -12,9 +12,11 @@ An Asyncio Friendly Trackmania API Wrapper for Python!
 </div>
 
 ## Important - [Trackmania.io API for my own project?](https://openplanet.dev/tmio/api)
+
 *See below on how to set your user agent*
 
 Your User-Agent Must Have:
+
 1. Your Discord Username
 2. Your Project Name
 
@@ -24,6 +26,7 @@ Example:
 *" | via py-tmio" is automatically appended to your user agent*
 
 #### How to set user agent.
+
 ```python
 from trackmania import Client
 
@@ -31,6 +34,7 @@ Client.USER_AGENT = "NottCurious#4351 | TMIndiaBot"
 ```
 
 #### How to set Redis Server Settings
+
 ```python
 from trackmania import Client
 
@@ -41,10 +45,13 @@ Client.REDIS_PASSWORD = "yadayadayada" # Defaults to None. Don't need to change 
 ```
 
 ## Docs
+
 Docs can be found on [readthedocs.org](https://py-trackmaniaio.readthedocs.io/en/latest/).
 
 ## Installation
+
 **Note:** Must have Python 3.10 or higher.
+
 ```shell
 python3 -m pip install py-tmio # Linux
 
@@ -52,14 +59,17 @@ python -m pip install py-tmio # Windows
 ```
 
 ## Caching
+
 Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 
 Caching is not *required* but is highly recommended.
 
 ## Changelog
+
 **v0.2.0**
 
 <small>**23rd March, 2022**</small>
+
 * Option to return raw data alongside the parsed data.
 * All classes previously in `trackmania.structures` have been moved to `trackmania`.
 * Update and fix lots of the problems I made.
@@ -67,6 +77,7 @@ Caching is not *required* but is highly recommended.
 **v0.1.0**
 
 <small>**15th March, 2022**</small>
+
 * First Beta Release of py-tmio
 * `player_manager`
     * `get_player(player_id)` command
@@ -82,7 +93,9 @@ Caching is not *required* but is highly recommended.
     * `totd(year, month, day, leaderboard)` command
 
 ## Examples
+
 ### Latest TOTD
+
 ```python
 from trackmania.managers import totd_manager
 
@@ -93,10 +106,15 @@ print(latest_totd.map_name)
 ```
 
 ## Pull Requests and Issues
-If you have any suggestions, bugs, fixes or enhancements, please open a [Pull Request](https://github.com/NottCurious/py-tmio/compare) or [Issue](https://github.com/NottCurious/py-tmio/issues/new)
+
+If you have any suggestions, bugs, fixes or enhancements, please open
+a [Pull Request](https://github.com/NottCurious/py-tmio/compare)
+or [Issue](https://github.com/NottCurious/py-tmio/issues/new)
 
 ## Discord
+
 Contact me on Discord if you have any questions, NottCurious#4351
 
 ## License
+
 [MIT License](https://mit-license.org/)

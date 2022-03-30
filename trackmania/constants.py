@@ -1,8 +1,8 @@
 # pylint: disable=too-many-instance-attributes
 from typing import List
-from functools import lru_cache
 
 __all__ = ("TMIO", "TMX")
+
 
 # pylint: disable=too-few-public-methods
 class TMIOTabs:

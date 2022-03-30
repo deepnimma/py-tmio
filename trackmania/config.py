@@ -2,6 +2,7 @@ from redis import Redis
 
 __all__ = ("Client",)
 
+
 # pylint: disable=too-few-public-methods
 class Client:
     """

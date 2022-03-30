@@ -1,759 +1,759 @@
 {
-    "year": 2022,
-    "month": 3,
-    "lastday": 31,
-    "days": [
-        {
-            "campaignid": 21679,
-            "map": {
-                "author": "d6141a5f-f879-4e21-bcaf-de961252fcad",
-                "name": "MTC - HabMichLieb Würfel",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 87161,
-                "goldScore": 93000,
-                "silverScore": 105000,
-                "bronzeScore": 131000,
-                "collectionName": "Stadium",
-                "filename": "MTC - HabMichLieb Würfel.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "232a375d-bfc1-4ea0-bde2-62ff4601c4e1",
-                "mapUid": "LddFfMoJx3xXJY86TxV0A1tJp96",
-                "submitter": "d6141a5f-f879-4e21-bcaf-de961252fcad",
-                "timestamp": "2022-03-01T14:36:36+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/a8cc6277-daef-4b9c-b183-d82dca74ac76",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/6777658d-efb6-4817-9c0d-9bdf964a5f5a.jpg",
-                "authorplayer": {
-                    "name": "Stups_Kiesel",
-                    "tag": "$S$C22В$FFFЭ",
-                    "id": "d6141a5f-f879-4e21-bcaf-de961252fcad",
-                    "zone": {
-                        "name": "Augsburg",
-                        "flag": "Ausgburg",
-                        "parent": {
-                            "name": "Bayern",
-                            "flag": "bavaria",
-                            "parent": {
-                                "name": "Germany",
-                                "flag": "GER",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "meta": {
-                        "twitch": "stups_kiesel",
-                        "youtube": "UCzyTqdqPC2ELzXz2r_CRcHg"
-                    }
-                },
-                "submitterplayer": {
-                    "name": "Stups_Kiesel",
-                    "tag": "$S$C22В$FFFЭ",
-                    "id": "d6141a5f-f879-4e21-bcaf-de961252fcad",
-                    "zone": {
-                        "name": "Augsburg",
-                        "flag": "Ausgburg",
-                        "parent": {
-                            "name": "Bayern",
-                            "flag": "bavaria",
-                            "parent": {
-                                "name": "Germany",
-                                "flag": "GER",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "meta": {
-                        "twitch": "stups_kiesel",
-                        "youtube": "UCzyTqdqPC2ELzXz2r_CRcHg"
-                    }
-                },
-                "exchangeid": 51997
-            },
-            "weekday": 1,
-            "monthday": 1,
-            "leaderboarduid": "732b2a4a-a91c-49e8-97c4-7264ebaa8321"
+  "year": 2022,
+  "month": 3,
+  "lastday": 31,
+  "days": [
+    {
+      "campaignid": 21679,
+      "map": {
+        "author": "d6141a5f-f879-4e21-bcaf-de961252fcad",
+        "name": "MTC - HabMichLieb Würfel",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 87161,
+        "goldScore": 93000,
+        "silverScore": 105000,
+        "bronzeScore": 131000,
+        "collectionName": "Stadium",
+        "filename": "MTC - HabMichLieb Würfel.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "232a375d-bfc1-4ea0-bde2-62ff4601c4e1",
+        "mapUid": "LddFfMoJx3xXJY86TxV0A1tJp96",
+        "submitter": "d6141a5f-f879-4e21-bcaf-de961252fcad",
+        "timestamp": "2022-03-01T14:36:36+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/a8cc6277-daef-4b9c-b183-d82dca74ac76",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/6777658d-efb6-4817-9c0d-9bdf964a5f5a.jpg",
+        "authorplayer": {
+          "name": "Stups_Kiesel",
+          "tag": "$S$C22В$FFFЭ",
+          "id": "d6141a5f-f879-4e21-bcaf-de961252fcad",
+          "zone": {
+            "name": "Augsburg",
+            "flag": "Ausgburg",
+            "parent": {
+              "name": "Bayern",
+              "flag": "bavaria",
+              "parent": {
+                "name": "Germany",
+                "flag": "GER",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          },
+          "meta": {
+            "twitch": "stups_kiesel",
+            "youtube": "UCzyTqdqPC2ELzXz2r_CRcHg"
+          }
         },
-        {
-            "campaignid": 21650,
-            "map": {
-                "author": "78332411-010f-4d61-84d8-0db1d6b5f8c0",
-                "name": "$F00P$F22l$F33a$F55s$F77t$F88i$FAAc$FCCi$FDDt$FFFy $nft ShineluTM",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 45191,
-                "goldScore": 48000,
-                "silverScore": 55000,
-                "bronzeScore": 68000,
-                "collectionName": "Stadium",
-                "filename": "Plasticity ft ShineluTM.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "d25ea3ce-1c70-4b07-a679-02ed7ceb2d68",
-                "mapUid": "jSnftUilzQCXzhFYjm6w36EFH88",
-                "submitter": "78332411-010f-4d61-84d8-0db1d6b5f8c0",
-                "timestamp": "2022-03-10T04:02:08+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/fe17bad0-9448-4016-9a36-ab22fec4913e",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/d478a2e6-f315-4a87-8b08-a7d7f60f1368.jpg",
-                "authorplayer": {
-                    "name": "henkisme",
-                    "tag": "$FFFEV$F05O",
-                    "id": "78332411-010f-4d61-84d8-0db1d6b5f8c0",
-                    "zone": {
-                        "name": "Gelderland",
-                        "flag": "Gelderland",
-                        "parent": {
-                            "name": "Netherlands",
-                            "flag": "NED",
-                            "parent": {
-                                "name": "Europe",
-                                "flag": "europe",
-                                "parent": {
-                                    "name": "World",
-                                    "flag": "WOR"
-                                }
-                            }
-                        }
-                    },
-                    "meta": {}
-                },
-                "submitterplayer": {
-                    "name": "henkisme",
-                    "tag": "$FFFEV$F05O",
-                    "id": "78332411-010f-4d61-84d8-0db1d6b5f8c0",
-                    "zone": {
-                        "name": "Gelderland",
-                        "flag": "Gelderland",
-                        "parent": {
-                            "name": "Netherlands",
-                            "flag": "NED",
-                            "parent": {
-                                "name": "Europe",
-                                "flag": "europe",
-                                "parent": {
-                                    "name": "World",
-                                    "flag": "WOR"
-                                }
-                            }
-                        }
-                    },
-                    "meta": {}
-                },
-                "exchangeid": 49094
-            },
-            "weekday": 2,
-            "monthday": 2,
-            "leaderboarduid": "fe1abdb3-6ebe-4b46-b36d-26ee3e8f2c1e"
+        "submitterplayer": {
+          "name": "Stups_Kiesel",
+          "tag": "$S$C22В$FFFЭ",
+          "id": "d6141a5f-f879-4e21-bcaf-de961252fcad",
+          "zone": {
+            "name": "Augsburg",
+            "flag": "Ausgburg",
+            "parent": {
+              "name": "Bayern",
+              "flag": "bavaria",
+              "parent": {
+                "name": "Germany",
+                "flag": "GER",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          },
+          "meta": {
+            "twitch": "stups_kiesel",
+            "youtube": "UCzyTqdqPC2ELzXz2r_CRcHg"
+          }
         },
-        {
-            "campaignid": 21651,
-            "map": {
-                "author": "499963f4-8284-487e-b0f1-511ee897ec15",
-                "name": "$s$F30Ignis $FFFft' ollernice",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 53115,
-                "goldScore": 57000,
-                "silverScore": 64000,
-                "bronzeScore": 80000,
-                "collectionName": "Stadium",
-                "filename": "Ignis ft' ollernice.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "9803ecba-de38-46fa-8261-f503dc52bd1f",
-                "mapUid": "f2DKFqkbb7QlX12kNg0Not4aWvm",
-                "submitter": "499963f4-8284-487e-b0f1-511ee897ec15",
-                "timestamp": "2022-02-23T14:55:12+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/7e39c59e-996f-4dce-8186-03a7ca6afeab",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/c0a72ba9-4bc8-4152-a03b-296cac366c88.jpg",
-                "authorplayer": {
-                    "name": "Skaaz.",
-                    "tag": "$FFFEV$F05O",
-                    "id": "499963f4-8284-487e-b0f1-511ee897ec15",
-                    "zone": {
-                        "name": "Seine-Maritime",
-                        "flag": "Seine-Maritime",
-                        "parent": {
-                            "name": "Normandie",
-                            "flag": "normandie",
-                            "parent": {
-                                "name": "France",
-                                "flag": "FRA",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "submitterplayer": {
-                    "name": "Skaaz.",
-                    "tag": "$FFFEV$F05O",
-                    "id": "499963f4-8284-487e-b0f1-511ee897ec15",
-                    "zone": {
-                        "name": "Seine-Maritime",
-                        "flag": "Seine-Maritime",
-                        "parent": {
-                            "name": "Normandie",
-                            "flag": "normandie",
-                            "parent": {
-                                "name": "France",
-                                "flag": "FRA",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "exchangeid": 51018
-            },
-            "weekday": 3,
-            "monthday": 3,
-            "leaderboarduid": "c4188a67-9cc2-481b-be3e-806ad504c3b0"
+        "exchangeid": 51997
+      },
+      "weekday": 1,
+      "monthday": 1,
+      "leaderboarduid": "732b2a4a-a91c-49e8-97c4-7264ebaa8321"
+    },
+    {
+      "campaignid": 21650,
+      "map": {
+        "author": "78332411-010f-4d61-84d8-0db1d6b5f8c0",
+        "name": "$F00P$F22l$F33a$F55s$F77t$F88i$FAAc$FCCi$FDDt$FFFy $nft ShineluTM",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 45191,
+        "goldScore": 48000,
+        "silverScore": 55000,
+        "bronzeScore": 68000,
+        "collectionName": "Stadium",
+        "filename": "Plasticity ft ShineluTM.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "d25ea3ce-1c70-4b07-a679-02ed7ceb2d68",
+        "mapUid": "jSnftUilzQCXzhFYjm6w36EFH88",
+        "submitter": "78332411-010f-4d61-84d8-0db1d6b5f8c0",
+        "timestamp": "2022-03-10T04:02:08+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/fe17bad0-9448-4016-9a36-ab22fec4913e",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/d478a2e6-f315-4a87-8b08-a7d7f60f1368.jpg",
+        "authorplayer": {
+          "name": "henkisme",
+          "tag": "$FFFEV$F05O",
+          "id": "78332411-010f-4d61-84d8-0db1d6b5f8c0",
+          "zone": {
+            "name": "Gelderland",
+            "flag": "Gelderland",
+            "parent": {
+              "name": "Netherlands",
+              "flag": "NED",
+              "parent": {
+                "name": "Europe",
+                "flag": "europe",
+                "parent": {
+                  "name": "World",
+                  "flag": "WOR"
+                }
+              }
+            }
+          },
+          "meta": {}
         },
-        {
-            "campaignid": 21652,
-            "map": {
-                "author": "3468343f-bc7f-4ddd-938f-0f118d13cdc9",
-                "name": "$s$o$n$c33AKITA 4 $z$s$n$o- KOYO",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 46987,
-                "goldScore": 50000,
-                "silverScore": 57000,
-                "bronzeScore": 71000,
-                "collectionName": "Stadium",
-                "filename": "AKITA 4 - KOYO.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "34238af2-67ca-40bb-8ea6-73a30b0db284",
-                "mapUid": "2DsoFI8MY0qvLM1_Fv3PWBKch0m",
-                "submitter": "3468343f-bc7f-4ddd-938f-0f118d13cdc9",
-                "timestamp": "2022-02-23T23:12:51+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/05b655c5-e67a-498f-9104-c55fae465233",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/e8095c75-3b49-460e-ad18-95a6005b5803.jpg",
-                "authorplayer": {
-                    "name": "Proff10",
-                    "id": "3468343f-bc7f-4ddd-938f-0f118d13cdc9",
-                    "zone": {
-                        "name": "South West England",
-                        "flag": "South West England ",
-                        "parent": {
-                            "name": "England",
-                            "flag": "ENG",
-                            "parent": {
-                                "name": "United Kingdom",
-                                "flag": "GBR",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "submitterplayer": {
-                    "name": "Proff10",
-                    "id": "3468343f-bc7f-4ddd-938f-0f118d13cdc9",
-                    "zone": {
-                        "name": "South West England",
-                        "flag": "South West England ",
-                        "parent": {
-                            "name": "England",
-                            "flag": "ENG",
-                            "parent": {
-                                "name": "United Kingdom",
-                                "flag": "GBR",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "exchangeid": 51903
-            },
-            "weekday": 4,
-            "monthday": 4,
-            "leaderboarduid": "a2ae4059-5650-4934-b13c-00d5a33cb983"
+        "submitterplayer": {
+          "name": "henkisme",
+          "tag": "$FFFEV$F05O",
+          "id": "78332411-010f-4d61-84d8-0db1d6b5f8c0",
+          "zone": {
+            "name": "Gelderland",
+            "flag": "Gelderland",
+            "parent": {
+              "name": "Netherlands",
+              "flag": "NED",
+              "parent": {
+                "name": "Europe",
+                "flag": "europe",
+                "parent": {
+                  "name": "World",
+                  "flag": "WOR"
+                }
+              }
+            }
+          },
+          "meta": {}
         },
-        {
-            "campaignid": 21653,
-            "map": {
-                "author": "5a1b3368-d3cb-4a13-93e8-ff9800d7df2f",
-                "name": "Avalanche",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 39584,
-                "goldScore": 42000,
-                "silverScore": 48000,
-                "bronzeScore": 60000,
-                "collectionName": "Stadium",
-                "filename": "Avalanche.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "93fa1ca3-b229-4a0c-a883-9a378778bc05",
-                "mapUid": "t4u5U3HeTgBZdZjsHwKhWUhhbGg",
-                "submitter": "5a1b3368-d3cb-4a13-93e8-ff9800d7df2f",
-                "timestamp": "2022-03-07T19:02:52+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/dc126341-80dd-4277-ae5a-14ef12982c55",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/53e711e9-ad53-405e-b886-8f1f08fa671c.jpg",
-                "authorplayer": {
-                    "name": "ttv.DangerRae91",
-                    "tag": "$O$FF0SHRED",
-                    "id": "5a1b3368-d3cb-4a13-93e8-ff9800d7df2f",
-                    "zone": {
-                        "name": "New South Wales",
-                        "flag": "New South Wales",
-                        "parent": {
-                            "name": "Australia",
-                            "flag": "AUS",
-                            "parent": {
-                                "name": "Oceania",
-                                "flag": "oceania",
-                                "parent": {
-                                    "name": "World",
-                                    "flag": "WOR"
-                                }
-                            }
-                        }
-                    },
-                    "meta": {}
-                },
-                "submitterplayer": {
-                    "name": "ttv.DangerRae91",
-                    "tag": "$O$FF0SHRED",
-                    "id": "5a1b3368-d3cb-4a13-93e8-ff9800d7df2f",
-                    "zone": {
-                        "name": "New South Wales",
-                        "flag": "New South Wales",
-                        "parent": {
-                            "name": "Australia",
-                            "flag": "AUS",
-                            "parent": {
-                                "name": "Oceania",
-                                "flag": "oceania",
-                                "parent": {
-                                    "name": "World",
-                                    "flag": "WOR"
-                                }
-                            }
-                        }
-                    },
-                    "meta": {}
-                },
-                "exchangeid": 52757
-            },
-            "weekday": 5,
-            "monthday": 5,
-            "leaderboarduid": "d5f3259d-8376-403d-9128-6f2f3f93bb25"
+        "exchangeid": 49094
+      },
+      "weekday": 2,
+      "monthday": 2,
+      "leaderboarduid": "fe1abdb3-6ebe-4b46-b36d-26ee3e8f2c1e"
+    },
+    {
+      "campaignid": 21651,
+      "map": {
+        "author": "499963f4-8284-487e-b0f1-511ee897ec15",
+        "name": "$s$F30Ignis $FFFft' ollernice",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 53115,
+        "goldScore": 57000,
+        "silverScore": 64000,
+        "bronzeScore": 80000,
+        "collectionName": "Stadium",
+        "filename": "Ignis ft' ollernice.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "9803ecba-de38-46fa-8261-f503dc52bd1f",
+        "mapUid": "f2DKFqkbb7QlX12kNg0Not4aWvm",
+        "submitter": "499963f4-8284-487e-b0f1-511ee897ec15",
+        "timestamp": "2022-02-23T14:55:12+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/7e39c59e-996f-4dce-8186-03a7ca6afeab",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/c0a72ba9-4bc8-4152-a03b-296cac366c88.jpg",
+        "authorplayer": {
+          "name": "Skaaz.",
+          "tag": "$FFFEV$F05O",
+          "id": "499963f4-8284-487e-b0f1-511ee897ec15",
+          "zone": {
+            "name": "Seine-Maritime",
+            "flag": "Seine-Maritime",
+            "parent": {
+              "name": "Normandie",
+              "flag": "normandie",
+              "parent": {
+                "name": "France",
+                "flag": "FRA",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          }
         },
-        {
-            "campaignid": 21654,
-            "map": {
-                "author": "912ae713-d291-44c7-b34e-bd96c655dc64",
-                "name": "$o$F22Gamer $111Impact",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 39688,
-                "goldScore": 43000,
-                "silverScore": 48000,
-                "bronzeScore": 60000,
-                "collectionName": "Stadium",
-                "filename": "Gamer Impact.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "9ae82c76-19cf-46e1-a85f-2a0712d78f9e",
-                "mapUid": "1gfapJWIyVCuHo1rQkJlND0hLaa",
-                "submitter": "912ae713-d291-44c7-b34e-bd96c655dc64",
-                "timestamp": "2022-02-21T22:41:00+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/4a9e7ff6-d7ba-43b8-af20-cda939ac4f28",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/f743108b-5189-4b0a-9a43-e8d5c7314a7f.jpg",
-                "authorplayer": {
-                    "name": "Yorsh-Mi-Veloce",
-                    "id": "912ae713-d291-44c7-b34e-bd96c655dc64",
-                    "zone": {
-                        "name": "Essonne",
-                        "flag": "Essonne",
-                        "parent": {
-                            "name": "Île-de-France",
-                            "flag": "ile-de-france",
-                            "parent": {
-                                "name": "France",
-                                "flag": "FRA",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "meta": {}
-                },
-                "submitterplayer": {
-                    "name": "Yorsh-Mi-Veloce",
-                    "id": "912ae713-d291-44c7-b34e-bd96c655dc64",
-                    "zone": {
-                        "name": "Essonne",
-                        "flag": "Essonne",
-                        "parent": {
-                            "name": "Île-de-France",
-                            "flag": "ile-de-france",
-                            "parent": {
-                                "name": "France",
-                                "flag": "FRA",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "meta": {}
-                },
-                "exchangeid": 54275
-            },
-            "weekday": 6,
-            "monthday": 6,
-            "leaderboarduid": "5a5db5be-c357-47a0-b96f-e3d1cc7462ad"
+        "submitterplayer": {
+          "name": "Skaaz.",
+          "tag": "$FFFEV$F05O",
+          "id": "499963f4-8284-487e-b0f1-511ee897ec15",
+          "zone": {
+            "name": "Seine-Maritime",
+            "flag": "Seine-Maritime",
+            "parent": {
+              "name": "Normandie",
+              "flag": "normandie",
+              "parent": {
+                "name": "France",
+                "flag": "FRA",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          }
         },
-        {
-            "campaignid": 21655,
-            "map": {
-                "author": "e7c087cf-46d7-402d-af1a-8abf9c12cad3",
-                "name": "$i$o$C00Willy Wonka's $609Chocolate Factory",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 55406,
-                "goldScore": 59000,
-                "silverScore": 67000,
-                "bronzeScore": 84000,
-                "collectionName": "Stadium",
-                "filename": "Willy Wonka's Chocolate Factory.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "5773d295-bd7e-45af-8b67-b31bc20700c5",
-                "mapUid": "FNyblA5g6KsP6gUwxEFmskWcs_4",
-                "submitter": "e7c087cf-46d7-402d-af1a-8abf9c12cad3",
-                "timestamp": "2022-03-07T09:17:09+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/4e5b67f8-ea22-4a0e-9e6a-051732d4a1cd",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/93a46ea1-65dd-4ec1-9f8e-9d1379f8c77c.jpg",
-                "authorplayer": {
-                    "name": "Oclavukixus",
-                    "tag": "$CCCT$D60M$555A",
-                    "id": "e7c087cf-46d7-402d-af1a-8abf9c12cad3",
-                    "zone": {
-                        "name": "Nevada",
-                        "flag": "Nevada",
-                        "parent": {
-                            "name": "United States",
-                            "flag": "USA",
-                            "parent": {
-                                "name": "North America",
-                                "flag": "namerica",
-                                "parent": {
-                                    "name": "World",
-                                    "flag": "WOR"
-                                }
-                            }
-                        }
-                    }
-                },
-                "submitterplayer": {
-                    "name": "Oclavukixus",
-                    "tag": "$CCCT$D60M$555A",
-                    "id": "e7c087cf-46d7-402d-af1a-8abf9c12cad3",
-                    "zone": {
-                        "name": "Nevada",
-                        "flag": "Nevada",
-                        "parent": {
-                            "name": "United States",
-                            "flag": "USA",
-                            "parent": {
-                                "name": "North America",
-                                "flag": "namerica",
-                                "parent": {
-                                    "name": "World",
-                                    "flag": "WOR"
-                                }
-                            }
-                        }
-                    }
-                },
-                "exchangeid": 52791
-            },
-            "weekday": 0,
-            "monthday": 7,
-            "leaderboarduid": "d66b778f-808e-4e71-bde0-80a6bda7fcbc"
+        "exchangeid": 51018
+      },
+      "weekday": 3,
+      "monthday": 3,
+      "leaderboarduid": "c4188a67-9cc2-481b-be3e-806ad504c3b0"
+    },
+    {
+      "campaignid": 21652,
+      "map": {
+        "author": "3468343f-bc7f-4ddd-938f-0f118d13cdc9",
+        "name": "$s$o$n$c33AKITA 4 $z$s$n$o- KOYO",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 46987,
+        "goldScore": 50000,
+        "silverScore": 57000,
+        "bronzeScore": 71000,
+        "collectionName": "Stadium",
+        "filename": "AKITA 4 - KOYO.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "34238af2-67ca-40bb-8ea6-73a30b0db284",
+        "mapUid": "2DsoFI8MY0qvLM1_Fv3PWBKch0m",
+        "submitter": "3468343f-bc7f-4ddd-938f-0f118d13cdc9",
+        "timestamp": "2022-02-23T23:12:51+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/05b655c5-e67a-498f-9104-c55fae465233",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/e8095c75-3b49-460e-ad18-95a6005b5803.jpg",
+        "authorplayer": {
+          "name": "Proff10",
+          "id": "3468343f-bc7f-4ddd-938f-0f118d13cdc9",
+          "zone": {
+            "name": "South West England",
+            "flag": "South West England ",
+            "parent": {
+              "name": "England",
+              "flag": "ENG",
+              "parent": {
+                "name": "United Kingdom",
+                "flag": "GBR",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          }
         },
-        {
-            "campaignid": 21801,
-            "map": {
-                "author": "a6ae76c9-9030-4a7b-b533-cacfd6e85cb2",
-                "name": "$o$0CFAQUA$0CFPARK $zft $0CF' $zSophie_ice",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 42069,
-                "goldScore": 45000,
-                "silverScore": 51000,
-                "bronzeScore": 64000,
-                "collectionName": "Stadium",
-                "filename": "AQUAPARK_ft__Sophie_ice.Map (1).Gbx",
-                "isPlayable": true,
-                "mapId": "e21fa396-5f82-4df6-9ae3-9b115d28adeb",
-                "mapUid": "Fh_GhNThDq6s_6ibuP1_hEPocLl",
-                "submitter": "7cd60a75-609a-4e64-b286-16f329878249",
-                "timestamp": "2022-02-25T10:40:13+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/0fe4bef9-5f07-47c2-ad3a-1803f17e6a80",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/620b6dda-78ce-48ca-8d12-267e96fc7717.jpg",
-                "authorplayer": {
-                    "name": "ShcrTM",
-                    "tag": "$W$FC6K$F93F$F60C",
-                    "id": "a6ae76c9-9030-4a7b-b533-cacfd6e85cb2",
-                    "zone": {
-                        "name": "Drôme",
-                        "flag": "Drome",
-                        "parent": {
-                            "name": "Auvergne-Rhône-Alpes",
-                            "flag": "auvergne-rhone-alpes",
-                            "parent": {
-                                "name": "France",
-                                "flag": "FRA",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "meta": {
-                        "twitch": "shcrtm",
-                        "youtube": "UCA8px8Y4RVCwekze5VxdzHg"
-                    }
-                },
-                "submitterplayer": {
-                    "name": "Tona.",
-                    "tag": "$3FFC$F0CW$FFFF",
-                    "id": "7cd60a75-609a-4e64-b286-16f329878249",
-                    "zone": {
-                        "name": "Val-de-Marne",
-                        "flag": "Val-de-Marne",
-                        "parent": {
-                            "name": "Île-de-France",
-                            "flag": "ile-de-france",
-                            "parent": {
-                                "name": "France",
-                                "flag": "FRA",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "meta": {
-                        "nadeo": true,
-                        "twitter": "TonaTM_"
-                    }
-                },
-                "exchangeid": 54047
-            },
-            "weekday": 1,
-            "monthday": 8,
-            "leaderboarduid": "619e3dd7-19a8-4439-9e5b-63ccb612bd9f"
+        "submitterplayer": {
+          "name": "Proff10",
+          "id": "3468343f-bc7f-4ddd-938f-0f118d13cdc9",
+          "zone": {
+            "name": "South West England",
+            "flag": "South West England ",
+            "parent": {
+              "name": "England",
+              "flag": "ENG",
+              "parent": {
+                "name": "United Kingdom",
+                "flag": "GBR",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          }
         },
-        {
-            "campaignid": 21911,
-            "map": {
-                "author": "714f94a3-16a9-4856-97e3-49db5e8a610f",
-                "name": " Glory Days ft Neon",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 60483,
-                "goldScore": 65000,
-                "silverScore": 73000,
-                "bronzeScore": 91000,
-                "collectionName": "Stadium",
-                "filename": " Glory Days ft Neon.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "fbdb7228-f5fe-41fc-af18-7ef74f2a6fe6",
-                "mapUid": "N0wz5ZPVzbk1ciGdD46Q2UZVN1",
-                "submitter": "714f94a3-16a9-4856-97e3-49db5e8a610f",
-                "timestamp": "2022-03-02T02:38:42+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/61cfa702-9fa0-40d4-a07e-3ed0669197c6",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/501cb43e-d219-43ee-ad98-4a36d84403c4.jpg",
-                "authorplayer": {
-                    "name": "Everios96",
-                    "id": "714f94a3-16a9-4856-97e3-49db5e8a610f",
-                    "zone": {
-                        "name": "Köln",
-                        "flag": "koln",
-                        "parent": {
-                            "name": "Nordrhein-Westfalen",
-                            "flag": "nordrhein-westfalen",
-                            "parent": {
-                                "name": "Germany",
-                                "flag": "GER",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "submitterplayer": {
-                    "name": "Everios96",
-                    "id": "714f94a3-16a9-4856-97e3-49db5e8a610f",
-                    "zone": {
-                        "name": "Köln",
-                        "flag": "koln",
-                        "parent": {
-                            "name": "Nordrhein-Westfalen",
-                            "flag": "nordrhein-westfalen",
-                            "parent": {
-                                "name": "Germany",
-                                "flag": "GER",
-                                "parent": {
-                                    "name": "Europe",
-                                    "flag": "europe",
-                                    "parent": {
-                                        "name": "World",
-                                        "flag": "WOR"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "exchangeid": 53886
-            },
-            "weekday": 2,
-            "monthday": 9,
-            "leaderboarduid": "89e5bb95-63ff-407d-9a2d-a64c7a511e8e"
+        "exchangeid": 51903
+      },
+      "weekday": 4,
+      "monthday": 4,
+      "leaderboarduid": "a2ae4059-5650-4934-b13c-00d5a33cb983"
+    },
+    {
+      "campaignid": 21653,
+      "map": {
+        "author": "5a1b3368-d3cb-4a13-93e8-ff9800d7df2f",
+        "name": "Avalanche",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 39584,
+        "goldScore": 42000,
+        "silverScore": 48000,
+        "bronzeScore": 60000,
+        "collectionName": "Stadium",
+        "filename": "Avalanche.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "93fa1ca3-b229-4a0c-a883-9a378778bc05",
+        "mapUid": "t4u5U3HeTgBZdZjsHwKhWUhhbGg",
+        "submitter": "5a1b3368-d3cb-4a13-93e8-ff9800d7df2f",
+        "timestamp": "2022-03-07T19:02:52+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/dc126341-80dd-4277-ae5a-14ef12982c55",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/53e711e9-ad53-405e-b886-8f1f08fa671c.jpg",
+        "authorplayer": {
+          "name": "ttv.DangerRae91",
+          "tag": "$O$FF0SHRED",
+          "id": "5a1b3368-d3cb-4a13-93e8-ff9800d7df2f",
+          "zone": {
+            "name": "New South Wales",
+            "flag": "New South Wales",
+            "parent": {
+              "name": "Australia",
+              "flag": "AUS",
+              "parent": {
+                "name": "Oceania",
+                "flag": "oceania",
+                "parent": {
+                  "name": "World",
+                  "flag": "WOR"
+                }
+              }
+            }
+          },
+          "meta": {}
         },
-        {
-            "campaignid": 21912,
-            "map": {
-                "author": "711036bf-d90b-4fa4-9be5-964eb3912256",
-                "name": "$sFrosty creek",
-                "mapType": "TrackMania\\TM_Race",
-                "mapStyle": "",
-                "authorScore": 42051,
-                "goldScore": 45000,
-                "silverScore": 51000,
-                "bronzeScore": 64000,
-                "collectionName": "Stadium",
-                "filename": "Frosty creek.Map.Gbx",
-                "isPlayable": true,
-                "mapId": "f301c6e6-b608-4e20-a0ae-ed48aef8b29d",
-                "mapUid": "E14e8D93S7QI2_xinrM6ZxWlSc",
-                "submitter": "711036bf-d90b-4fa4-9be5-964eb3912256",
-                "timestamp": "2022-03-03T14:17:03+00:00",
-                "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/583bb411-6e80-4cf0-8b76-954f72bf1cb7",
-                "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/ba5d860b-ef42-4115-a7d0-d53a2df4313a.jpg",
-                "authorplayer": {
-                    "name": "Mariina.",
-                    "tag": "$S$O$FFFB$06FT",
-                    "id": "711036bf-d90b-4fa4-9be5-964eb3912256",
-                    "zone": {
-                        "name": "Salzburg",
-                        "flag": "Salzburg",
-                        "parent": {
-                            "name": "Austria",
-                            "flag": "AUT",
-                            "parent": {
-                                "name": "Europe",
-                                "flag": "europe",
-                                "parent": {
-                                    "name": "World",
-                                    "flag": "WOR"
-                                }
-                            }
-                        }
-                    },
-                    "meta": {
-                        "twitch": "Mariina9899"
-                    }
-                },
-                "submitterplayer": {
-                    "name": "Mariina.",
-                    "tag": "$S$O$FFFB$06FT",
-                    "id": "711036bf-d90b-4fa4-9be5-964eb3912256",
-                    "zone": {
-                        "name": "Salzburg",
-                        "flag": "Salzburg",
-                        "parent": {
-                            "name": "Austria",
-                            "flag": "AUT",
-                            "parent": {
-                                "name": "Europe",
-                                "flag": "europe",
-                                "parent": {
-                                    "name": "World",
-                                    "flag": "WOR"
-                                }
-                            }
-                        }
-                    },
-                    "meta": {
-                        "twitch": "Mariina9899"
-                    }
-                },
-                "exchangeid": 51774
-            },
-            "weekday": 3,
-            "monthday": 10,
-            "leaderboarduid": "5b520978-749c-45a9-824a-e42813edb5b6"
-        }
-    ],
-    "monthoffset": 0,
-    "monthcount": 21
+        "submitterplayer": {
+          "name": "ttv.DangerRae91",
+          "tag": "$O$FF0SHRED",
+          "id": "5a1b3368-d3cb-4a13-93e8-ff9800d7df2f",
+          "zone": {
+            "name": "New South Wales",
+            "flag": "New South Wales",
+            "parent": {
+              "name": "Australia",
+              "flag": "AUS",
+              "parent": {
+                "name": "Oceania",
+                "flag": "oceania",
+                "parent": {
+                  "name": "World",
+                  "flag": "WOR"
+                }
+              }
+            }
+          },
+          "meta": {}
+        },
+        "exchangeid": 52757
+      },
+      "weekday": 5,
+      "monthday": 5,
+      "leaderboarduid": "d5f3259d-8376-403d-9128-6f2f3f93bb25"
+    },
+    {
+      "campaignid": 21654,
+      "map": {
+        "author": "912ae713-d291-44c7-b34e-bd96c655dc64",
+        "name": "$o$F22Gamer $111Impact",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 39688,
+        "goldScore": 43000,
+        "silverScore": 48000,
+        "bronzeScore": 60000,
+        "collectionName": "Stadium",
+        "filename": "Gamer Impact.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "9ae82c76-19cf-46e1-a85f-2a0712d78f9e",
+        "mapUid": "1gfapJWIyVCuHo1rQkJlND0hLaa",
+        "submitter": "912ae713-d291-44c7-b34e-bd96c655dc64",
+        "timestamp": "2022-02-21T22:41:00+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/4a9e7ff6-d7ba-43b8-af20-cda939ac4f28",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/f743108b-5189-4b0a-9a43-e8d5c7314a7f.jpg",
+        "authorplayer": {
+          "name": "Yorsh-Mi-Veloce",
+          "id": "912ae713-d291-44c7-b34e-bd96c655dc64",
+          "zone": {
+            "name": "Essonne",
+            "flag": "Essonne",
+            "parent": {
+              "name": "Île-de-France",
+              "flag": "ile-de-france",
+              "parent": {
+                "name": "France",
+                "flag": "FRA",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          },
+          "meta": {}
+        },
+        "submitterplayer": {
+          "name": "Yorsh-Mi-Veloce",
+          "id": "912ae713-d291-44c7-b34e-bd96c655dc64",
+          "zone": {
+            "name": "Essonne",
+            "flag": "Essonne",
+            "parent": {
+              "name": "Île-de-France",
+              "flag": "ile-de-france",
+              "parent": {
+                "name": "France",
+                "flag": "FRA",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          },
+          "meta": {}
+        },
+        "exchangeid": 54275
+      },
+      "weekday": 6,
+      "monthday": 6,
+      "leaderboarduid": "5a5db5be-c357-47a0-b96f-e3d1cc7462ad"
+    },
+    {
+      "campaignid": 21655,
+      "map": {
+        "author": "e7c087cf-46d7-402d-af1a-8abf9c12cad3",
+        "name": "$i$o$C00Willy Wonka's $609Chocolate Factory",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 55406,
+        "goldScore": 59000,
+        "silverScore": 67000,
+        "bronzeScore": 84000,
+        "collectionName": "Stadium",
+        "filename": "Willy Wonka's Chocolate Factory.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "5773d295-bd7e-45af-8b67-b31bc20700c5",
+        "mapUid": "FNyblA5g6KsP6gUwxEFmskWcs_4",
+        "submitter": "e7c087cf-46d7-402d-af1a-8abf9c12cad3",
+        "timestamp": "2022-03-07T09:17:09+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/4e5b67f8-ea22-4a0e-9e6a-051732d4a1cd",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/93a46ea1-65dd-4ec1-9f8e-9d1379f8c77c.jpg",
+        "authorplayer": {
+          "name": "Oclavukixus",
+          "tag": "$CCCT$D60M$555A",
+          "id": "e7c087cf-46d7-402d-af1a-8abf9c12cad3",
+          "zone": {
+            "name": "Nevada",
+            "flag": "Nevada",
+            "parent": {
+              "name": "United States",
+              "flag": "USA",
+              "parent": {
+                "name": "North America",
+                "flag": "namerica",
+                "parent": {
+                  "name": "World",
+                  "flag": "WOR"
+                }
+              }
+            }
+          }
+        },
+        "submitterplayer": {
+          "name": "Oclavukixus",
+          "tag": "$CCCT$D60M$555A",
+          "id": "e7c087cf-46d7-402d-af1a-8abf9c12cad3",
+          "zone": {
+            "name": "Nevada",
+            "flag": "Nevada",
+            "parent": {
+              "name": "United States",
+              "flag": "USA",
+              "parent": {
+                "name": "North America",
+                "flag": "namerica",
+                "parent": {
+                  "name": "World",
+                  "flag": "WOR"
+                }
+              }
+            }
+          }
+        },
+        "exchangeid": 52791
+      },
+      "weekday": 0,
+      "monthday": 7,
+      "leaderboarduid": "d66b778f-808e-4e71-bde0-80a6bda7fcbc"
+    },
+    {
+      "campaignid": 21801,
+      "map": {
+        "author": "a6ae76c9-9030-4a7b-b533-cacfd6e85cb2",
+        "name": "$o$0CFAQUA$0CFPARK $zft $0CF' $zSophie_ice",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 42069,
+        "goldScore": 45000,
+        "silverScore": 51000,
+        "bronzeScore": 64000,
+        "collectionName": "Stadium",
+        "filename": "AQUAPARK_ft__Sophie_ice.Map (1).Gbx",
+        "isPlayable": true,
+        "mapId": "e21fa396-5f82-4df6-9ae3-9b115d28adeb",
+        "mapUid": "Fh_GhNThDq6s_6ibuP1_hEPocLl",
+        "submitter": "7cd60a75-609a-4e64-b286-16f329878249",
+        "timestamp": "2022-02-25T10:40:13+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/0fe4bef9-5f07-47c2-ad3a-1803f17e6a80",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/620b6dda-78ce-48ca-8d12-267e96fc7717.jpg",
+        "authorplayer": {
+          "name": "ShcrTM",
+          "tag": "$W$FC6K$F93F$F60C",
+          "id": "a6ae76c9-9030-4a7b-b533-cacfd6e85cb2",
+          "zone": {
+            "name": "Drôme",
+            "flag": "Drome",
+            "parent": {
+              "name": "Auvergne-Rhône-Alpes",
+              "flag": "auvergne-rhone-alpes",
+              "parent": {
+                "name": "France",
+                "flag": "FRA",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          },
+          "meta": {
+            "twitch": "shcrtm",
+            "youtube": "UCA8px8Y4RVCwekze5VxdzHg"
+          }
+        },
+        "submitterplayer": {
+          "name": "Tona.",
+          "tag": "$3FFC$F0CW$FFFF",
+          "id": "7cd60a75-609a-4e64-b286-16f329878249",
+          "zone": {
+            "name": "Val-de-Marne",
+            "flag": "Val-de-Marne",
+            "parent": {
+              "name": "Île-de-France",
+              "flag": "ile-de-france",
+              "parent": {
+                "name": "France",
+                "flag": "FRA",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          },
+          "meta": {
+            "nadeo": true,
+            "twitter": "TonaTM_"
+          }
+        },
+        "exchangeid": 54047
+      },
+      "weekday": 1,
+      "monthday": 8,
+      "leaderboarduid": "619e3dd7-19a8-4439-9e5b-63ccb612bd9f"
+    },
+    {
+      "campaignid": 21911,
+      "map": {
+        "author": "714f94a3-16a9-4856-97e3-49db5e8a610f",
+        "name": " Glory Days ft Neon",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 60483,
+        "goldScore": 65000,
+        "silverScore": 73000,
+        "bronzeScore": 91000,
+        "collectionName": "Stadium",
+        "filename": " Glory Days ft Neon.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "fbdb7228-f5fe-41fc-af18-7ef74f2a6fe6",
+        "mapUid": "N0wz5ZPVzbk1ciGdD46Q2UZVN1",
+        "submitter": "714f94a3-16a9-4856-97e3-49db5e8a610f",
+        "timestamp": "2022-03-02T02:38:42+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/61cfa702-9fa0-40d4-a07e-3ed0669197c6",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/501cb43e-d219-43ee-ad98-4a36d84403c4.jpg",
+        "authorplayer": {
+          "name": "Everios96",
+          "id": "714f94a3-16a9-4856-97e3-49db5e8a610f",
+          "zone": {
+            "name": "Köln",
+            "flag": "koln",
+            "parent": {
+              "name": "Nordrhein-Westfalen",
+              "flag": "nordrhein-westfalen",
+              "parent": {
+                "name": "Germany",
+                "flag": "GER",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "submitterplayer": {
+          "name": "Everios96",
+          "id": "714f94a3-16a9-4856-97e3-49db5e8a610f",
+          "zone": {
+            "name": "Köln",
+            "flag": "koln",
+            "parent": {
+              "name": "Nordrhein-Westfalen",
+              "flag": "nordrhein-westfalen",
+              "parent": {
+                "name": "Germany",
+                "flag": "GER",
+                "parent": {
+                  "name": "Europe",
+                  "flag": "europe",
+                  "parent": {
+                    "name": "World",
+                    "flag": "WOR"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "exchangeid": 53886
+      },
+      "weekday": 2,
+      "monthday": 9,
+      "leaderboarduid": "89e5bb95-63ff-407d-9a2d-a64c7a511e8e"
+    },
+    {
+      "campaignid": 21912,
+      "map": {
+        "author": "711036bf-d90b-4fa4-9be5-964eb3912256",
+        "name": "$sFrosty creek",
+        "mapType": "TrackMania\\TM_Race",
+        "mapStyle": "",
+        "authorScore": 42051,
+        "goldScore": 45000,
+        "silverScore": 51000,
+        "bronzeScore": 64000,
+        "collectionName": "Stadium",
+        "filename": "Frosty creek.Map.Gbx",
+        "isPlayable": true,
+        "mapId": "f301c6e6-b608-4e20-a0ae-ed48aef8b29d",
+        "mapUid": "E14e8D93S7QI2_xinrM6ZxWlSc",
+        "submitter": "711036bf-d90b-4fa4-9be5-964eb3912256",
+        "timestamp": "2022-03-03T14:17:03+00:00",
+        "fileUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/583bb411-6e80-4cf0-8b76-954f72bf1cb7",
+        "thumbnailUrl": "https://prod.trackmania.core.nadeo.online/storageObjects/ba5d860b-ef42-4115-a7d0-d53a2df4313a.jpg",
+        "authorplayer": {
+          "name": "Mariina.",
+          "tag": "$S$O$FFFB$06FT",
+          "id": "711036bf-d90b-4fa4-9be5-964eb3912256",
+          "zone": {
+            "name": "Salzburg",
+            "flag": "Salzburg",
+            "parent": {
+              "name": "Austria",
+              "flag": "AUT",
+              "parent": {
+                "name": "Europe",
+                "flag": "europe",
+                "parent": {
+                  "name": "World",
+                  "flag": "WOR"
+                }
+              }
+            }
+          },
+          "meta": {
+            "twitch": "Mariina9899"
+          }
+        },
+        "submitterplayer": {
+          "name": "Mariina.",
+          "tag": "$S$O$FFFB$06FT",
+          "id": "711036bf-d90b-4fa4-9be5-964eb3912256",
+          "zone": {
+            "name": "Salzburg",
+            "flag": "Salzburg",
+            "parent": {
+              "name": "Austria",
+              "flag": "AUT",
+              "parent": {
+                "name": "Europe",
+                "flag": "europe",
+                "parent": {
+                  "name": "World",
+                  "flag": "WOR"
+                }
+              }
+            }
+          },
+          "meta": {
+            "twitch": "Mariina9899"
+          }
+        },
+        "exchangeid": 51774
+      },
+      "weekday": 3,
+      "monthday": 10,
+      "leaderboarduid": "5b520978-749c-45a9-824a-e42813edb5b6"
+    }
+  ],
+  "monthoffset": 0,
+  "monthcount": 21
 }

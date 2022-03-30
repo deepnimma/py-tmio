@@ -1,1135 +1,1135 @@
 [
-    {
-        "player": {
-            "name": "Kaizer_TM",
-            "id": "17cebbbb-2637-4110-ba67-f733de4559ea",
-            "zone": {
-                "name": "India",
-                "flag": "IND",
-                "parent": {
-                    "name": "Asia",
-                    "flag": "asia",
-                    "parent": {
-                        "name": "World",
-                        "flag": "WOR"
-                    }
-                }
-            }
-        },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
-                "rank": 11058,
-                "score": 1922,
-                "progression": 1922,
-                "division": {
-                    "position": 6,
-                    "rule": "points_range",
-                    "minpoints": 1600,
-                    "maxpoints": 1999
-                },
-                "division_next": {
-                    "position": 7,
-                    "rule": "points_range",
-                    "minpoints": 2000,
-                    "maxpoints": 2299
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
-                "rank": 57257,
-                "score": 1200,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
-            }
-        ]
+  {
+    "player": {
+      "name": "Kaizer_TM",
+      "id": "17cebbbb-2637-4110-ba67-f733de4559ea",
+      "zone": {
+        "name": "India",
+        "flag": "IND",
+        "parent": {
+          "name": "Asia",
+          "flag": "asia",
+          "parent": {
+            "name": "World",
+            "flag": "WOR"
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "Kaizer127",
-            "tag": "$O$S$39F$OGEHT$39F~",
-            "id": "1f5b7b22-35bc-4e61-9ebe-a72c61006e92",
-            "zone": {
-                "name": "Frankfurt",
-                "flag": "Frankfurt",
-                "parent": {
-                    "name": "Hessen",
-                    "flag": "hesse",
-                    "parent": {
-                        "name": "Germany",
-                        "flag": "GER",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
+        "rank": 11058,
+        "score": 1922,
+        "progression": 1922,
+        "division": {
+          "position": 6,
+          "rule": "points_range",
+          "minpoints": 1600,
+          "maxpoints": 1999
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "1f5b7b22-35bc-4e61-9ebe-a72c61006e92",
-                "rank": 9547,
-                "score": 2000,
-                "progression": 2000,
-                "division": {
-                    "position": 7,
-                    "rule": "points_range",
-                    "minpoints": 2000,
-                    "maxpoints": 2299
-                },
-                "division_next": {
-                    "position": 8,
-                    "rule": "points_range",
-                    "minpoints": 2300,
-                    "maxpoints": 2599
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "1f5b7b22-35bc-4e61-9ebe-a72c61006e92",
-                "rank": 110839,
-                "score": 911,
-                "progression": 5,
-                "division": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                },
-                "division_next": {
-                    "position": 3,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 10,
-                    "maxwins": 99
-                }
+        "division_next": {
+          "position": 7,
+          "rule": "points_range",
+          "minpoints": 2000,
+          "maxpoints": 2299
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "17cebbbb-2637-4110-ba67-f733de4559ea",
+        "rank": 57257,
+        "score": 1200,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "Kaizer127",
+      "tag": "$O$S$39F$OGEHT$39F~",
+      "id": "1f5b7b22-35bc-4e61-9ebe-a72c61006e92",
+      "zone": {
+        "name": "Frankfurt",
+        "flag": "Frankfurt",
+        "parent": {
+          "name": "Hessen",
+          "flag": "hesse",
+          "parent": {
+            "name": "Germany",
+            "flag": "GER",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "KaizerEU",
-            "id": "930e6ef9-4568-44d6-af3d-550b877d7e0c",
-            "zone": {
-                "name": "Puy-de-Dôme",
-                "flag": "Puy-de-Dome",
-                "parent": {
-                    "name": "Auvergne-Rhône-Alpes",
-                    "flag": "auvergne-rhone-alpes",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "1f5b7b22-35bc-4e61-9ebe-a72c61006e92",
+        "rank": 9547,
+        "score": 2000,
+        "progression": 2000,
+        "division": {
+          "position": 7,
+          "rule": "points_range",
+          "minpoints": 2000,
+          "maxpoints": 2299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "930e6ef9-4568-44d6-af3d-550b877d7e0c",
-                "rank": 58470,
-                "score": 984,
-                "progression": 984,
-                "division": {
-                    "position": 3,
-                    "rule": "points_range",
-                    "minpoints": 600,
-                    "maxpoints": 999
-                },
-                "division_next": {
-                    "position": 4,
-                    "rule": "points_range",
-                    "minpoints": 1000,
-                    "maxpoints": 1299
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "930e6ef9-4568-44d6-af3d-550b877d7e0c",
-                "rank": 86251,
-                "score": 1018,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
+        "division_next": {
+          "position": 8,
+          "rule": "points_range",
+          "minpoints": 2300,
+          "maxpoints": 2599
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "1f5b7b22-35bc-4e61-9ebe-a72c61006e92",
+        "rank": 110839,
+        "score": 911,
+        "progression": 5,
+        "division": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        },
+        "division_next": {
+          "position": 3,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 10,
+          "maxwins": 99
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "KaizerEU",
+      "id": "930e6ef9-4568-44d6-af3d-550b877d7e0c",
+      "zone": {
+        "name": "Puy-de-Dôme",
+        "flag": "Puy-de-Dome",
+        "parent": {
+          "name": "Auvergne-Rhône-Alpes",
+          "flag": "auvergne-rhone-alpes",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "KaiZer_oF_Dead",
-            "id": "fae166b7-77fe-4a08-b09c-c9861d33c74b",
-            "zone": {
-                "name": "Rhône",
-                "flag": "Rhone",
-                "parent": {
-                    "name": "Auvergne-Rhône-Alpes",
-                    "flag": "auvergne-rhone-alpes",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "930e6ef9-4568-44d6-af3d-550b877d7e0c",
+        "rank": 58470,
+        "score": 984,
+        "progression": 984,
+        "division": {
+          "position": 3,
+          "rule": "points_range",
+          "minpoints": 600,
+          "maxpoints": 999
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "fae166b7-77fe-4a08-b09c-c9861d33c74b",
-                "rank": 51378,
-                "score": 1000,
-                "progression": 1000,
-                "division": {
-                    "position": 4,
-                    "rule": "points_range",
-                    "minpoints": 1000,
-                    "maxpoints": 1299
-                },
-                "division_next": {
-                    "position": 5,
-                    "rule": "points_range",
-                    "minpoints": 1300,
-                    "maxpoints": 1599
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "fae166b7-77fe-4a08-b09c-c9861d33c74b",
-                "rank": 178381,
-                "score": 600,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
+        "division_next": {
+          "position": 4,
+          "rule": "points_range",
+          "minpoints": 1000,
+          "maxpoints": 1299
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "930e6ef9-4568-44d6-af3d-550b877d7e0c",
+        "rank": 86251,
+        "score": 1018,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "KaiZer_oF_Dead",
+      "id": "fae166b7-77fe-4a08-b09c-c9861d33c74b",
+      "zone": {
+        "name": "Rhône",
+        "flag": "Rhone",
+        "parent": {
+          "name": "Auvergne-Rhône-Alpes",
+          "flag": "auvergne-rhone-alpes",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "KaizerBlow",
-            "id": "218f86a7-5cc6-4afc-839c-6c94d94642cf",
-            "zone": {
-                "name": "Rhône",
-                "flag": "Rhone",
-                "parent": {
-                    "name": "Auvergne-Rhône-Alpes",
-                    "flag": "auvergne-rhone-alpes",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "fae166b7-77fe-4a08-b09c-c9861d33c74b",
+        "rank": 51378,
+        "score": 1000,
+        "progression": 1000,
+        "division": {
+          "position": 4,
+          "rule": "points_range",
+          "minpoints": 1000,
+          "maxpoints": 1299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "218f86a7-5cc6-4afc-839c-6c94d94642cf",
-                "rank": 40061,
-                "score": 1096,
-                "progression": 1096,
-                "division": {
-                    "position": 4,
-                    "rule": "points_range",
-                    "minpoints": 1000,
-                    "maxpoints": 1299
-                },
-                "division_next": {
-                    "position": 5,
-                    "rule": "points_range",
-                    "minpoints": 1300,
-                    "maxpoints": 1599
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "218f86a7-5cc6-4afc-839c-6c94d94642cf",
-                "rank": 251575,
-                "score": 184,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
+        "division_next": {
+          "position": 5,
+          "rule": "points_range",
+          "minpoints": 1300,
+          "maxpoints": 1599
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "fae166b7-77fe-4a08-b09c-c9861d33c74b",
+        "rank": 178381,
+        "score": 600,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "KaizerBlow",
+      "id": "218f86a7-5cc6-4afc-839c-6c94d94642cf",
+      "zone": {
+        "name": "Rhône",
+        "flag": "Rhone",
+        "parent": {
+          "name": "Auvergne-Rhône-Alpes",
+          "flag": "auvergne-rhone-alpes",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "JulianKaizer",
-            "id": "bb9056bc-42a2-4364-ad41-ce2cbd54b65b",
-            "zone": {
-                "name": "Wiesbaden",
-                "flag": "Wiesbaden",
-                "parent": {
-                    "name": "Hessen",
-                    "flag": "hesse",
-                    "parent": {
-                        "name": "Germany",
-                        "flag": "GER",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "218f86a7-5cc6-4afc-839c-6c94d94642cf",
+        "rank": 40061,
+        "score": 1096,
+        "progression": 1096,
+        "division": {
+          "position": 4,
+          "rule": "points_range",
+          "minpoints": 1000,
+          "maxpoints": 1299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "bb9056bc-42a2-4364-ad41-ce2cbd54b65b",
-                "rank": 260773,
-                "score": 20,
-                "progression": 20,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "bb9056bc-42a2-4364-ad41-ce2cbd54b65b",
-                "rank": 164907,
-                "score": 626,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
+        "division_next": {
+          "position": 5,
+          "rule": "points_range",
+          "minpoints": 1300,
+          "maxpoints": 1599
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "218f86a7-5cc6-4afc-839c-6c94d94642cf",
+        "rank": 251575,
+        "score": 184,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "JulianKaizer",
+      "id": "bb9056bc-42a2-4364-ad41-ce2cbd54b65b",
+      "zone": {
+        "name": "Wiesbaden",
+        "flag": "Wiesbaden",
+        "parent": {
+          "name": "Hessen",
+          "flag": "hesse",
+          "parent": {
+            "name": "Germany",
+            "flag": "GER",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "kaizercruz6",
-            "id": "460dc5f0-d811-4116-bce7-001513a776af",
-            "zone": {
-                "name": "Mexico",
-                "flag": "MEX",
-                "parent": {
-                    "name": "North America",
-                    "flag": "namerica",
-                    "parent": {
-                        "name": "World",
-                        "flag": "WOR"
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "bb9056bc-42a2-4364-ad41-ce2cbd54b65b",
+        "rank": 260773,
+        "score": 20,
+        "progression": 20,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "460dc5f0-d811-4116-bce7-001513a776af",
-                "rank": 449321,
-                "score": 0,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "460dc5f0-d811-4116-bce7-001513a776af",
-                "rank": 195790,
-                "score": 475,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
-            }
-        ]
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "bb9056bc-42a2-4364-ad41-ce2cbd54b65b",
+        "rank": 164907,
+        "score": 626,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "kaizercruz6",
+      "id": "460dc5f0-d811-4116-bce7-001513a776af",
+      "zone": {
+        "name": "Mexico",
+        "flag": "MEX",
+        "parent": {
+          "name": "North America",
+          "flag": "namerica",
+          "parent": {
+            "name": "World",
+            "flag": "WOR"
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "KaizerLeCrack",
-            "id": "a9084a2b-4ab0-423b-bdb7-2825949d451d",
-            "zone": {
-                "name": "Loire-Atlantique",
-                "flag": "Loire-Atlantique",
-                "parent": {
-                    "name": "Pays-de-la-Loire",
-                    "flag": "Pays-de-la-Loire",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "460dc5f0-d811-4116-bce7-001513a776af",
+        "rank": 449321,
+        "score": 0,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "a9084a2b-4ab0-423b-bdb7-2825949d451d",
-                "rank": 262177,
-                "score": 20,
-                "progression": 20,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "a9084a2b-4ab0-423b-bdb7-2825949d451d",
-                "rank": 273509,
-                "score": 77,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "460dc5f0-d811-4116-bce7-001513a776af",
+        "rank": 195790,
+        "score": 475,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "KaizerLeCrack",
+      "id": "a9084a2b-4ab0-423b-bdb7-2825949d451d",
+      "zone": {
+        "name": "Loire-Atlantique",
+        "flag": "Loire-Atlantique",
+        "parent": {
+          "name": "Pays-de-la-Loire",
+          "flag": "Pays-de-la-Loire",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "kaizer_09",
-            "id": "342d594c-bdaa-4bc0-9627-07df272a1cce",
-            "zone": {
-                "name": "Saint Kitts and Nevis",
-                "flag": "SKN",
-                "parent": {
-                    "name": "North America",
-                    "flag": "namerica",
-                    "parent": {
-                        "name": "World",
-                        "flag": "WOR"
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "a9084a2b-4ab0-423b-bdb7-2825949d451d",
+        "rank": 262177,
+        "score": 20,
+        "progression": 20,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "342d594c-bdaa-4bc0-9627-07df272a1cce",
-                "rank": 465370,
-                "score": 0,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "342d594c-bdaa-4bc0-9627-07df272a1cce",
-                "rank": 283028,
-                "score": 56,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
-            }
-        ]
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "a9084a2b-4ab0-423b-bdb7-2825949d451d",
+        "rank": 273509,
+        "score": 77,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "kaizer_09",
+      "id": "342d594c-bdaa-4bc0-9627-07df272a1cce",
+      "zone": {
+        "name": "Saint Kitts and Nevis",
+        "flag": "SKN",
+        "parent": {
+          "name": "North America",
+          "flag": "namerica",
+          "parent": {
+            "name": "World",
+            "flag": "WOR"
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "kaizer_11",
-            "id": "c4a3f79d-cd35-4346-8513-37ecbd6a7ccb",
-            "zone": {
-                "name": "Małopolskie",
-                "flag": "maloposkie",
-                "parent": {
-                    "name": "Poland",
-                    "flag": "POL",
-                    "parent": {
-                        "name": "Europe",
-                        "flag": "europe",
-                        "parent": {
-                            "name": "World",
-                            "flag": "WOR"
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "342d594c-bdaa-4bc0-9627-07df272a1cce",
+        "rank": 465370,
+        "score": 0,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "c4a3f79d-cd35-4346-8513-37ecbd6a7ccb",
-                "rank": 260085,
-                "score": 20,
-                "progression": 20,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
-            },
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "c4a3f79d-cd35-4346-8513-37ecbd6a7ccb",
-                "rank": 356237,
-                "score": 0,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "342d594c-bdaa-4bc0-9627-07df272a1cce",
+        "rank": 283028,
+        "score": 56,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "kaizer_11",
+      "id": "c4a3f79d-cd35-4346-8513-37ecbd6a7ccb",
+      "zone": {
+        "name": "Małopolskie",
+        "flag": "maloposkie",
+        "parent": {
+          "name": "Poland",
+          "flag": "POL",
+          "parent": {
+            "name": "Europe",
+            "flag": "europe",
+            "parent": {
+              "name": "World",
+              "flag": "WOR"
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "RasKaizer",
-            "id": "3de726ba-8e6d-4c1c-9a4e-7b940359dea9",
-            "zone": {
-                "name": "Sarthe",
-                "flag": "Sarthe",
-                "parent": {
-                    "name": "Pays-de-la-Loire",
-                    "flag": "Pays-de-la-Loire",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "c4a3f79d-cd35-4346-8513-37ecbd6a7ccb",
+        "rank": 260085,
+        "score": 20,
+        "progression": 20,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "3de726ba-8e6d-4c1c-9a4e-7b940359dea9",
-                "rank": 33938,
-                "score": 1178,
-                "progression": 1178,
-                "division": {
-                    "position": 4,
-                    "rule": "points_range",
-                    "minpoints": 1000,
-                    "maxpoints": 1299
-                },
-                "division_next": {
-                    "position": 5,
-                    "rule": "points_range",
-                    "minpoints": 1300,
-                    "maxpoints": 1599
-                }
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      },
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "c4a3f79d-cd35-4346-8513-37ecbd6a7ccb",
+        "rank": 356237,
+        "score": 0,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "RasKaizer",
+      "id": "3de726ba-8e6d-4c1c-9a4e-7b940359dea9",
+      "zone": {
+        "name": "Sarthe",
+        "flag": "Sarthe",
+        "parent": {
+          "name": "Pays-de-la-Loire",
+          "flag": "Pays-de-la-Loire",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "KaizerMaximus",
-            "id": "b4fe6697-c8f7-450f-bef0-8f696e32e2c4",
-            "zone": {
-                "name": "California",
-                "flag": "California",
-                "parent": {
-                    "name": "United States",
-                    "flag": "USA",
-                    "parent": {
-                        "name": "North America",
-                        "flag": "namerica",
-                        "parent": {
-                            "name": "World",
-                            "flag": "WOR"
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "3de726ba-8e6d-4c1c-9a4e-7b940359dea9",
+        "rank": 33938,
+        "score": 1178,
+        "progression": 1178,
+        "division": {
+          "position": 4,
+          "rule": "points_range",
+          "minpoints": 1000,
+          "maxpoints": 1299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "b4fe6697-c8f7-450f-bef0-8f696e32e2c4",
-                "rank": 187330,
-                "score": 108,
-                "progression": 108,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
+        "division_next": {
+          "position": 5,
+          "rule": "points_range",
+          "minpoints": 1300,
+          "maxpoints": 1599
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "KaizerMaximus",
+      "id": "b4fe6697-c8f7-450f-bef0-8f696e32e2c4",
+      "zone": {
+        "name": "California",
+        "flag": "California",
+        "parent": {
+          "name": "United States",
+          "flag": "USA",
+          "parent": {
+            "name": "North America",
+            "flag": "namerica",
+            "parent": {
+              "name": "World",
+              "flag": "WOR"
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "B_rdKaizer",
-            "id": "2185c3e4-482d-46be-aa57-6a149fbd2831"
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "b4fe6697-c8f7-450f-bef0-8f696e32e2c4",
+        "rank": 187330,
+        "score": 108,
+        "progression": 108,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
         },
-        "matchmaking": [
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "2185c3e4-482d-46be-aa57-6a149fbd2831",
-                "rank": 284559,
-                "score": 54,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
-            }
-        ]
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "B_rdKaizer",
+      "id": "2185c3e4-482d-46be-aa57-6a149fbd2831"
     },
-    {
-        "player": {
-            "name": "kaizer_pt",
-            "id": "e3419d20-f330-4691-8ce1-9d14762878e9"
+    "matchmaking": [
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "2185c3e4-482d-46be-aa57-6a149fbd2831",
+        "rank": 284559,
+        "score": 54,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
         },
-        "matchmaking": [
-            {
-                "typename": "Royal",
-                "typeid": 3,
-                "accountid": "e3419d20-f330-4691-8ce1-9d14762878e9",
-                "rank": 286192,
-                "score": 51,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "victory_count",
-                    "minpoints": 0,
-                    "maxpoints": 0,
-                    "minwins": 1,
-                    "maxwins": 9
-                }
-            }
-        ]
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "kaizer_pt",
+      "id": "e3419d20-f330-4691-8ce1-9d14762878e9"
     },
-    {
-        "player": {
-            "name": "Demon.Kaizer",
-            "id": "c4f2b67e-7925-4a3d-80d1-1a71a7bca131",
-            "zone": {
-                "name": "Catalunya",
-                "flag": "Catalunya",
-                "parent": {
-                    "name": "Spain",
-                    "flag": "ESP",
-                    "parent": {
-                        "name": "Europe",
-                        "flag": "europe",
-                        "parent": {
-                            "name": "World",
-                            "flag": "WOR"
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "Royal",
+        "typeid": 3,
+        "accountid": "e3419d20-f330-4691-8ce1-9d14762878e9",
+        "rank": 286192,
+        "score": 51,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "c4f2b67e-7925-4a3d-80d1-1a71a7bca131",
-                "rank": 224612,
-                "score": 50,
-                "progression": 50,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
+        "division_next": {
+          "position": 2,
+          "rule": "victory_count",
+          "minpoints": 0,
+          "maxpoints": 0,
+          "minwins": 1,
+          "maxwins": 9
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "Demon.Kaizer",
+      "id": "c4f2b67e-7925-4a3d-80d1-1a71a7bca131",
+      "zone": {
+        "name": "Catalunya",
+        "flag": "Catalunya",
+        "parent": {
+          "name": "Spain",
+          "flag": "ESP",
+          "parent": {
+            "name": "Europe",
+            "flag": "europe",
+            "parent": {
+              "name": "World",
+              "flag": "WOR"
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "Kaizer",
-            "id": "7fea7bd6-cb02-4df8-b978-0b0335e4a531",
-            "zone": {
-                "name": "Illinois",
-                "flag": "Illinois",
-                "parent": {
-                    "name": "United States",
-                    "flag": "USA",
-                    "parent": {
-                        "name": "North America",
-                        "flag": "namerica",
-                        "parent": {
-                            "name": "World",
-                            "flag": "WOR"
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "c4f2b67e-7925-4a3d-80d1-1a71a7bca131",
+        "rank": 224612,
+        "score": 50,
+        "progression": 50,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "7fea7bd6-cb02-4df8-b978-0b0335e4a531",
-                "rank": 397412,
-                "score": 0,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "Kaizer",
+      "id": "7fea7bd6-cb02-4df8-b978-0b0335e4a531",
+      "zone": {
+        "name": "Illinois",
+        "flag": "Illinois",
+        "parent": {
+          "name": "United States",
+          "flag": "USA",
+          "parent": {
+            "name": "North America",
+            "flag": "namerica",
+            "parent": {
+              "name": "World",
+              "flag": "WOR"
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "KaosKaizer",
-            "id": "70205403-d616-4cc5-b19f-036507efeb1e",
-            "zone": {
-                "name": "West Midlands",
-                "flag": "West Midlands",
-                "parent": {
-                    "name": "England",
-                    "flag": "ENG",
-                    "parent": {
-                        "name": "United Kingdom",
-                        "flag": "GBR",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
-            }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "7fea7bd6-cb02-4df8-b978-0b0335e4a531",
+        "rank": 397412,
+        "score": 0,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
         },
-        "matchmaking": [
-            {
-                "typename": "3v3",
-                "typeid": 2,
-                "accountid": "70205403-d616-4cc5-b19f-036507efeb1e",
-                "rank": 411613,
-                "score": 0,
-                "progression": 0,
-                "division": {
-                    "position": 1,
-                    "rule": "points_range",
-                    "minpoints": 0,
-                    "maxpoints": 299
-                },
-                "division_next": {
-                    "position": 2,
-                    "rule": "points_range",
-                    "minpoints": 300,
-                    "maxpoints": 599
-                }
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "KaosKaizer",
+      "id": "70205403-d616-4cc5-b19f-036507efeb1e",
+      "zone": {
+        "name": "West Midlands",
+        "flag": "West Midlands",
+        "parent": {
+          "name": "England",
+          "flag": "ENG",
+          "parent": {
+            "name": "United Kingdom",
+            "flag": "GBR",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        ]
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "Kaizer92s",
-            "id": "ab50c381-0f48-4446-8e05-002e91520c8e",
-            "zone": {
-                "name": "Hauts-de-Seine",
-                "flag": "Hauts-de-Seine",
-                "parent": {
-                    "name": "Île-de-France",
-                    "flag": "ile-de-france",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
+    "matchmaking": [
+      {
+        "typename": "3v3",
+        "typeid": 2,
+        "accountid": "70205403-d616-4cc5-b19f-036507efeb1e",
+        "rank": 411613,
+        "score": 0,
+        "progression": 0,
+        "division": {
+          "position": 1,
+          "rule": "points_range",
+          "minpoints": 0,
+          "maxpoints": 299
+        },
+        "division_next": {
+          "position": 2,
+          "rule": "points_range",
+          "minpoints": 300,
+          "maxpoints": 599
+        }
+      }
+    ]
+  },
+  {
+    "player": {
+      "name": "Kaizer92s",
+      "id": "ab50c381-0f48-4446-8e05-002e91520c8e",
+      "zone": {
+        "name": "Hauts-de-Seine",
+        "flag": "Hauts-de-Seine",
+        "parent": {
+          "name": "Île-de-France",
+          "flag": "ile-de-france",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        },
-        "matchmaking": []
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "kaizerS_",
-            "id": "be9a57f1-05c6-417e-8899-d0ab3e91e481",
-            "zone": {
-                "name": "Nord",
-                "flag": "Nord",
-                "parent": {
-                    "name": "Hauts-de-France",
-                    "flag": "hauts-de-france",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
+    "matchmaking": []
+  },
+  {
+    "player": {
+      "name": "kaizerS_",
+      "id": "be9a57f1-05c6-417e-8899-d0ab3e91e481",
+      "zone": {
+        "name": "Nord",
+        "flag": "Nord",
+        "parent": {
+          "name": "Hauts-de-France",
+          "flag": "hauts-de-france",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        },
-        "matchmaking": []
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "KaizerLied",
-            "id": "162cfcc8-9965-47f7-b2f0-edb70159e911",
-            "zone": {
-                "name": "Haute-Garonne",
-                "flag": "Haute-Garonne",
-                "parent": {
-                    "name": "Occitanie",
-                    "flag": "occitanie",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
+    "matchmaking": []
+  },
+  {
+    "player": {
+      "name": "KaizerLied",
+      "id": "162cfcc8-9965-47f7-b2f0-edb70159e911",
+      "zone": {
+        "name": "Haute-Garonne",
+        "flag": "Haute-Garonne",
+        "parent": {
+          "name": "Occitanie",
+          "flag": "occitanie",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        },
-        "matchmaking": []
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "BlacKaizer",
-            "tag": "BRN",
-            "id": "68a8a0c1-f3e1-4795-98f6-d476900170de",
-            "zone": {
-                "name": "Val-d'Oise",
-                "flag": "Val-d'Oise",
-                "parent": {
-                    "name": "Île-de-France",
-                    "flag": "ile-de-france",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
+    "matchmaking": []
+  },
+  {
+    "player": {
+      "name": "BlacKaizer",
+      "tag": "BRN",
+      "id": "68a8a0c1-f3e1-4795-98f6-d476900170de",
+      "zone": {
+        "name": "Val-d'Oise",
+        "flag": "Val-d'Oise",
+        "parent": {
+          "name": "Île-de-France",
+          "flag": "ile-de-france",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        },
-        "matchmaking": []
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "kaizer_33",
-            "id": "41f09482-b009-4c51-b7a3-a9b93033bbf3"
-        },
-        "matchmaking": []
+    "matchmaking": []
+  },
+  {
+    "player": {
+      "name": "kaizer_33",
+      "id": "41f09482-b009-4c51-b7a3-a9b93033bbf3"
     },
-    {
-        "player": {
-            "name": "Kaizer77250",
-            "id": "79bf45d1-64e7-44c2-9084-1ea330d29277",
-            "zone": {
-                "name": "Essonne",
-                "flag": "Essonne",
-                "parent": {
-                    "name": "Île-de-France",
-                    "flag": "ile-de-france",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
+    "matchmaking": []
+  },
+  {
+    "player": {
+      "name": "Kaizer77250",
+      "id": "79bf45d1-64e7-44c2-9084-1ea330d29277",
+      "zone": {
+        "name": "Essonne",
+        "flag": "Essonne",
+        "parent": {
+          "name": "Île-de-France",
+          "flag": "ile-de-france",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        },
-        "matchmaking": []
+          }
+        }
+      }
     },
-    {
-        "player": {
-            "name": "matkaizer08",
-            "id": "02728546-8d3c-46d6-a904-5c4ee94fc71a",
-            "zone": {
-                "name": "Ardennes",
-                "flag": "Ardennes",
-                "parent": {
-                    "name": "Grand Est",
-                    "flag": "grand-est",
-                    "parent": {
-                        "name": "France",
-                        "flag": "FRA",
-                        "parent": {
-                            "name": "Europe",
-                            "flag": "europe",
-                            "parent": {
-                                "name": "World",
-                                "flag": "WOR"
-                            }
-                        }
-                    }
-                }
+    "matchmaking": []
+  },
+  {
+    "player": {
+      "name": "matkaizer08",
+      "id": "02728546-8d3c-46d6-a904-5c4ee94fc71a",
+      "zone": {
+        "name": "Ardennes",
+        "flag": "Ardennes",
+        "parent": {
+          "name": "Grand Est",
+          "flag": "grand-est",
+          "parent": {
+            "name": "France",
+            "flag": "FRA",
+            "parent": {
+              "name": "Europe",
+              "flag": "europe",
+              "parent": {
+                "name": "World",
+                "flag": "WOR"
+              }
             }
-        },
-        "matchmaking": []
-    }
+          }
+        }
+      }
+    },
+    "matchmaking": []
+  }
 ]
