@@ -1,16 +1,17 @@
-import asyncio
 import json
 from contextlib import suppress
-from datetime import date, datetime
-from typing import Dict, List
 
 import redis
+
+import logging
 
 from ..api import APIClient
 from ..config import Client
 from ..constants import TMIO
 from ..structures.cotd import PlayerCOTD
 from ..util.cotd_parsers import parse_cotd
+
+_log = logging.getLogger(__name__)
 
 
 async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
@@ -47,6 +48,7 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|cotd|{page}"):
+            _log.debug(f"{player_id} page: {page} was cached.")
             if page != -1:
                 return PlayerCOTD(
                     **parse_cotd(
@@ -56,12 +58,16 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
 
     api_client = APIClient()
 
+    _log.debug(
+        f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(page)])}"
+    )
     cotd_page_resp = await api_client.get(
         TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(page)])
     )
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         cache_client.set(f"{player_id}|cotd|{page}", json.dumps(cotd_page_resp))
+        _log.debug(f"Cached {player_id} page: {page}")
 
     await api_client.close()
     return PlayerCOTD(**parse_cotd(cotd_page_resp))

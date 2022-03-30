@@ -1,6 +1,7 @@
 import json
 from contextlib import suppress
 from typing import Dict, List, Tuple
+import logging
 
 import redis
 
@@ -10,6 +11,8 @@ from ..constants import TMIO
 from ..errors import InvalidIDError, InvalidMatchmakingGroupError, InvalidUsernameError
 from ..structures.player import Player, PlayerSearchResult
 from ..util import player_parsers
+
+_log = logging.getLogger(__name__)
 
 
 async def get_player(
@@ -47,6 +50,7 @@ async def get_player(
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|data"):
+            _log.debug(f"{player_id} was cached.")
             player = Player(
                 **player_parsers.parse_player(
                     json.loads(cache_client.get(f"{player_id}|data"))
@@ -56,7 +60,10 @@ async def get_player(
                 return player
             if raw:
                 return player, json.loads(cache_client.get(f"{player_id}|data"))
+
     api_client = APIClient()
+
+    _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, player_id])}")
     player_resp = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, player_id]))
     await api_client.close()
 
@@ -66,6 +73,8 @@ async def get_player(
         cache_client.set(f"{player_id}|data", json.dumps(player_resp), ex=600)
         cache_client.set(f"{player_data['name'].lower()}:id", player_id)
         cache_client.set(f"{player_id}:username", player_data["name"])
+
+        _log.debug(f"Cached {player_id}.")
 
     if not raw:
         return Player(**player_data)
@@ -98,6 +107,10 @@ async def search_player(
         raise InvalidUsernameError("Usernmae cannot be empty.")
 
     api_client = APIClient()
+    _log.debug(
+        f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYERS])}"
+        + f"/find?search={username}"
+    )
     search_result = await api_client.get(
         TMIO.build([TMIO.TABS.PLAYERS]) + f"/find?search={username}"
     )
@@ -155,6 +168,7 @@ async def to_account_id(username: str) -> str | None:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{username.lower()}|id"):
+            _log.debug(f"{username} was cached.")
             return cache_client.get(f"{username.lower()}|id").decode("utf-8")
 
         player_data = await search_player(username)
@@ -166,6 +180,7 @@ async def to_account_id(username: str) -> str | None:
                 cache_client.set(
                     f"{player_data.name.lower()}|id", player_data.player_id
                 )
+                _log.debug(f"Cached {player_data.name.lower()}.")
 
             return player_data.player_id
 
@@ -173,6 +188,7 @@ async def to_account_id(username: str) -> str | None:
             cache_client.set(
                 f"{player_data[0].name.lower()}|id", player_data[0].player_id
             )
+            _log.debug(f"Cached {player_data[0].name.lower()}.")
         return player_data[0].player_id
 
 
@@ -204,6 +220,7 @@ async def to_username(player_id: str) -> str | None:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"{player_id}|username"):
+            _log.debug(f"{player_id} was cached.")
             return cache_client.get(f"{player_id}|username").decode("utf-8")
 
     player = await get_player(player_id)
@@ -211,6 +228,7 @@ async def to_username(player_id: str) -> str | None:
     if player is not None:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             cache_client.set(f"{player_id}|username", player.name)
+            _log.debug(f"Cached {player_id}.")
         return player.name
 
     return None
@@ -251,9 +269,13 @@ async def top_matchmaking(group: int, page: int = 0) -> Dict:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"matchmaking|{group}|{page}"):
+            _log.debug(f"{group} page: {page} was cached.")
             return json.loads(cache_client.get(f"matchmaking|{group}|{page}"))
 
     api_client = APIClient()
+    _log.debug(
+        f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_MATCHMAKING, group, page])}"
+    )
     matchmaking_resp = await api_client.get(
         TMIO.build([TMIO.TABS.TOP_MATCHMAKING, group, page])
     )
@@ -263,6 +285,7 @@ async def top_matchmaking(group: int, page: int = 0) -> Dict:
         cache_client.set(
             f"matchmaking|{group}|{page}", json.dumps(matchmaking_resp), ex=3600
         )
+        _log.debug(f"Cached {group} page: {page}.")
 
     return matchmaking_resp
 
@@ -293,13 +316,16 @@ async def top_trophies(page: int = 0) -> Dict:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"trophies|{page}"):
+            _log.debug(f"trophies page: {page} was cached.")
             return json.loads(cache_client.get(f"trophies|{page}"))
 
     api_client = APIClient()
+    _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_TROPHIES, page])}")
     trophies_resp = await api_client.get(TMIO.build([TMIO.TABS.TOP_TROPHIES, page]))
     await api_client.close()
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         cache_client.set(f"trophies|{page}", json.dumps(trophies_resp), ex=10800)
+        _log.debug(f"Cached trophies page: {page}.")
 
     return trophies_resp

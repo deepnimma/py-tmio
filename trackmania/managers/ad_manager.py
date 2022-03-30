@@ -1,6 +1,6 @@
 import json
 from contextlib import suppress
-from multiprocessing.sharedctypes import Value
+import logging
 
 import redis
 
@@ -9,6 +9,8 @@ from ..config import Client
 from ..constants import TMIO
 from ..structures.ad import Ad
 from ..util import ad_parsers
+
+_log = logging.getLogger(__name__)
 
 
 async def get_ad(ad_uid: str) -> Ad:
@@ -46,9 +48,11 @@ async def get_ad(ad_uid: str) -> Ad:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"ad|{ad_uid}"):
+            _log.debug(f"{ad_uid} was cached.")
             return ad_parsers.parse_ad(json.loads(cache_client.get(f"ad|{ad_uid}")))
 
     api_client = APIClient()
+    _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.ADS])}")
     ad_resp = await api_client.get(TMIO.build([TMIO.TABS.ADS]))
     await api_client.close()
 
@@ -60,5 +64,6 @@ async def get_ad(ad_uid: str) -> Ad:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         cache_client.set(f"ad|{ad_uid}", json.dumps(req_ad))
+        _log.debug(f"Caching {ad_uid}.")
 
     return ad_parsers.parse_ad(req_ad)

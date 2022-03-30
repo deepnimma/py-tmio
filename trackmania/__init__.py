@@ -8,6 +8,7 @@ A wrapper for Trackmania.io api service.
 """
 import asyncio
 import os
+import logging
 
 from .api import *
 from .config import *
@@ -30,3 +31,5 @@ __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 
 if os.name == "nt":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+logging.getLogger(__name__).addHandler(logging.NullHandler())

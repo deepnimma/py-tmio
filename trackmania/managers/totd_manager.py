@@ -2,6 +2,7 @@ import json
 from contextlib import suppress
 from datetime import date, datetime
 from typing import Dict, List
+import logging
 
 import redis
 
@@ -11,6 +12,8 @@ from ..api import APIClient
 from ..config import Client
 from ..constants import TMIO
 from ..util import map_parsers
+
+_log = logging.getLogger(__name__)
 
 
 async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
@@ -36,14 +39,19 @@ async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists("latest_totd"):
+            _log.debug("latest_totd was cached.")
             latest_totd = json.loads(cache_client.get("latest_totd"))
             return map_parsers.parse_totd_map(latest_totd, latest_totd["leaderboard"])
 
     api_client = APIClient()
+    _log.debug(f'Sending GET request to {TMIO.build([TMIO.TABS.TOTD, "0"])}')
     latest_totd = await api_client.get(TMIO.build([TMIO.TABS.TOTD, "0"]))
     latest_totd: dict = latest_totd["days"][-1]
 
     if leaderboard_flag:
+        _log.debug(
+            f'Sending GET request to {TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, latest_totd["map"]["mapUid"]])}'
+        )
         raw_lb_data = await api_client.get(
             TMIO.build(
                 [TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, latest_totd["map"]["mapUid"]]
@@ -62,6 +70,9 @@ async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
         hour, minute = datetime.utcnow().hour, datetime.utcnow().minute
         if not ((hour > 17 and minute > 0) and (hour < 18 and minute < 0)):
             cache_client.set(name="latest_totd", value=json.dumps(latest_totd), ex=3600)
+            _log.debug("latest_totd was cached.")
+        else:
+            _log.debug("Within 1 hour of the next totd, latest_totd was not cached.")
 
     return map_parsers.parse_totd_map(latest_totd, leaderboard)
 
@@ -127,9 +138,11 @@ async def totd(
 
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if date.day == -1 and cache_client.exists(f"totd|{date.year}|{date.month}|-1"):
+            _log.debug(f"TOTD for {date.year}-{date.month}-{date.day} was cached.")
             return json.loads(cache_client.get(f"totd|{date.year}|{date.month}|-1"))
 
         if cache_client.exists(f"totd|{date.year}|{date.month}|{date.day}"):
+            _log.debug(f"totd|{date.year}|{date.month}|{date.day} was cached.")
             totd = cache_client.get(f"totd|{date.year}|{date.month}|{date.day}")
             return map_parsers.parse_totd_map(json.loads(totd, totd["leaderboard"]))
 
@@ -144,6 +157,7 @@ async def totd(
         count = today_date.month - date.month
 
     api_client = APIClient()
+    _log.debug(f"Sending GET Request to {TMIO.build([TMIO.TABS.TOTD, str(count)])}")
     month_data = await api_client.get(TMIO.build([TMIO.TABS.TOTD, str(count)]))
 
     if date.day == -1:
@@ -153,9 +167,13 @@ async def totd(
                 json.dumps(month_data),
                 ex=None if count != 0 else 14400,
             )
+            _log.debug(f"totd|{date.year}|{date.month}|-1 was cached.")
         return month_data["days"]
 
     if leaderboard_flag:
+        _log.debug(
+            f'Sending GET request to {TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, month_data["days"][date.day - 1]["map"]["mapUid"]])}'
+        )
         raw_lb_data = await api_client.get(
             TMIO.build(
                 [
@@ -179,4 +197,5 @@ async def totd(
             json.dumps(month_data["days"][date.day - 1]),
             ex=None if count != 0 else 14400,
         )
+        _log.debug(f"totd|{date.year}|{month}|{date.day} was cached.")
     return map_parsers.parse_totd_map(month_data["days"][date.day - 1], leaderboard)
