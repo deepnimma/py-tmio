@@ -24,7 +24,7 @@ async def get_ad(ad_uid: str) -> Ad:
     -------
     :class:`Ad`
         The maniapub.
-        
+
     Raises
     ------
     `ValueError`
@@ -38,7 +38,7 @@ async def get_ad(ad_uid: str) -> Ad:
         db=Client.REDIS_DB,
         password=Client.REDIS_PASSWORD,
     )
-    
+
     if ad_uid == "" or ad_uid is None:
         raise ValueError("ad_uid cannot be NoneType or empty.")
     if not isinstance(ad_uid, str):

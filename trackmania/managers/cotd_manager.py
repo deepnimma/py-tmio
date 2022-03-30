@@ -29,7 +29,7 @@ async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
     -------
     :class:`PlayerCOTD`
         The COTD Data as a :class:`PlayerCOTD` object.
-        
+
     Raises
     ------
     ValueError

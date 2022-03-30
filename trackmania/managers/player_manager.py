@@ -149,7 +149,7 @@ async def to_account_id(username: str) -> str | None:
         db=Client.REDIS_DB,
         password=Client.REDIS_PASSWORD,
     )
-    
+
     if username is None:
         raise ValueError("Username cannot be None.")
 
@@ -196,7 +196,7 @@ async def to_username(player_id: str) -> str | None:
         db=Client.REDIS_DB,
         password=Client.REDIS_PASSWORD,
     )
-    
+
     if player_id is None:
         raise ValueError("player_id cannot be NoneType")
     if not isinstance(player_id, str):
