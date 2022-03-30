@@ -8,6 +8,8 @@ __all__ = ("TOTD",)
 # pylint: disable=too-many-arguments, too-many-instance-attributes, too-few-public-methods
 class TOTD:
     """
+    .. versionadded:: 0.1.0
+
     Class that represents a totd map
 
     Parameters

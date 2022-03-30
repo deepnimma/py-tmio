@@ -19,6 +19,8 @@ async def get_player(
     player_id: str, raw: bool = False
 ) -> Player | Tuple[Player, Dict] | None:
     """
+    .. versionadded:: 0.1.0
+    
     Retrieves a player's information using their player_id.
 
     Parameters
@@ -86,6 +88,8 @@ async def search_player(
     username: str,
 ) -> None | PlayerSearchResult | List[PlayerSearchResult]:
     """
+    .. versionadded:: 0.1.0
+
     Searches for a player's information using their username.
 
     Parameters
@@ -139,6 +143,8 @@ async def search_player(
 
 async def to_account_id(username: str) -> str | None:
     """
+    .. versionadded:: 0.1.0
+
     Returns the account id of the given username.
 
     Parameters
@@ -194,6 +200,8 @@ async def to_account_id(username: str) -> str | None:
 
 async def to_username(player_id: str) -> str | None:
     """
+    .. versionadded:: 0.1.0
+
     Gets a player's username from their ID.
 
     Parameters
@@ -236,6 +244,8 @@ async def to_username(player_id: str) -> str | None:
 
 async def top_matchmaking(group: int, page: int = 0) -> Dict:
     """
+    .. versionadded:: 0.1.0
+
     Retrieves the
 
     Parameters
@@ -292,6 +302,8 @@ async def top_matchmaking(group: int, page: int = 0) -> Dict:
 
 async def top_trophies(page: int = 0) -> Dict:
     """
+    .. versionadded:: 0.1.0
+
     Gets the trophy leaderboard.
 
     Parameters

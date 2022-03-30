@@ -3,6 +3,8 @@ from typing import List
 
 class _BestData:
     """
+    .. versionadded:: 0.2.1
+
     Data representing the best scores of the specific fields of a player.
 
     Parameters
@@ -48,6 +50,8 @@ class _BestData:
 
 class _COTDStats:
     """
+    .. versionadded:: 0.2.1
+
     Represents the COTD stats of a player.
 
     best_primary : :class:`_BestData`
@@ -95,6 +99,8 @@ class _COTDStats:
 
 class COTD:
     """
+    .. versionadded:: 0.2.1
+
     Represents a single COTD result of a player.
 
     cotd_id : int
@@ -144,6 +150,8 @@ class COTD:
 
 class PlayerCOTD:
     """
+    .. versionadded:: 0.2.1
+
     Represents a player's COTD stats.
 
     Parameters

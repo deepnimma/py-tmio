@@ -3,6 +3,8 @@ __all__ = ("Ad",)
 
 class Ad:
     """
+    .. versionadded:: 0.2.0
+
     The Maniapub.
 
     Parameters

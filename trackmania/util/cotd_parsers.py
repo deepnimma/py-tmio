@@ -5,6 +5,8 @@ from ..structures.cotd import COTD, _BestData, _COTDStats
 
 def parse_cotd(cotd_page_data: Dict) -> Dict:
     """
+    .. versionadded:: 0.2.0
+
     Parses a COTD JSON File into a proper Kwargs Dict for a :class:`PlayerCOTD` object.
 
     Parameters

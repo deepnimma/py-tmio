@@ -18,6 +18,8 @@ _log = logging.getLogger(__name__)
 
 async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
     """
+    .. versionadded:: 0.2.0
+
     Fetches the current TOTD map.
 
     Parameters
@@ -81,6 +83,8 @@ async def totd(
     date: date | int = -1, month: bool = False, leaderboard_flag: bool = False
 ) -> TOTD | List[Dict]:
     """
+    .. versionadded:: 0.2.0
+
     Gets the TOTD of a specific date.
 
     Parameters

@@ -5,6 +5,8 @@ from ..structures.ad import Ad
 
 def parse_ad(ad: Dict) -> Ad:
     """
+    .. versionadded:: 0.2.0
+
     Parses an AD dict to an :class:`Ad` object.
 
     Parameters

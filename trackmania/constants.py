@@ -6,7 +6,11 @@ __all__ = ("TMIO", "TMX")
 
 # pylint: disable=too-few-public-methods
 class TMIOTabs:
-    """TMIO Endpoints"""
+    """
+    .. versionadded:: 0.1.0
+    
+    TMIO Endpoints
+    """
 
     def __init__(self):
         self.PLAYER: str = "player"
@@ -29,6 +33,8 @@ class TMIOTabs:
 # pylint: disable=too-few-public-methods
 class TMIO:
     """
+    .. versionadded:: 0.1.0
+    
     Basic TMIO Api Details
 
     Parameters
@@ -80,6 +86,8 @@ class TMIO:
 # pylint: disable=too-few-public-methods
 class TMX:
     """
+    .. versionadded:: 0.1.0
+    
     Basic TMX Api Details
 
     Parameters

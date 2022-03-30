@@ -18,6 +18,8 @@ __all__ = (
 
 class PlayerMetaInfo:
     """
+    .. versionadded:: 0.1.0
+
     Represents Player Meta Data, which inclues YT, Twitch, Twitter or TMIO Vanity Link
 
     Parameters
@@ -78,6 +80,8 @@ class PlayerMetaInfo:
 
 class PlayerTrophies:
     """
+    .. versionadded:: 0.1.0
+
     Represents Player Trophies
 
     Parameters
@@ -201,7 +205,10 @@ class PlayerTrophies:
 
 
 class PlayerZone:
-    """Class that represents the player zone
+    """
+    .. versionadded:: 0.1.0
+
+    Class that represents the player zone
 
     Parameters
     ----------
@@ -223,6 +230,8 @@ class PlayerZone:
 
 class PlayerMatchmaking:
     """
+    .. versionadded:: 0.1.0
+
     Class that represents the player matchmaking details
 
     Parameters
@@ -305,6 +314,8 @@ class PlayerMatchmaking:
 
 class Player:
     """
+    .. versionadded:: 0.1.0
+
     Represents a Player in Trackmania
 
     Parameters
@@ -377,6 +388,8 @@ class Player:
 
 class PlayerSearchResult:
     """
+    .. versionadded:: 0.1.0
+
     Represents 1 Player from a Search Result
 
     Parameters

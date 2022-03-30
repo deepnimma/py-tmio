@@ -5,7 +5,10 @@ from ..structures.medal_times import MedalTimes
 
 
 def parse_totd_map(map_data: Dict, leaderboard: List[Dict] | None = None) -> TOTD:
-    """Parses TOTD Map Data.
+    """
+    .. versionadded:: 0.1.0
+
+    Parses TOTD Map Data.
 
     :param map_data (: class:`Dict`): The map data as a dict or json.
     :param map_data: Dict:

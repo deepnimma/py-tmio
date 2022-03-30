@@ -3,6 +3,8 @@ __all__ = ("MedalTimes",)
 
 class MedalTimes:
     """
+    .. versionadded:: 0.1.0
+
     Represents the MedalTimes of a map.
 
     Parameters

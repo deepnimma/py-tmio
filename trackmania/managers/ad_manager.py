@@ -15,6 +15,8 @@ _log = logging.getLogger(__name__)
 
 async def get_ad(ad_uid: str) -> Ad:
     """
+    .. versionadded:: 0.2.0
+    
     Retrieves the Trackmania Maniapub of the given ad uid.
 
     Parameters

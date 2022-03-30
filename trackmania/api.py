@@ -10,6 +10,8 @@ __all__ = ("ResponseCodeError", "APIClient")
 
 class ResponseCodeError(ValueError):
     """
+    .. versionadded:: 0.1.0
+
     Raised when a non-OK HTTP Response is received
 
     Parameters
@@ -42,7 +44,11 @@ class ResponseCodeError(ValueError):
 
 # pylint: disable=W0612
 class APIClient:
-    """API Wrappers"""
+    """
+    .. versionadded:: 0.1.0
+
+    API Wrappers
+    """
 
     def __init__(self, **session_kwargs):
         if Client.USER_AGENT is None:

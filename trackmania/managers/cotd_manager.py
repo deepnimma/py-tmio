@@ -16,6 +16,8 @@ _log = logging.getLogger(__name__)
 
 async def get_player_cotd(player_id: str, page: int = 0) -> PlayerCOTD:
     """
+    .. versionadded:: 0.2.1
+    
     Gets the player cotd data. Function will sleep for 120s if it uses too many requests.
 
     Parameters

@@ -16,6 +16,8 @@ from ..structures.player import (
 
 def parse_player(data: Dict) -> Tuple:
     """
+    .. versionadded:: 0.1.0
+
     Parses the JSON data into the required data types for the :class:`Player` constructor.
 
     Parameters
