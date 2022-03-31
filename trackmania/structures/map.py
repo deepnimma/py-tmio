@@ -5,8 +5,7 @@ from .medal_times import MedalTimes
 __all__ = ("TOTD",)
 
 
-# pylint: disable=too-many-arguments, too-many-instance-attributes, too-few-public-methods
-class TOTD:
+class TMMap:
     """
     .. versionadded:: 0.1.0
 
@@ -78,3 +77,15 @@ class TOTD:
         self.month_day = month_day
         self.leaderboard_uid = leaderboard_uid
         self.leaderboard = leaderboard
+
+
+# pylint: disable=too-many-arguments, too-many-instance-attributes, too-few-public-methods
+class TOTD(TMMap):
+    """
+    ..versionadded :: 0.3.0
+
+    Represents a TOTD Map
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
