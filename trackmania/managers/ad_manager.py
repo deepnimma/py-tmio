@@ -70,6 +70,7 @@ async def get_ad(ad_uid: str) -> Ad:
 
     return _parse_ad(req_ad)
 
+
 async def list_ads() -> List[Ad]:
     """
     Lists all Ingame maniapubs.
@@ -80,15 +81,16 @@ async def list_ads() -> List[Ad]:
         The List of Ingame Maniapubs
     """
     api_client = APIClient()
-    _log.debug(f'Sending GET request to {TMIO.build([TMIO.TABS.ADS])}')
+    _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.ADS])}")
     ad_list_raw = await api_client.get(TMIO.build([TMIO.TABS.ADS]))
     await api_client.close()
-    
+
     ad_list = list()
     for _, ad in enumerate(ad_list_raw["ads"]):
         ad_list.append(_parse_ad(ad))
-        
+
     return ad_list
+
 
 def _parse_ad(ad: Dict) -> Ad:
     """
