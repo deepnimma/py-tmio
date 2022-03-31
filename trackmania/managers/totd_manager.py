@@ -11,7 +11,7 @@ from trackmania.structures.map import TOTD
 from ..api import APIClient
 from ..config import Client
 from ..constants import TMIO
-from ..util import map_parsers
+from ..structures.medal_times import MedalTimes
 
 _log = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
         if cache_client.exists("latest_totd"):
             _log.debug("latest_totd was cached.")
             latest_totd = json.loads(cache_client.get("latest_totd"))
-            return map_parsers.parse_totd_map(latest_totd, latest_totd["leaderboard"])
+            return _parse_totd_map(latest_totd, latest_totd["leaderboard"])
 
     api_client = APIClient()
     _log.debug(f'Sending GET request to {TMIO.build([TMIO.TABS.TOTD, "0"])}')
@@ -76,7 +76,7 @@ async def _latest_totd(leaderboard_flag: bool = False) -> TOTD:
         else:
             _log.debug("Within 1 hour of the next totd, latest_totd was not cached.")
 
-    return map_parsers.parse_totd_map(latest_totd, leaderboard)
+    return _parse_totd_map(latest_totd, leaderboard)
 
 
 async def totd(
@@ -148,7 +148,7 @@ async def totd(
         if cache_client.exists(f"totd|{date.year}|{date.month}|{date.day}"):
             _log.debug(f"totd|{date.year}|{date.month}|{date.day} was cached.")
             totd = cache_client.get(f"totd|{date.year}|{date.month}|{date.day}")
-            return map_parsers.parse_totd_map(json.loads(totd, totd["leaderboard"]))
+            return _parse_totd_map(json.loads(totd, totd["leaderboard"]))
 
     # Find how many months ago the given month is.
     count = 0
@@ -202,4 +202,67 @@ async def totd(
             ex=None if count != 0 else 14400,
         )
         _log.debug(f"totd|{date.year}|{month}|{date.day} was cached.")
-    return map_parsers.parse_totd_map(month_data["days"][date.day - 1], leaderboard)
+    return _parse_totd_map(month_data["days"][date.day - 1], leaderboard)
+
+
+def _parse_totd_map(map_data: Dict, leaderboard: List[Dict] | None = None) -> TOTD:
+    """
+    .. versionadded:: 0.1.0
+
+    Parses TOTD Map Data.
+
+    :param map_data (: class:`Dict`): The map data as a dict or json.
+    :param map_data: Dict:
+    :param leaderboard: List[Dict] | None:  (Default value = None)
+    :returns: class:`TOTD`: The TOTD object for the map.
+
+    Parameters
+    ----------
+    map_data : :class:`Dict`
+        The map data as a dict or json.
+    leaderboard: :class:`List[Dict]` | None :
+         (Default value = None)
+
+    Returns
+    -------
+    class:`TOTD`
+        The TOTD object for the map.
+
+    """
+    campaign_id = map_data["campaignid"]
+    map_author_id = map_data["map"]["author"]
+    map_name = map_data["map"]["name"]
+    map_type = map_data["map"]["mapType"]
+
+    medal_times = MedalTimes(
+        map_data["map"]["bronzeScore"],
+        map_data["map"]["silverScore"],
+        map_data["map"]["goldScore"],
+        map_data["map"]["authorScore"],
+    )
+
+    map_id = map_data["map"]["mapId"]
+    map_uid = map_data["map"]["mapUid"]
+    timestamp = map_data["map"]["timestamp"]
+    file_url = map_data["map"]["fileUrl"]
+    thumbnail_url = map_data["map"]["thumbnailUrl"]
+    week_day = map_data["weekday"]
+    month_day = map_data["monthday"]
+    leaderboard_uid = map_data["leaderboarduid"]
+
+    return TOTD(
+        campaign_id,
+        map_author_id,
+        map_name,
+        map_type,
+        medal_times,
+        map_id,
+        map_uid,
+        timestamp,
+        file_url,
+        thumbnail_url,
+        week_day,
+        month_day,
+        leaderboard_uid,
+        leaderboard,
+    )

@@ -12,7 +12,6 @@ packages = [
     "trackmania",
     "trackmania.structures",
     "trackmania.managers",
-    "trackmania.util",
 ]
 
 setup(

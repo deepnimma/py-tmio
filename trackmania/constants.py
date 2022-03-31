@@ -8,7 +8,7 @@ __all__ = ("TMIO", "TMX")
 class TMIOTabs:
     """
     .. versionadded:: 0.1.0
-    
+
     TMIO Endpoints
     """
 
@@ -34,7 +34,7 @@ class TMIOTabs:
 class TMIO:
     """
     .. versionadded:: 0.1.0
-    
+
     Basic TMIO Api Details
 
     Parameters
@@ -87,7 +87,7 @@ class TMIO:
 class TMX:
     """
     .. versionadded:: 0.1.0
-    
+
     Basic TMX Api Details
 
     Parameters

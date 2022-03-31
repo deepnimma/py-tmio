@@ -1,6 +1,7 @@
 import json
 from contextlib import suppress
 import logging
+from typing import Dict
 
 import redis
 
@@ -8,7 +9,6 @@ from ..api import APIClient
 from ..config import Client
 from ..constants import TMIO
 from ..structures.ad import Ad
-from ..util import ad_parsers
 
 _log = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ _log = logging.getLogger(__name__)
 async def get_ad(ad_uid: str) -> Ad:
     """
     .. versionadded:: 0.2.0
-    
+
     Retrieves the Trackmania Maniapub of the given ad uid.
 
     Parameters
@@ -51,7 +51,7 @@ async def get_ad(ad_uid: str) -> Ad:
     with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
         if cache_client.exists(f"ad|{ad_uid}"):
             _log.debug(f"{ad_uid} was cached.")
-            return ad_parsers.parse_ad(json.loads(cache_client.get(f"ad|{ad_uid}")))
+            return _parse_ad(json.loads(cache_client.get(f"ad|{ad_uid}")))
 
     api_client = APIClient()
     _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.ADS])}")
@@ -68,4 +68,35 @@ async def get_ad(ad_uid: str) -> Ad:
         cache_client.set(f"ad|{ad_uid}", json.dumps(req_ad))
         _log.debug(f"Caching {ad_uid}.")
 
-    return ad_parsers.parse_ad(req_ad)
+    return _parse_ad(req_ad)
+
+
+def _parse_ad(ad: Dict) -> Ad:
+    """
+    .. versionadded:: 0.2.0
+
+    Parses an AD dict to an :class:`Ad` object.
+
+    Parameters
+    ----------
+    ad : :class:`Dict`
+        The ad data as a dict.
+
+    Returns
+    -------
+    :class:`Ad`
+        The ad data as an :class:`Ad` object.
+    """
+    ad_data = {
+        "cp_image": ad["img64x10"],
+        "display_format": ad["displayformat"],
+        "image": ad["img16x9"],
+        "media": ad["media"],
+        "name": ad["name"],
+        "type": ad["type"],
+        "uid": ad["uid"],
+        "url": ad["url"],
+        "vertical_image": ad["img2x3"],
+    }
+
+    return Ad(**ad_data)
