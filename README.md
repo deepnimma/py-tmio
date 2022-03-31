@@ -64,33 +64,159 @@ Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 
 Caching is not *required* but is highly recommended.
 
-## Changelog
+## April Roadmap
+#### By April 8th
+1. Update the AdsManager class
+	1. With the following functions
+		1. list()
+2. Implement TMMapLeaderboard
+	* Parameters
+		1. date
+		2. ghost
+		3. map
+		4. position
+		5. time
+	* Methods	
+		1. player()
+3. Implement TMMap Class (or rename COTD Map class)
+	* Parameters
+		1. environment
+		2. exchange
+		3. exchange_id
+		4. file_name
+		5. id
+		6. leaderboard
+		7. medal_times
+		8. name
+		9. storage_id
+		10. thumbnail
+		11. thumnail_cached
+		12. uid
+		13. uploaded
+		14. url
+	* Functions
+		1. author
+		2. leaderboard_get(position)
+		3. submitter()
+		
+4. Implement Room Class
+	* Parameters
+		1. id
+		2. image_url
+		3. is_cloud
+		4. login
+		5. max_players_count
+		6. name
+		7. player_count
+		8. region
+		9. script
+		10. script_settings
+	* Functions
+		1. club()
+		2. maps()
 
-**v0.2.0**
+5. Implement ClubActivity class
+	* Parameters
+		1. external_id
+		2. id
+		3. is_password_protected
+		4. is_public
+		5. media
+		6. name
+		7. type
+	* Functions
+		1. campaign()
+		2. room()
+	
+6. Implement ClubMember class
+	* Parameters
+		1. is_admin
+		2. is_creator
+		3. is_vip
+		4. join_date
+		5. role
+	
+	* Functions
+		1. member()
+		
+7. Implement Club Class
+	* Parameters
+		1. background
+		2. created_at
+		3. decal
+		4. description
+		5. featured
+		6. id
+		7. logo	
+		8. member_count
+		9. name
+		10. popularity
+		11. screens
+		12. state
+		13. tag
+		14. vertical
+	* Functions
+		1. creator()
+		2. fetch_activities(page)
+		3. fetch_members(page)
+		
+8. Implement Campaign class
+	* Parameters
+		1. created_at
+		2. id
+		3. image
+		4. is_official
+		5. leaderboard_id
+		6. map_count
+		7. media
+		8. name
+		9. uploaded_at
+	* Functions
+		1. club()
+		2. leaderboard()
+		3. map(index)
+		4. maps()
 
-<small>**23rd March, 2022**</small>
+9. Implement CampaignSearchResult class
+	* Parameters
+		1. club_id
+		2. date
+		3. id
+		4. map_count
+		5. name
+	* Functions
+		1. get_campaign()
+		
+10. Implement CampaignMedia class
+	* Parameters
+		1. button_background
+		2. button_foreground
+		3. decal
+		4. live_button_background
+		5. live_button_foreground
+		6. popup
+		7. popup_background
 
-* Option to return raw data alongside the parsed data.
-* All classes previously in `trackmania.structures` have been moved to `trackmania`.
-* Update and fix lots of the problems I made.
 
-**v0.1.0**
+11. Implement CampaignLeaderboard class
+	* Parameters
+		1. 
+	* Functions
 
-<small>**15th March, 2022**</small>
+8. Implement the Campaign Manager class
+	* Functions
+		1. current_season
+		2. get(club_id, id)
+		3. official_campaigns()
+		4. popular_campaigns(page)
+		5. search(query, page)
 
-* First Beta Release of py-tmio
-* `player_manager`
-    * `get_player(player_id)` command
-    * `search_player(username)` command
-    * `to_account_id(username)` command
-    * `to_username(account_id)` command
-    * `top_matchmaking(group, page)` command
-    * `top_trophies(page)` command
-* `ad_manager`
-    * `get_ad(ad_id)` command
-* `totd_manager`
-    * `latest_totd(leaderboard)` command
-    * `totd(year, month, day, leaderboard)` command
+			
+	
+#### By April 15th
+1. Implement MapManager class
+	* Functions
+		1. get()
 
 ## Examples
 
