@@ -73,6 +73,8 @@ async def get_ad(ad_uid: str) -> Ad:
 
 async def list_ads() -> List[Ad]:
     """
+    ..versionadded:: 0.3.0
+    
     Lists all Ingame maniapubs.
 
     Returns
