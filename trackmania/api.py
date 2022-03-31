@@ -93,12 +93,14 @@ class APIClient:
         async with self.session.request(method.upper(), endpoint, **kwargs) as resp:
             await self.maybe_raise_for_status(resp, raise_for_status)
 
-            if "trackmania.io" in endpoint:
-                Client.RATELIMIT_LIMIT = int(resp.headers.get("x-ratelimit-limit")[0])
-                Client.RATELIMIT_REMAINING = int(
-                    resp.headers.get("x-ratelimit-remaining")[0]
-                )
-
+            try:
+                if "trackmania.io" in endpoint:
+                    Client.RATELIMIT_LIMIT = int(resp.headers.get("x-ratelimit-limit")[0])
+                    Client.RATELIMIT_REMAINING = int(
+                        resp.headers.get("x-ratelimit-remaining")[0]
+                    )
+            except (AttributeError, TypeError):
+                pass
             return await resp.json()
 
     async def get(
