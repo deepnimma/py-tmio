@@ -53,7 +53,6 @@ class TestPlayerManager(unittest.TestCase):
             self.assertEqual(resp.meta.in_nadeo, False)
             self.assertEqual(resp.meta.in_tmgl, False)
             self.assertEqual(resp.meta.in_tmio_dev_team, False)
-            self.assertEqual(resp.meta.in_tmwc21, False)
             self.assertEqual(resp.meta.is_sponsor, False)
             self.assertEqual(resp.meta.sponsor_level, 0)
             self.assertEqual(resp.meta.twitch, "NottCurious")
