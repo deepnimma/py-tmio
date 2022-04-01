@@ -1,11 +1,12 @@
 import asyncio
 import json
 import unittest
+import datetime
 
 from aioresponses import aioresponses
 
 from trackmania import Client
-from trackmania.managers import player_manager
+from trackmania.player import Player
 
 
 class TestPlayerManager(unittest.TestCase):
@@ -20,14 +21,13 @@ class TestPlayerManager(unittest.TestCase):
 
             loop = asyncio.get_event_loop()
             resp = loop.run_until_complete(
-                player_manager.get_player("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
+                Player.get("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
             )
 
             self.assertEqual(resp.club_tag, "$F63W$F971$FCBS$FFFP")
-            self.assertEqual(resp.first_login, "2021-02-12T11:04:02+00:00")
+            self.assertEqual(resp.first_login, datetime.datetime(2021, 2, 12, 11, 4, 2))
             self.assertEqual(resp.player_id, "b73fe3d7-a92a-4a6d-ab9d-49005caec499")
-            self.assertEqual(resp.last_club_tag_change, "2022-03-06T15:35:59+00:00")
-            self.assertEqual(resp.login, "NottCurious")
+            self.assertEqual(resp.last_club_tag_change, datetime.datetime(2022, 3, 6, 15, 35, 59))
             self.assertEqual(resp.name, "NottCurious")
             self.assertEqual(resp.m3v3_data.matchmaking_type, "3v3")
             self.assertEqual(resp.m3v3_data.type_id, 2)
@@ -60,7 +60,7 @@ class TestPlayerManager(unittest.TestCase):
             self.assertEqual(resp.meta.youtube, "UCZV9i9_sgXwIdN6cy1uFkyw")
             self.assertEqual(resp.meta.vanity, None)
             self.assertEqual(resp.trophies.echelon, 6)
-            self.assertEqual(resp.trophies.last_change, "2022-03-07T04:02:19+00:00")
+            self.assertEqual(resp.trophies.last_change, datetime.datetime(2022, 3, 7, 4, 2, 19))
             self.assertEqual(resp.trophies.points, 3290258)
             self.assertEqual(
                 resp.trophies.trophies, [3378, 3868, 5482, 570, 163, 5, 0, 0, 0]
@@ -68,67 +68,6 @@ class TestPlayerManager(unittest.TestCase):
             self.assertEqual(
                 resp.trophies.player_id, "b73fe3d7-a92a-4a6d-ab9d-49005caec499"
             )
-
-    @aioresponses()
-    def test_to_account_id(self, mocked):
-        Client.USER_AGENT = "NottCurious#4351 | py-trackmania.io Testing Suite"
-
-        with open("./tests/data/account_id_one.json", "r", encoding="UTF-8") as file:
-            mocked.get(
-                "https://trackmania.io/api/players/find?search=NottCurious",
-                status=200,
-                payload=json.load(file),
-            )
-
-            loop = asyncio.get_event_loop()
-
-            resp = loop.run_until_complete(player_manager.to_account_id("NottCurious"))
-
-            self.assertEqual(str(resp), "b73fe3d7-a92a-4a6d-ab9d-49005caec499")
-
-        with open("./tests/data/account_id_two.json", "r", encoding="UTF-8") as file:
-            mocked.get(
-                "https://trackmania.io/api/players/find?search=Kaizer",
-                status=200,
-                payload=json.load(file),
-            )
-
-            loop = asyncio.get_event_loop()
-            resp = loop.run_until_complete(player_manager.to_account_id("Kaizer"))
-
-            self.assertEqual(str(resp), "17cebbbb-2637-4110-ba67-f733de4559ea")
-
-    @aioresponses()
-    def test_to_username(self, mocked):
-        Client.USER_AGENT = "NottCurious#4351 | py-trackmania.io Testing Suite"
-
-        with open("./tests/data/to_username_one.json", "r", encoding="UTF-8") as file:
-            mocked.get(
-                "https://trackmania.io/api/player/b73fe3d7-a92a-4a6d-ab9d-49005caec499",
-                status=200,
-                payload=json.load(file),
-            )
-
-            loop = asyncio.get_event_loop()
-            resp = loop.run_until_complete(
-                player_manager.to_username("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
-            )
-
-            self.assertEqual(str(resp), "NottCurious")
-
-        with open("./tests/data/to_username_two.json", "r", encoding="UTF-8") as file:
-            mocked.get(
-                "https://trackmania.io/api/player/17cebbbb-2637-4110-ba67-f733de4559ea",
-                status=200,
-                payload=json.load(file),
-            )
-
-            loop = asyncio.get_event_loop()
-            resp = loop.run_until_complete(
-                player_manager.to_username("17cebbbb-2637-4110-ba67-f733de4559ea")
-            )
-
-            self.assertEqual(str(resp), "Kaizer_TM")
 
 
 if __name__ == "__main__":

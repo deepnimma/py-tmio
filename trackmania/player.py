@@ -1,10 +1,19 @@
+from struct import unpack
 from types import NoneType
 from typing import Dict, List
 from datetime import datetime
+import logging
+from contextlib import suppress
+import json
+
+import redis
 
 from .api import APIClient
 from .errors import InvalidTrophyNumber, InvalidIDError
 from .constants import TMIO
+from .config import Client
+
+_log = logging.getLogger(__name__)
 
 
 class PlayerMetaInfo:
@@ -73,20 +82,22 @@ class PlayerMetaInfo:
             The meta data to parse
         Returns
         -------
-        PlayerMetaInfo
+        :class:`PlayerMetaInfo`
             The parsed meta data
         """
+        _log.debug(f"Creating a PlayerMetaInfo class from the given dictionary.")
+
         return cls(
             display_url=meta_data["display_url"]
             if "display_url" in meta_data
             else None,
-            in_nadeo=meta_data["nadeo"] if "nadeo" in meta_data else None,
-            in_tmgl=meta_data["tmgl"] if "tmgl" in meta_data else None,
-            in_tmio_dev_team=meta_data["team"] if "team" in meta_data else None,
-            is_sponsor=meta_data["sponsor"] if "sponsor" in meta_data else None,
+            in_nadeo=meta_data["nadeo"] if "nadeo" in meta_data else False,
+            in_tmgl=meta_data["tmgl"] if "tmgl" in meta_data else False,
+            in_tmio_dev_team=meta_data["team"] if "team" in meta_data else False,
+            is_sponsor=meta_data["sponsor"] if "sponsor" in meta_data else False,
             sponsor_level=meta_data["sponsor_level"]
             if "sponsor_level" in meta_data
-            else None,
+            else 0,
             twitch=meta_data["twitch"] if "twitch" in meta_data else None,
             twitter=meta_data["twitter"] if "twitter" in meta_data else None,
             youtube=meta_data["youtube"] if "youtube" in meta_data else None,
@@ -127,6 +138,34 @@ class PlayerTrophies:
         self.trophies = trophies
         self._player_id = player_id
 
+    @classmethod
+    def from_dict(cls, raw_trophy_data: Dict, player_id: str):
+        """
+        Creates a :class:`PlayerTrophies` object from the given dictionary.
+
+        Parameters
+        ----------
+        raw_trophy_data : :class:`Dict`
+            The raw trophy data to parse.
+        player_id : str
+            The player ID to set.
+        Returns
+        -------
+        :class:`PlayerTrophies`
+            The parsed trophy data.
+        """
+        _log.debug(f"Creating a PlayerTrophies class from the given dictionary.")
+
+        return cls(
+            echelon=raw_trophy_data["echelon"],
+            last_change=datetime.strptime(
+                raw_trophy_data["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
+            ),
+            points=raw_trophy_data["points"],
+            trophies=raw_trophy_data["counts"],
+            player_id=player_id,
+        )
+
     @property
     def last_change(self):
         """Last change property."""
@@ -154,6 +193,7 @@ class PlayerTrophies:
         int
             the number of trophies for that specific tier.
         """
+        _log.debug(f"Returning trophy T{number} for player {self.player_id}")
 
         if number > 9 or number < 1:
             raise InvalidTrophyNumber(
@@ -201,6 +241,9 @@ class PlayerTrophies:
         if self.player_id is None:
             raise InvalidIDError("ID Has not been set for the Object")
 
+        _log.info(
+            f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, page])}"
+        )
         history = await api_client.get(
             TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, page])
         )
@@ -245,10 +288,12 @@ class PlayerZone:
         class:`List[PlayerZone]`
             The list of :class:`PlayerZone` objects.
         """
+        _log.debug("Parsing Zones")
         player_zone_list: List = []
         i: int = 0
 
         while "zone" in zones:
+            _log.debug(f"Gone {i} Levels Deep")
             player_zone_list.append(
                 cls(zones["flag"], zones["zone"], zone_positions[i])
             )
@@ -300,7 +345,7 @@ class PlayerMatchmaking:
         max_points: int,
     ):
         """Constructor for the class."""
-        matchmaking_string = {
+        MATCHMAKING_STRING = {
             1: "Bronze 3",
             2: "Bronze 2",
             3: "Bronze 1",
@@ -322,7 +367,7 @@ class PlayerMatchmaking:
         self.score = score
         self.progression = progression
         self.division = division
-        self.division_str = matchmaking_string[division]
+        self.division_str = MATCHMAKING_STRING[division]
         self._min_points = min_points
         self._max_points = 1 if max_points == 0 else max_points
 
@@ -332,6 +377,62 @@ class PlayerMatchmaking:
             )
         except ZeroDivisionError:
             self.progress = 0
+
+    @staticmethod
+    def from_dict(mm_data: Dict):
+        """
+        Parses the matchmaking data of the player and returns 2 :class:`PlayerMatchmaking` objects.
+            One for 3v3 Matchmaking and the other for Royal matchmaking.
+        Parameters
+        ----------
+        mm_data : :class:`List[Dict]`
+            The matchmaking data.
+        Returns
+        -------
+        :class:`List[PlayerMatchmaking]`
+            The list of matchmaking data, one for 3v3 and other other one for royal.
+        """
+        matchmaking_data = []
+
+        if len(mm_data) == 0:
+            matchmaking_data.extend([None, None])
+        elif len(mm_data) == 1:
+            matchmaking_data.extend([PlayerMatchmaking.__parse_3v3(mm_data[0]), None])
+        else:
+            matchmaking_data.extend(
+                [
+                    PlayerMatchmaking.__parse_3v3(mm_data[0]),
+                    PlayerMatchmaking.__parse_3v3(mm_data[1]),
+                ]
+            )
+
+        return matchmaking_data
+
+    @classmethod
+    def __parse_3v3(cls, data: Dict):
+        """
+        Parses matchmaking data for 3v3 and royal type matchmaking.
+        Parameters
+        ----------
+        data : :class:`Dict`
+            The matchmaking data only.
+        Returns
+        -------
+        :class:`PlayerMatchmaking`
+            The parsed data.
+        """
+        typename = data["info"]["typename"]
+        typeid = data["info"]["typeid"]
+        rank = data["info"]["rank"]
+        score = data["info"]["score"]
+        progression = data["info"]["progression"]
+        division = data["info"]["division"]["position"]
+        min_points = data["info"]["division"]["minpoints"]
+        max_points = data["info"]["division"]["maxpoints"]
+
+        return cls(
+            typename, typeid, progression, rank, score, division, min_points, max_points
+        )
 
     @property
     def min_points(self):
@@ -380,7 +481,6 @@ class Player:
         first_login: str,
         player_id: str,
         last_club_tag_change: str,
-        login: str,
         meta: PlayerMetaInfo,
         name: str,
         trophies: PlayerTrophies = None,
@@ -393,7 +493,6 @@ class Player:
         self._first_login = first_login
         self._id = player_id
         self.last_club_tag_change = last_club_tag_change
-        self.login = login
         self.meta = meta
         self.name = name
         self.trophies = trophies
@@ -414,3 +513,86 @@ class Player:
     def player_id(self):
         """player id property."""
         return self._id
+
+    @classmethod
+    async def get(cls, player_id: str):
+        """
+        Gets a player's data from their player_id
+
+        Parameters
+        ----------
+        player_id : str
+            The player id of the player
+        """
+        _log.debug(f"Getting {player_id}'s data")
+
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(f"player:{player_id}"):
+                _log.debug(f"{player_id}'s data found in cache")
+                player_data = cache_client.get(f"player:{player_id}")
+                player_data = json.loads(player_data)
+                return cls(
+                    **Player._parse_player(cache_client.get(f"player:{player_id}"))
+                )
+
+        api_client = APIClient()
+        _log.info(f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, player_id])}")
+        player_data = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, player_id]))
+        await api_client.close()
+
+        # add caching
+
+        return cls(**Player._parse_player(player_data))
+
+    @staticmethod
+    def _parse_player(player_data: Dict) -> Dict:
+        """
+        Parses the player data
+
+        Parameters
+        ----------
+        player_data : :class:`Dict`
+            The player data as a dictionary
+
+        Returns
+        -------
+        :class:`Dict`
+            The parsed player data formatted kwargs friendly for the :class:`Player` constructors
+        """
+        first_login = datetime.strptime(
+            player_data["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
+        )
+        last_club_tag_change = (
+            datetime.strptime(
+                player_data["clubtagtimestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
+            )
+            if "clubtagtimestamp" in player_data
+            else None
+        )
+
+        player_meta = PlayerMetaInfo.from_dict(player_data["meta"])
+        player_trophies = PlayerTrophies.from_dict(
+            player_data["trophies"], player_data["accountid"]
+        )
+        player_zone = PlayerZone._parse_zones(player_data["trophies"]["zone"], player_data['trophies']['zonepositions'])
+        matchmaking = PlayerMatchmaking.from_dict(player_data["matchmaking"])
+
+        return {
+            "club_tag": player_data["clubtag"] if "clubtag" in player_data else None,
+            "first_login": first_login,
+            "name": player_data["displayname"],
+            "player_id": player_data["accountid"],
+            "last_club_tag_change": last_club_tag_change,
+            "meta": player_meta,
+            "trophies": player_trophies,
+            "zone": player_zone,
+            "m3v3_data": matchmaking[0],
+            "royal_data": matchmaking[1],
+        }
