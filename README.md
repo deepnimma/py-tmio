@@ -66,18 +66,6 @@ Caching is not *required* but is highly recommended.
 
 ## April Roadmap
 #### By April 8th
-1. Update the AdsManager class
-	1. With the following functions
-		1. list()
-2. Implement TMMapLeaderboard
-	* Parameters
-		1. date
-		2. ghost
-		3. map
-		4. position
-		5. time
-	* Methods	
-		1. player()
 3. Implement TMMap Class (or rename COTD Map class)
 	* Parameters
 		1. environment

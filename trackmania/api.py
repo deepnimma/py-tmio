@@ -95,7 +95,9 @@ class APIClient:
 
             try:
                 if "trackmania.io" in endpoint:
-                    Client.RATELIMIT_LIMIT = int(resp.headers.get("x-ratelimit-limit")[0])
+                    Client.RATELIMIT_LIMIT = int(
+                        resp.headers.get("x-ratelimit-limit")[0]
+                    )
                     Client.RATELIMIT_REMAINING = int(
                         resp.headers.get("x-ratelimit-remaining")[0]
                     )
