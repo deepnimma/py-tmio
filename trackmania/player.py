@@ -1,27 +1,16 @@
-# pylint: disable=too-many-arguments,too-few-public-methods,too-many-instance-attributes
-
+from types import NoneType
 from typing import Dict, List
+from datetime import datetime
 
-from ..api import APIClient
-from ..constants import TMIO
-from ..errors import InvalidIDError, InvalidTrophyNumber
-
-__all__ = (
-    "PlayerMetaInfo",
-    "PlayerTrophies",
-    "PlayerZone",
-    "PlayerMatchmaking",
-    "Player",
-    "PlayerSearchResult",
-)
+from .api import APIClient
+from .errors import InvalidTrophyNumber, InvalidIDError
+from .constants import TMIO
 
 
 class PlayerMetaInfo:
     """
-    .. versionadded:: 0.1.0
-
     Represents Player Meta Data, which inclues YT, Twitch, Twitter or TMIO Vanity Link
-
+    
     Parameters
     ----------
     display_url : str
@@ -44,10 +33,6 @@ class PlayerMetaInfo:
         The YouTube URL of the player, `NoneType` if the player has no YouTube
     vanity : str | None
         The TMIO Vanity URL of the player, `NoneType` if the player has no TMIO Vanity URL
-
-    Returns
-    -------
-
     """
 
     def __init__(
@@ -77,11 +62,40 @@ class PlayerMetaInfo:
         self.youtube = youtube
         self.vanity = vanity
 
+    @classmethod
+    def from_dict(cls, meta_data: Dict):
+        """
+        Parses the meta data into a PlayerMetaInfo object.
+        
+        Parameters
+        ----------
+        meta_data : Dict
+            The meta data to parse
+        Returns
+        -------
+        PlayerMetaInfo
+            The parsed meta data
+        """
+        return cls(
+            display_url=meta_data["display_url"]
+            if "display_url" in meta_data
+            else None,
+            in_nadeo=meta_data["nadeo"] if "nadeo" in meta_data else None,
+            in_tmgl=meta_data["tmgl"] if "tmgl" in meta_data else None,
+            in_tmio_dev_team=meta_data["team"] if "team" in meta_data else None,
+            is_sponsor=meta_data["sponsor"] if "sponsor" in meta_data else None,
+            sponsor_level=meta_data["sponsor_level"]
+            if "sponsor_level" in meta_data
+            else None,
+            twitch=meta_data["twitch"] if "twitch" in meta_data else None,
+            twitter=meta_data["twitter"] if "twitter" in meta_data else None,
+            youtube=meta_data["youtube"] if "youtube" in meta_data else None,
+            vanity=meta_data["vanity"] if "vanity" in meta_data else None,
+        )
+
 
 class PlayerTrophies:
     """
-    .. versionadded:: 0.1.0
-
     Represents Player Trophies
 
     Parameters
@@ -94,88 +108,47 @@ class PlayerTrophies:
         The number of points of the player.
     trophies : :class:`List[int]`
         The number of trophies of the player.
-    player_id : str, optional
+    player_id : str | :class:`NoneType`, optional
         The Trackmania ID of the player
-
     """
-
-    # Add a last_change str to datetime converter
 
     def __init__(
         self,
         echelon: int,
-        last_change: str,
+        last_change: datetime,
         points: int,
         trophies: List[int],
-        player_id: str = None,
+        player_id: str | NoneType = None,
     ):
         """Constructor for the class."""
         self.echelon = echelon
         self._last_change = last_change
         self.points = points
         self.trophies = trophies
-        self.player_id = player_id
+        self._player_id = player_id
 
     @property
     def last_change(self):
         """Last change property."""
         return self._last_change
 
-    async def history(self, page: int = 0) -> Dict:
-        """
-        Retrieves Trophy Gain and Loss history of a player.
-
-        Parameters
-        ----------
-        page : int, optional
-            page number of trophy history, by default 0
-
-        Returns
-        -------
-        :class:`Dict`
-            Trophy history data.
-
-        Raises
-        ------
-        InvalidIDError
-            If an ID has not been set for the object.
-        InvalidIDError
-            If an invalid id has been set for the object.
-        """
-        api_client = APIClient()
-
-        if self.player_id is None:
-            raise InvalidIDError("ID Has not been set for the Object")
-
-        history = await api_client.get(
-            TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, page])
-        )
-
-        await api_client.close()
-
-        try:
-            return history["gains"]
-        except KeyError:
-            raise InvalidIDError(f"Player ID {self.player_id} does not exist")
+    @property
+    def player_id(self):
+        """player_id property"""
+        return self._player_id
 
     def set_id(self, player_id: str):
-        """Sets the ID of the player.
-
-        Parameters
-        ----------
-        player_id : str
-            The Trackmania ID of the player.
-        """
-        self.player_id = player_id
+        """Setter for player_id"""
+        self._player_id = player_id
 
     def trophy(self, number: int) -> int:
-        """Returns the trophies by tier.
-
+        """
+        Returns the trophies by tier.
+        
         Parameters
         ----------
         number : int
             The trophy number, from 1 (T1) to 9 (T9).
-
         Returns
         -------
         int
@@ -203,13 +176,43 @@ class PlayerTrophies:
             + self.trophy(8) * 10_000_000
         )
 
+    # async def trophy_history function
+    async def history(self, page: int = 0) -> Dict:
+        """
+        Retrieves Trophy Gain and Loss history of a player.
+        
+        Parameters
+        ----------
+        page : int, optional
+            page number of trophy history, by default 0
+        Returns
+        -------
+        :class:`Dict`
+            Trophy history data.
+        Raises
+        ------
+        InvalidIDError
+            If an ID has not been set for the object.
+        InvalidIDError
+            If an invalid id has been set for the object.
+        """
+        api_client = APIClient()
+
+        if self.player_id is None:
+            raise InvalidIDError("ID Has not been set for the Object")
+
+        history = await api_client.get(
+            TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, page])
+        )
+
+        await api_client.close()
+        return history["gains"]
+
 
 class PlayerZone:
     """
-    .. versionadded:: 0.1.0
-
     Class that represents the player zone
-
+    
     Parameters
     ----------
     flag : str
@@ -218,7 +221,6 @@ class PlayerZone:
         The zone name
     rank : int
         The rank of the player in the zone
-
     """
 
     def __init__(self, flag: str, zone: str, rank: int):
@@ -227,13 +229,43 @@ class PlayerZone:
         self.zone = zone
         self.rank = rank
 
+    @classmethod
+    def _parse_zones(cls, zones: Dict, zone_positions: List[int]) -> List:
+        """
+        Parses the Data from the API into a list of PlayerZone objects.
+
+        Parameters
+        ----------
+        zones : :class:`Dict`
+            the zones data from the API.
+        zone_positions : :class:`List[int]`
+            The zone positions data from the API.
+        Returns
+        -------
+        class:`List[PlayerZone]`
+            The list of :class:`PlayerZone` objects.
+        """
+        player_zone_list: List = []
+        i: int = 0
+
+        while "zone" in zones:
+            player_zone_list.append(
+                cls(zones["flag"], zones["zone"], zone_positions[i])
+            )
+            i += 1
+
+            if "parent" in zones:
+                zones = zones["parent"]
+            else:
+                break
+
+        return player_zone_list
+
 
 class PlayerMatchmaking:
     """
-    .. versionadded:: 0.1.0
-
     Class that represents the player matchmaking details
-
+    
     Parameters
     ----------
     type : str
@@ -314,10 +346,8 @@ class PlayerMatchmaking:
 
 class Player:
     """
-    .. versionadded:: 0.1.0
-
     Represents a Player in Trackmania
-
+    
     Parameters
     ----------
     club_tag : str | None.
@@ -384,47 +414,3 @@ class Player:
     def player_id(self):
         """player id property."""
         return self._id
-
-
-class PlayerSearchResult:
-    """
-    .. versionadded:: 0.1.0
-
-    Represents 1 Player from a Search Result
-
-    Parameters
-    ----------
-    club_tag : str | None.
-        The club tag of the player, `NoneType` if the player is not in a club.
-    name : str
-        Name of the player.
-    player_id : str
-        The Trackmania ID of the player.
-    zone : :class:`List[PlayerZone]`, optional
-        The zone of the player as a list.
-    threes : :class:`PlayerMatchmaking`, optional
-        The 3v3 data of the player.
-    royals : :class:`PlayerMatchmaking`, optional
-        The royal data of the player.
-
-    Returns
-    -------
-
-    """
-
-    def __init__(
-        self,
-        club_tag: str | None,
-        name: str,
-        player_id: str,
-        zone: List[PlayerZone],
-        threes: PlayerMatchmaking | None,
-        royal: PlayerMatchmaking | None,
-    ):
-        """Constructor method."""
-        self.club_tag = club_tag
-        self.name = name
-        self.player_id = player_id
-        self.zone = zone
-        self.threes = threes
-        self.royal = royal

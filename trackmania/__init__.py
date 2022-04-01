@@ -14,11 +14,6 @@ from .api import *
 from .config import *
 from .constants import *
 from .errors import *
-from .structures.ad import *
-from .structures.cotd import *
-from .structures.map import *
-from .structures.medal_times import *
-from .structures.player import *
 
 __title__ = "py-tmio"
 __author__ = "Deepesh Nimma"
