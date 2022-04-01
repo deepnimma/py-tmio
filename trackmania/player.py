@@ -10,7 +10,7 @@ from .constants import TMIO
 class PlayerMetaInfo:
     """
     Represents Player Meta Data, which inclues YT, Twitch, Twitter or TMIO Vanity Link
-    
+
     Parameters
     ----------
     display_url : str
@@ -66,7 +66,7 @@ class PlayerMetaInfo:
     def from_dict(cls, meta_data: Dict):
         """
         Parses the meta data into a PlayerMetaInfo object.
-        
+
         Parameters
         ----------
         meta_data : Dict
@@ -144,7 +144,7 @@ class PlayerTrophies:
     def trophy(self, number: int) -> int:
         """
         Returns the trophies by tier.
-        
+
         Parameters
         ----------
         number : int
@@ -180,7 +180,7 @@ class PlayerTrophies:
     async def history(self, page: int = 0) -> Dict:
         """
         Retrieves Trophy Gain and Loss history of a player.
-        
+
         Parameters
         ----------
         page : int, optional
@@ -212,7 +212,7 @@ class PlayerTrophies:
 class PlayerZone:
     """
     Class that represents the player zone
-    
+
     Parameters
     ----------
     flag : str
@@ -265,7 +265,7 @@ class PlayerZone:
 class PlayerMatchmaking:
     """
     Class that represents the player matchmaking details
-    
+
     Parameters
     ----------
     type : str
@@ -347,7 +347,7 @@ class PlayerMatchmaking:
 class Player:
     """
     Represents a Player in Trackmania
-    
+
     Parameters
     ----------
     club_tag : str | None.
