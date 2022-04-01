@@ -1,8 +1,10 @@
 from typing import Dict, List
 
 from .medal_times import MedalTimes
+from .player import Player
+from ..managers.player_manager import _parse_zones, _parse_meta
 
-__all__ = ("TOTD",)
+__all__ = ("TMMap", "TOTD", "TMMapLeaderboard")
 
 
 class TMMap:
@@ -78,11 +80,84 @@ class TMMap:
         self.leaderboard_uid = leaderboard_uid
         self.leaderboard = leaderboard
 
+class TMMapLeaderboard:
+    """
+    .. versionadded :: 0.3.0
+    
+    Represents a map leaderboard.
+    
+    Parameters
+    ----------
+    ghost : str
+        File url for the ghost
+    position : int
+        The player's position
+    time : int  
+        The time in milliseconds
+        
+    Methods
+    -------
+    player() -> Player
+    """
+
+    def __init__(self, ghost: str, position: int, time: int, player: Player):
+        self.ghost = ghost
+        self.position = position
+        self.time = time
+        self._player = player
+        
+    @property
+    def player(self):
+        """
+        .. versionadded :: 0.3.0
+        
+        Returns the player instance
+        """
+        return self._player
+    
+    @classmethod
+    def from_dict(cls, raw_data: Dict):
+        """
+        .. versionadded:: 0.3.0
+        
+        Parses the dictionary data into a :class:`TMMapLeaderboard` object.
+
+        Parameters
+        ----------
+        raw_data : Dict
+            The raw data.
+
+        Returns
+        -------
+        `TMMapLeaderboard`
+            An instance of :class:`TMMapLeaderboard`
+        """
+        player_data = raw_data['player']
+        player_obj_kwargs = {
+            "club_tag": player_data['tag'] if 'tag' in player_data else None,
+            "first_login": None,
+            "id": player_data['id'],
+            "last_club_tag_change": None,
+            "login": player_data['name'],
+            "meta": _parse_meta(player_data),
+            "name": player_data['name'],
+            "trophies": None,
+            "zone": _parse_zones(player_data['zone']),
+            "m3v3_data": None,
+            "royal_data": None,
+        }
+        
+        return cls(
+            raw_data['url'],
+            raw_data['position'],
+            raw_data['time'],
+            Player(**player_obj_kwargs)
+        )
 
 # pylint: disable=too-many-arguments, too-many-instance-attributes, too-few-public-methods
 class TOTD(TMMap):
     """
-    ..versionadded :: 0.3.0
+    .. versionadded :: 0.3.0
 
     Represents a TOTD Map
     """

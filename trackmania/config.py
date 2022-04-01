@@ -20,16 +20,16 @@ class Client:
         The port of the redis server.
     REDIS_DB : int
         The database of the redis server.
-        ..versionadded:: 0.2.0
+        .. versionadded:: 0.2.0
     REDIS_PASSWORD : str
         The password of the redis server.
-        ..versionadded:: 0.2.0
+        .. versionadded:: 0.2.0
     RATELIMIT_LIMIT: int
         The `trackmania.io` ratelimit limit.
-        ..versionadded:: 0.2.1
+        .. versionadded:: 0.2.1
     RATELIMIT_REMAINING : int
         The amount of remaining requests with `trackmania.io` api.
-        ..versionadded:: 0.2.1
+        .. versionadded:: 0.2.1
     """
 
     USER_AGENT: str = None

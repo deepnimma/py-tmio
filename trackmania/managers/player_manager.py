@@ -378,14 +378,14 @@ def _parse_player(data: Dict) -> Tuple:
     zone_positions = data["trophies"]["zonepositions"]
 
     try:
-        player_meta = __parse_meta(data["meta"])
+        player_meta = _parse_meta(data["meta"])
     except KeyError:
         player_meta = None
 
     player_trophies = PlayerTrophies(
         echelon, last_trophy, trophy_points, trophy_count, player_id
     )
-    player_zones = __parse_zones(zones, zone_positions)
+    player_zones = _parse_zones(zones, zone_positions)
 
     player_mm_data = __parse_matchmaking(data["matchmaking"])
     threes, royal = player_mm_data[0], player_mm_data[1]
@@ -405,7 +405,7 @@ def _parse_player(data: Dict) -> Tuple:
     }
 
 
-def __parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
+def _parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
     """Parses the Data from the API into a list of PlayerZone objects.
 
     Parameters
@@ -498,7 +498,7 @@ def __parse_zones(zones: Dict, zone_positions: List[int]) -> List[PlayerZone]:
     return player_zone_list
 
 
-def __parse_meta(metadata: Dict) -> PlayerMetaInfo:
+def _parse_meta(metadata: Dict) -> PlayerMetaInfo:
     """
     Parses the Meta Data from the API into a :class:`PlayerMetaInfo` object.
 
