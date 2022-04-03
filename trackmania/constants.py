@@ -18,6 +18,7 @@ class TMIOTabs:
         self.TROPHIES: str = "trophies"
         self.MAP: str = "map"
         self.LEADERBOARD: str = "leaderboard"
+        self.MATCHES: str = "matches"
 
         self.TOP_MATCHMAKING: str = "top/matchmaking"
         self.TOP_TROPHIES: str = "top/trophies"
