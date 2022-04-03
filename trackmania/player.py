@@ -1,4 +1,3 @@
-from struct import unpack
 from types import NoneType
 from typing import Dict, List
 from datetime import datetime
@@ -15,6 +14,7 @@ from .config import Client
 
 _log = logging.getLogger(__name__)
 
+__all__ = ("PlayerMetaInfo", "PlayerTrophies", "PlayerZone", "PlayerMatchmaking", "Player")
 
 class PlayerMetaInfo:
     """

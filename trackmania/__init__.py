@@ -14,6 +14,7 @@ from .api import *
 from .config import *
 from .constants import *
 from .errors import *
+from .player import *
 
 __title__ = "py-tmio"
 __author__ = "Deepesh Nimma"
