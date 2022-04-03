@@ -264,6 +264,30 @@ class PlayerTrophies:
         await api_client.close()
         return history["gains"]
 
+    @staticmethod
+    async def top(page: int = 0) -> Dict:
+        """
+        Get's the top players ranked by trophies
+
+        Parameters
+        ----------
+        page : int, optional
+            The page of the leaderboards, by default 0
+
+        Returns
+        -------
+        Dict
+            The players
+        """
+        api_client = APIClient()
+        _log.debug(
+            f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_TROPHIES, page])}"
+        )
+        top_trophies = await api_client.get(TMIO.build([TMIO.TABS.TOP_TROPHIES, page]))
+        await api_client.close()
+
+        return top_trophies["ranks"]
+
 
 class PlayerZone:
     """
@@ -325,9 +349,9 @@ class PlayerZone:
 class PlayerMatchmakingResult:
     """
     .. versionadded :: 0.3.0
-    
+
     Represent's a player's matchmaking result
-    
+
     Parameters
     ----------
     after_score : int
@@ -345,8 +369,17 @@ class PlayerMatchmakingResult:
     win : bool
         Whether the player won the match
     """
-    
-    def __init__(self, after_score: int, leave: bool, live_id: str, mvp: bool, player_id: str | None, start_time: datetime, win: bool):
+
+    def __init__(
+        self,
+        after_score: int,
+        leave: bool,
+        live_id: str,
+        mvp: bool,
+        player_id: str | None,
+        start_time: datetime,
+        win: bool,
+    ):
         self.after_score = after_score
         self.leave = leave
         self.live_id = live_id
@@ -354,7 +387,7 @@ class PlayerMatchmakingResult:
         self.player_id = player_id
         self.start_time = start_time
         self.win = win
-        
+
     @classmethod
     def from_dict(cls, data: Dict, player_id: str = None):
         after_score = data["after_score"]
@@ -363,7 +396,7 @@ class PlayerMatchmakingResult:
         mvp = data["mvp"]
         start_time = datetime.strptime(data["starttime"], "%Y-%m-%dT%H:%M:%SZ")
         win = data["win"]
-        
+
         return cls(after_score, leave, live_id, mvp, player_id, start_time, win)
 
 
@@ -497,7 +530,15 @@ class PlayerMatchmaking:
         max_points = data["info"]["division"]["maxpoints"]
 
         return cls(
-            typename, typeid, progression, rank, score, division, min_points, max_points, player_id
+            typename,
+            typeid,
+            progression,
+            rank,
+            score,
+            division,
+            min_points,
+            max_points,
+            player_id,
         )
 
     @property
@@ -509,11 +550,11 @@ class PlayerMatchmaking:
     def max_points(self):
         """max points property"""
         return self._max_points
-    
+
     async def history(self, page: int = 0) -> List[PlayerMatchmakingResult]:
         """
         .. versionadded :: 0.3.0
-        
+
         History of recent matches in this matchmaking
 
         Parameters
@@ -525,7 +566,7 @@ class PlayerMatchmaking:
         -------
         :class:`List[PlayerMatchmakingResult]`
             The list of matchmaking results
-            
+
         Raises
         ------
         :class:`InvalidIDError`
@@ -533,23 +574,35 @@ class PlayerMatchmaking:
         """
         if self.player_id is None:
             raise InvalidIDError("Player ID is not set")
-        
+
         api_client = APIClient()
-        _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.MATCHES, self.type_id, page])}")
-        match_history = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.MATCHES, self.type_id, page]))
+        _log.debug(
+            f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.MATCHES, self.type_id, page])}"
+        )
+        match_history = await api_client.get(
+            TMIO.build(
+                [
+                    TMIO.TABS.PLAYER,
+                    self.player_id,
+                    TMIO.TABS.MATCHES,
+                    self.type_id,
+                    page,
+                ]
+            )
+        )
         await api_client.close()
-        
+
         player_results = []
         for match in match_history["matches"]:
             player_results.append(PlayerMatchmakingResult.from_dict(match))
-        
-        return player_results   
-       
+
+        return player_results
+
     @staticmethod
     async def top_matchmaking(page: int = 0, royal: bool = False) -> List[Dict]:
         """
         .. versionadded :: 0.3.0
-        
+
         Top matchmaking players
 
         Parameters
@@ -564,19 +617,28 @@ class PlayerMatchmaking:
         :class:`List[Dict]`
             The top matchmaking players by score. Each page contains 50 players.
         """
-        
+
         api_client = APIClient()
-        
+
         if not royal:
-            _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page])}")
-            match_history = await api_client.get(TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page]))
+            _log.debug(
+                f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page])}"
+            )
+            match_history = await api_client.get(
+                TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page])
+            )
         else:
-            _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_ROYAL, page])}")
-            match_history = await api_client.get(TMIO.build([TMIO.TABS.TOP_ROYAL, page]))
-            
+            _log.debug(
+                f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_ROYAL, page])}"
+            )
+            match_history = await api_client.get(
+                TMIO.build([TMIO.TABS.TOP_ROYAL, page])
+            )
+
         await api_client.close()
-        
+
         return match_history["ranks"]
+
 
 class PlayerSearchResult:
     """
@@ -671,10 +733,10 @@ class Player:
         last_club_tag_change: str,
         meta: PlayerMetaInfo,
         name: str,
-        trophies: PlayerTrophies = None,
-        zone: List[PlayerZone] = None,
-        m3v3_data: PlayerMatchmaking = None,
-        royal_data: PlayerMatchmaking = None,
+        trophies: PlayerTrophies | None = None,
+        zone: List[PlayerZone] | None = None,
+        m3v3_data: PlayerMatchmaking | None = None,
+        royal_data: PlayerMatchmaking | None = None,
     ):
         """Constructor of the class."""
         self.club_tag = club_tag
@@ -890,16 +952,30 @@ class Player:
         )
 
         player_meta = PlayerMetaInfo.from_dict(player_data["meta"])
-        player_trophies = PlayerTrophies.from_dict(
-            player_data["trophies"], player_data["accountid"]
+        player_trophies = (
+            PlayerTrophies.from_dict(player_data["trophies"], player_data["accountid"])
+            if "trophies" in player_data
+            else None
         )
-        player_zone = PlayerZone._parse_zones(
-            player_data["trophies"]["zone"], player_data["trophies"]["zonepositions"]
+        player_zone = (
+            PlayerZone._parse_zones(
+                player_data["trophies"]["zone"],
+                player_data["trophies"]["zonepositions"],
+            )
+            if "trophies" in player_data and "zone" in player_data["trophies"]
+            else None
         )
-        matchmaking = PlayerMatchmaking.from_dict(player_data["matchmaking"])
+
+        matchmaking = (
+            PlayerMatchmaking.from_dict(player_data["matchmaking"])
+            if "matchmaking" in player_data
+            else None
+        )
 
         return {
-            "club_tag": player_data["clubtag"] if "clubtag" in player_data else None,
+            "club_tag": player_data["clubtag"]
+            if "clubtag" in player_data or "tag" in player_data
+            else None,
             "first_login": first_login,
             "name": player_data["displayname"],
             "player_id": player_data["accountid"],
