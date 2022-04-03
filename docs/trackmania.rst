@@ -12,6 +12,8 @@ Submodules
    trackmania.constants
    trackmania.errors
    trackmania.player
+   trackmania.trophy
+   trackmania.matchmaking
 
 Module contents
 ---------------
