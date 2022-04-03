@@ -1,3 +1,4 @@
+from functools import cache
 from subprocess import ABOVE_NORMAL_PRIORITY_CLASS
 from types import NoneType
 from typing import Dict, List
@@ -7,6 +8,7 @@ from contextlib import suppress
 import json
 
 import redis
+from yarl import cache_clear
 
 from .api import APIClient
 from .errors import InvalidTrophyNumber, InvalidIDError, InvalidUsernameError
@@ -620,7 +622,7 @@ class Player:
 
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             cache_client.set(f"player:{player_id}", json.dumps(player_data))
-            cache_client.set(f"{player_data['displayname']}:id", player_id)
+            cache_client.set(f"{player_data['displayname'].lower()}:id", player_id)
 
         return cls(**Player._parse_player(player_data))
 
@@ -641,6 +643,8 @@ class Player:
         :class:`NoneType` | :class:`PlayerSearchResult` | :class:`List[PlayerSearchResult]`
             None if no players. :class:`PlayerSearchResult` if only one player. :class:`List[PlayerSearchResult]` if multiple players.
         """
+        _log.debug(f"Searching for players with the username -> {username}")
+        
         api_client = APIClient()
         _log.info(
             f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYERS])}"
@@ -661,6 +665,89 @@ class Player:
                 players.append(PlayerSearchResult.from_dict(player))
 
             return players
+        
+    @staticmethod
+    async def get_id(username: str) -> str:
+        """
+        Gets a player's id from the given username
+
+        Parameters
+        ----------
+        username : str
+            The player's username to get the ID for.
+
+        Returns
+        -------
+        str
+            The player's id.
+        """
+        _log.debug(f"Getting {username}'s id")
+        
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )
+        
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(f"{username.lower()}:id"):
+                _log.debug(f"{username}'s id found in cache")
+                return cache_client.get(f"{username.lower()}:id")
+        
+        players = await Player.search(username)
+        
+        if players is None:
+            with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+                _log.debug(f"Caching {username.lower()} id as None")
+                cache_client.set(f"{username.lower()}:id", None)
+        elif isinstance(players, PlayerSearchResult):
+            with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+                _log.debug(f"Caching {username.lower()} id as {players.player_id}")
+                cache_client.set(f"{username.lower()}:id", players.player_id)
+            return players.player_id
+        else:
+            with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+                _log.debug(f"Caching {username.lower()} id as {players[0].player_id}")
+                cache_client.set(f"{username.lower()}:id", players[0].player_id)
+            return players[0].player_id
+
+    @staticmethod
+    async def get_username(player_id: str) -> str:
+        """
+        Gets a player's username from their player id
+
+        Parameters
+        ----------
+        player_id : str
+            The player id of the player
+
+        Returns
+        -------
+        str
+            The player's username
+        """
+        _log.debug(f"Getting the username for {player_id}")
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )
+        
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(f"{player_id}:username"):
+                _log.debug(f"{player_id}'s username found in cache")
+                return cache_client.get(f"{player_id}:username")
+        
+        player: Player = await Player.get(player_id)
+        
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching {player_id}:username as {player.name}")
+            cache_client.set(f"{player_id}:username", player.name)
+        
+        return player.name
+            
 
     @staticmethod
     def _parse_player(player_data: Dict) -> Dict:
