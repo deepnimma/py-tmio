@@ -316,10 +316,14 @@ class Player:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"player:{player_id}"):
                 _log.debug(f"{player_id}'s data found in cache")
-                player_data = cache_client.get(f"player:{player_id}")
+                player_data = cache_client.get(f"player:{player_id}").decode("utf-8")
                 player_data = json.loads(player_data)
                 return cls(
-                    **Player._parse_player(cache_client.get(f"player:{player_id}"))
+                    **Player._parse_player(
+                        json.loads(
+                            cache_client.get(f"player:{player_id}").decode("utf-8")
+                        )
+                    )
                 )
 
         api_client = APIClient()
@@ -400,7 +404,9 @@ class Player:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"{username.lower()}:id"):
                 _log.debug(f"{username}'s id found in cache")
-                return cache_client.get(f"{username.lower()}:id")
+                return json.loads(
+                    cache_client.get(f"{username.lower()}:id").decode("utf-8")
+                )
 
         players = await Player.search(username)
 
@@ -445,7 +451,9 @@ class Player:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"{player_id}:username"):
                 _log.debug(f"{player_id}'s username found in cache")
-                return cache_client.get(f"{player_id}:username")
+                return json.loads(
+                    cache_client.get(f"{player_id}:username").decode("utf-8")
+                )
 
         player: Player = await Player.get(player_id)
 
@@ -481,7 +489,11 @@ class Player:
             else None
         )
 
-        player_meta = PlayerMetaInfo.from_dict(player_data["meta"])
+        player_meta = (
+            PlayerMetaInfo.from_dict(player_data["meta"])
+            if "meta" in player_data
+            else PlayerMetaInfo.from_dict(dict())
+        )
         player_trophies = (
             PlayerTrophies.from_dict(player_data["trophies"], player_data["accountid"])
             if "trophies" in player_data
