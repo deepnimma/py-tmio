@@ -1,3 +1,4 @@
+from subprocess import ABOVE_NORMAL_PRIORITY_CLASS
 from types import NoneType
 from typing import Dict, List
 from datetime import datetime
@@ -8,13 +9,20 @@ import json
 import redis
 
 from .api import APIClient
-from .errors import InvalidTrophyNumber, InvalidIDError
+from .errors import InvalidTrophyNumber, InvalidIDError, InvalidUsernameError
 from .constants import TMIO
 from .config import Client
 
 _log = logging.getLogger(__name__)
 
-__all__ = ("PlayerMetaInfo", "PlayerTrophies", "PlayerZone", "PlayerMatchmaking", "Player")
+__all__ = (
+    "PlayerMetaInfo",
+    "PlayerTrophies",
+    "PlayerZone",
+    "PlayerMatchmaking",
+    "Player",
+)
+
 
 class PlayerMetaInfo:
     """
@@ -445,6 +453,57 @@ class PlayerMatchmaking:
         return self._max_points
 
 
+class PlayerSearchResult:
+    """
+    Represents 1 Player from a Search Result
+
+    Parameters
+    ----------
+    club_tag : str | None.
+        The club tag of the player, `NoneType` if the player is not in a club.
+    name : str
+        Name of the player.
+    player_id : str
+        The Trackmania ID of the player.
+    zone : :class:`List[PlayerZone]`, optional
+        The zone of the player as a list.
+    threes : :class:`PlayerMatchmaking`, optional
+        The 3v3 data of the player.
+    royals : :class:`PlayerMatchmaking`, optional
+        The royal data of the player.
+    """
+
+    def __init__(
+        self,
+        club_tag: str | None,
+        name: str,
+        player_id: str,
+        zone: List[PlayerZone],
+        threes: PlayerMatchmaking | None,
+        royal: PlayerMatchmaking | None,
+    ):
+        self.club_tag = club_tag
+        self.name = name
+        self.player_id = player_id
+        self.zone = zone
+        self.threes = threes
+        self.royal = royal
+
+    @classmethod
+    def from_dict(cls, player_data: Dict):
+        zone = PlayerZone._parse_zones(player_data["player"]["zone"], [0, 0, 0, 0, 0])
+        club_tag = (
+            player_data["player"]["club_tag"]
+            if "club_tag" in player_data["player"]
+            else None
+        )
+        name = player_data["player"]["name"]
+        player_id = player_data["player"]["id"]
+        matchmaking = PlayerMatchmaking.from_dict(player_data["matchmaking"])
+
+        return cls(club_tag, name, player_id, zone, matchmaking[0], matchmaking[1])
+
+
 class Player:
     """
     Represents a Player in Trackmania
@@ -552,6 +611,44 @@ class Player:
         return cls(**Player._parse_player(player_data))
 
     @staticmethod
+    async def search(
+        username: str,
+    ) -> None | PlayerSearchResult | List[PlayerSearchResult]:
+        """
+        Searches for a player's information using their username.
+
+        Parameters
+        ----------
+        username : str
+            The player's username to search for
+
+        Returns
+        -------
+        :class:`NoneType` | :class:`PlayerSearchResult` | :class:`List[PlayerSearchResult]`
+            None if no players. :class:`PlayerSearchResult` if only one player. :class:`List[PlayerSearchResult]` if multiple players.
+        """
+        api_client = APIClient()
+        _log.info(
+            f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYERS])}"
+            + f"find?search={username}"
+        )
+        search_result = await api_client.get(
+            TMIO.build([TMIO.TABS.PLAYERS]) + f"find?search={username}"
+        )
+        await api_client.close()
+
+        if len(search_result) == 0:
+            return None
+        elif len(search_result) == 1:
+            return PlayerSearchResult.from_dict(search_result[0])
+        else:
+            players = []
+            for player in search_result:
+                players.append(PlayerSearchResult.from_dict(player))
+
+            return players
+
+    @staticmethod
     def _parse_player(player_data: Dict) -> Dict:
         """
         Parses the player data
@@ -581,7 +678,9 @@ class Player:
         player_trophies = PlayerTrophies.from_dict(
             player_data["trophies"], player_data["accountid"]
         )
-        player_zone = PlayerZone._parse_zones(player_data["trophies"]["zone"], player_data['trophies']['zonepositions'])
+        player_zone = PlayerZone._parse_zones(
+            player_data["trophies"]["zone"], player_data["trophies"]["zonepositions"]
+        )
         matchmaking = PlayerMatchmaking.from_dict(player_data["matchmaking"])
 
         return {

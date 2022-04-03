@@ -27,7 +27,9 @@ class TestPlayerManager(unittest.TestCase):
             self.assertEqual(resp.club_tag, "$F63W$F971$FCBS$FFFP")
             self.assertEqual(resp.first_login, datetime.datetime(2021, 2, 12, 11, 4, 2))
             self.assertEqual(resp.player_id, "b73fe3d7-a92a-4a6d-ab9d-49005caec499")
-            self.assertEqual(resp.last_club_tag_change, datetime.datetime(2022, 3, 6, 15, 35, 59))
+            self.assertEqual(
+                resp.last_club_tag_change, datetime.datetime(2022, 3, 6, 15, 35, 59)
+            )
             self.assertEqual(resp.name, "NottCurious")
             self.assertEqual(resp.m3v3_data.matchmaking_type, "3v3")
             self.assertEqual(resp.m3v3_data.type_id, 2)
@@ -60,7 +62,9 @@ class TestPlayerManager(unittest.TestCase):
             self.assertEqual(resp.meta.youtube, "UCZV9i9_sgXwIdN6cy1uFkyw")
             self.assertEqual(resp.meta.vanity, None)
             self.assertEqual(resp.trophies.echelon, 6)
-            self.assertEqual(resp.trophies.last_change, datetime.datetime(2022, 3, 7, 4, 2, 19))
+            self.assertEqual(
+                resp.trophies.last_change, datetime.datetime(2022, 3, 7, 4, 2, 19)
+            )
             self.assertEqual(resp.trophies.points, 3290258)
             self.assertEqual(
                 resp.trophies.trophies, [3378, 3868, 5482, 570, 163, 5, 0, 0, 0]
