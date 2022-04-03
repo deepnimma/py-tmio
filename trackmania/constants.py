@@ -20,7 +20,8 @@ class TMIOTabs:
         self.LEADERBOARD: str = "leaderboard"
         self.MATCHES: str = "matches"
 
-        self.TOP_MATCHMAKING: str = "top/matchmaking"
+        self.TOP_MATCHMAKING: str = "top/matchmaking/2"
+        self.TOP_ROYAL: str = "top/matchmaking/3"
         self.TOP_TROPHIES: str = "top/trophies"
 
         self.MATCHMAKING_ID: int = 2

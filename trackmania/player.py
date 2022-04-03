@@ -544,7 +544,39 @@ class PlayerMatchmaking:
             player_results.append(PlayerMatchmakingResult.from_dict(match))
         
         return player_results   
+       
+    @staticmethod
+    async def top_matchmaking(page: int = 0, royal: bool = False) -> List[Dict]:
+        """
+        .. versionadded :: 0.3.0
         
+        Top matchmaking players
+
+        Parameters
+        ----------
+        page : int, optional
+            The page number, by default 0
+        royal : bool, optional
+            Whether to get the top matchmaking players for royal, by default False
+
+        Returns
+        -------
+        :class:`List[Dict]`
+            The top matchmaking players by score. Each page contains 50 players.
+        """
+        
+        api_client = APIClient()
+        
+        if not royal:
+            _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page])}")
+            match_history = await api_client.get(TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page]))
+        else:
+            _log.debug(f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_ROYAL, page])}")
+            match_history = await api_client.get(TMIO.build([TMIO.TABS.TOP_ROYAL, page]))
+            
+        await api_client.close()
+        
+        return match_history["ranks"]
 
 class PlayerSearchResult:
     """
