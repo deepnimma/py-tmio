@@ -1,14 +1,13 @@
-from functools import cache
-from subprocess import ABOVE_NORMAL_PRIORITY_CLASS
 from types import NoneType
 from typing import Dict, List
 from datetime import datetime
 import logging
 from contextlib import suppress
 import json
+import base64
+import re
 
 import redis
-from yarl import cache_clear
 
 from .api import APIClient
 from .errors import InvalidTrophyNumber, InvalidIDError, InvalidUsernameError
@@ -29,7 +28,7 @@ __all__ = (
 class PlayerMetaInfo:
     """
     .. versionadded :: 0.1.0
-    
+
     Represents Player Meta Data, which inclues YT, Twitch, Twitter or TMIO Vanity Link
 
     Parameters
@@ -120,7 +119,7 @@ class PlayerMetaInfo:
 class PlayerTrophies:
     """
     .. versionadded :: 0.1.0
-    
+
     Represents Player Trophies
 
     Parameters
@@ -269,7 +268,7 @@ class PlayerTrophies:
 class PlayerZone:
     """
     .. versionadded :: 0.1.0
-    
+
     Class that represents the player zone
 
     Parameters
@@ -326,7 +325,7 @@ class PlayerZone:
 class PlayerMatchmaking:
     """
     .. versionadded :: 0.1.0
-    
+
     Class that represents the player matchmaking details
 
     Parameters
@@ -466,7 +465,7 @@ class PlayerMatchmaking:
 class PlayerSearchResult:
     """
     .. versionadded :: 0.1.0
-    
+
     Represents 1 Player from a Search Result
 
     Parameters
@@ -519,7 +518,7 @@ class PlayerSearchResult:
 class Player:
     """
     .. versionadded :: 0.1.0
-    
+
     Represents a Player in Trackmania
 
     Parameters
@@ -644,7 +643,7 @@ class Player:
             None if no players. :class:`PlayerSearchResult` if only one player. :class:`List[PlayerSearchResult]` if multiple players.
         """
         _log.debug(f"Searching for players with the username -> {username}")
-        
+
         api_client = APIClient()
         _log.info(
             f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYERS])}"
@@ -665,7 +664,7 @@ class Player:
                 players.append(PlayerSearchResult.from_dict(player))
 
             return players
-        
+
     @staticmethod
     async def get_id(username: str) -> str:
         """
@@ -682,21 +681,21 @@ class Player:
             The player's id.
         """
         _log.debug(f"Getting {username}'s id")
-        
+
         cache_client = redis.Redis(
             host=Client.REDIS_HOST,
             port=Client.REDIS_PORT,
             db=Client.REDIS_DB,
             password=Client.REDIS_PASSWORD,
         )
-        
+
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"{username.lower()}:id"):
                 _log.debug(f"{username}'s id found in cache")
                 return cache_client.get(f"{username.lower()}:id")
-        
+
         players = await Player.search(username)
-        
+
         if players is None:
             with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
                 _log.debug(f"Caching {username.lower()} id as None")
@@ -734,20 +733,19 @@ class Player:
             db=Client.REDIS_DB,
             password=Client.REDIS_PASSWORD,
         )
-        
+
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"{player_id}:username"):
                 _log.debug(f"{player_id}'s username found in cache")
                 return cache_client.get(f"{player_id}:username")
-        
+
         player: Player = await Player.get(player_id)
-        
+
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching {player_id}:username as {player.name}")
             cache_client.set(f"{player_id}:username", player.name)
-        
+
         return player.name
-            
 
     @staticmethod
     def _parse_player(player_data: Dict) -> Dict:
