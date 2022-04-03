@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 import aiohttp
@@ -6,6 +7,7 @@ from .config import Client
 from .errors import NoUserAgentSetError
 
 __all__ = ("ResponseCodeError", "APIClient")
+_log = logging.getLogger(__name__)
 
 
 class ResponseCodeError(ValueError):
@@ -92,7 +94,7 @@ class APIClient:
         """Send an HTTP request to the site API and return the JSON response."""
         async with self.session.request(method.upper(), endpoint, **kwargs) as resp:
             await self.maybe_raise_for_status(resp, raise_for_status)
-
+            _log.info(f"Sending {method.upper()} to {endpoint}")
             try:
                 if "trackmania.io" in endpoint:
                     Client.RATELIMIT_LIMIT = int(

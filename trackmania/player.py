@@ -327,7 +327,6 @@ class Player:
                 )
 
         api_client = APIClient()
-        _log.info(f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, player_id])}")
         player_data = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, player_id]))
         await api_client.close()
 
@@ -357,10 +356,6 @@ class Player:
         _log.debug(f"Searching for players with the username -> {username}")
 
         api_client = APIClient()
-        _log.info(
-            f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYERS])}"
-            + f"find?search={username}"
-        )
         search_result = await api_client.get(
             TMIO.build([TMIO.TABS.PLAYERS]) + f"find?search={username}"
         )

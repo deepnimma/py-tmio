@@ -1,9 +1,14 @@
+import json
 import logging
+from contextlib import suppress
 from datetime import datetime
 from types import NoneType
 from typing import Dict, List
 
+import redis
+
 from .api import APIClient
+from .config import Client
 from .constants import TMIO
 from .errors import InvalidIDError, InvalidTrophyNumber
 
@@ -123,7 +128,6 @@ class PlayerTrophies:
             + self.trophy(8) * 10_000_000
         )
 
-    # async def trophy_history function
     async def history(self, page: int = 0) -> Dict:
         """
         Retrieves Trophy Gain and Loss history of a player.
@@ -143,19 +147,37 @@ class PlayerTrophies:
         InvalidIDError
             If an invalid id has been set for the object.
         """
+        _log.debug(f"Getting Trophy Leaderboard for Page: {page}")
+
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(f"trophy:{page}"):
+                _log.debug(f"Found trophy leaderboard for page {page} in cache")
+                return json.loads(cache_client.get(f"trophy:{page}").decode("utf-8"))[
+                    "gains"
+                ]
+
         api_client = APIClient()
 
         if self.player_id is None:
             raise InvalidIDError("ID Has not been set for the Object")
 
-        _log.info(
-            f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, page])}"
-        )
         history = await api_client.get(
             TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, page])
         )
 
         await api_client.close()
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching trophy history for page: {page}")
+            cache_client.set(f"trophy:{page}", json.dumps(history), ex=3600)
+
         return history["gains"]
 
     @staticmethod
@@ -173,11 +195,30 @@ class PlayerTrophies:
         Dict
             The players
         """
-        api_client = APIClient()
-        _log.debug(
-            f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_TROPHIES, page])}"
+        _log.debug(f"Getting Page {page} of Trophy Leaderboards")
+
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
         )
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(f"trophies:{page}"):
+                _log.debug(f"Found trophy leaderboard for page {page} in cache")
+                return json.loads(cache_client.get(f"trophies:{page}").decode("utf-8"))[
+                    "ranks"
+                ]
+
+        api_client = APIClient()
+
         top_trophies = await api_client.get(TMIO.build([TMIO.TABS.TOP_TROPHIES, page]))
+
         await api_client.close()
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching trophy leaderboard for page: {page}")
+            cache_client.set(f"trophies:{page}", json.dumps(top_trophies), ex=3600)
 
         return top_trophies["ranks"]

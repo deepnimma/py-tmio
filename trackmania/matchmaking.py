@@ -1,8 +1,13 @@
+import json
 import logging
+from contextlib import suppress
 from datetime import datetime
 from typing import Dict, List
 
+import redis
+
 from .api import APIClient
+from .config import Client
 from .constants import TMIO
 from .errors import InvalidIDError
 
@@ -238,10 +243,29 @@ class PlayerMatchmaking:
         if self.player_id is None:
             raise InvalidIDError("Player ID is not set")
 
-        api_client = APIClient()
         _log.debug(
-            f"Sending GET request to {TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.MATCHES, self.type_id, page])}"
+            f"Getting matchmaking history page {page} for player {self.player_id}"
         )
+
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(
+                f"mm_history:{page}:{self.type_id}:{self.player_id}"
+            ):
+                _log.debug(f"Found matchmaking history for page {page} in cache")
+                return json.loads(
+                    cache_client.get(
+                        f"mm_history:{page}:{self.type_id}:{self.player_id}"
+                    ).decode("utf-8")
+                )
+
+        api_client = APIClient()
         match_history = await api_client.get(
             TMIO.build(
                 [
@@ -254,6 +278,14 @@ class PlayerMatchmaking:
             )
         )
         await api_client.close()
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Saving matchmaking history for page {page} to cache")
+            cache_client.set(
+                f"mm_history:{page}:{self.type_id}:{self.player_id}",
+                json.dumps(match_history),
+                ex=3600,
+            )
 
         player_results = []
         for match in match_history["matches"]:
@@ -280,24 +312,38 @@ class PlayerMatchmaking:
         :class:`List[Dict]`
             The top matchmaking players by score. Each page contains 50 players.
         """
+        _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
 
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(f"top_matchmaking:{page}:{royal}"):
+                _log.debug(f"Found top matchmaking players for page {page} in cache")
+                return json.loads(
+                    cache_client.get(f"top_matchmaking:{page}:{royal}").decode("utf-8")
+                )["ranks"]
         api_client = APIClient()
 
         if not royal:
-            _log.debug(
-                f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page])}"
-            )
             match_history = await api_client.get(
                 TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page])
             )
         else:
-            _log.debug(
-                f"Sending GET request to {TMIO.build([TMIO.TABS.TOP_ROYAL, page])}"
-            )
             match_history = await api_client.get(
                 TMIO.build([TMIO.TABS.TOP_ROYAL, page])
             )
 
         await api_client.close()
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching top matchmaking players for page {page}")
+            cache_client.set(
+                f"top_matchmaking:{page}:{royal}", json.dumps(match_history), ex=3600
+            )
 
         return match_history["ranks"]
