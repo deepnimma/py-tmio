@@ -14,6 +14,8 @@ from .errors import InvalidIDError, InvalidTrophyNumber
 
 _log = logging.getLogger(__name__)
 
+__all__ = ("PlayerTrophies",)
+
 
 class PlayerTrophies:
     """
@@ -94,6 +96,8 @@ class PlayerTrophies:
 
     def trophy(self, number: int) -> int:
         """
+        .. versionadded :: 0.3.0
+
         Returns the trophies by tier.
 
         Parameters
@@ -130,6 +134,8 @@ class PlayerTrophies:
 
     async def history(self, page: int = 0) -> Dict:
         """
+        .. versionadded :: 0.3.0
+
         Retrieves Trophy Gain and Loss history of a player.
 
         Parameters
@@ -183,6 +189,8 @@ class PlayerTrophies:
     @staticmethod
     async def top(page: int = 0) -> Dict:
         """
+        .. versionadded :: 0.3.0
+
         Get's the top players ranked by trophies
 
         Parameters

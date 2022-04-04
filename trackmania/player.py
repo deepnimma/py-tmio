@@ -233,7 +233,7 @@ class Player:
     ----------
     club_tag : str | None.
         The club tag of the player, `NoneType` if the player is not in a club.
-    first_login : str
+    first_login : :class:`datetime` | None
         The date of the first login of the player.
     player_id : str
         The Trackmania ID of the player.
@@ -258,7 +258,7 @@ class Player:
     def __init__(
         self,
         club_tag: str | None,
-        first_login: str,
+        first_login: datetime | None,
         player_id: str,
         last_club_tag_change: str,
         meta: PlayerMetaInfo,
@@ -297,6 +297,8 @@ class Player:
     @classmethod
     async def get(cls, player_id: str):
         """
+        .. versionadded :: 0.1.0
+
         Gets a player's data from their player_id
 
         Parameters
@@ -341,6 +343,8 @@ class Player:
         username: str,
     ) -> None | PlayerSearchResult | List[PlayerSearchResult]:
         """
+        .. versionadded :: 0.1.0
+
         Searches for a player's information using their username.
 
         Parameters
@@ -375,6 +379,8 @@ class Player:
     @staticmethod
     async def get_id(username: str) -> str:
         """
+        .. versionadded :: 0.1.0
+
         Gets a player's id from the given username
 
         Parameters
@@ -423,6 +429,8 @@ class Player:
     @staticmethod
     async def get_username(player_id: str) -> str:
         """
+        .. versionadded :: 0.1.0
+
         Gets a player's username from their player id
 
         Parameters
@@ -473,9 +481,12 @@ class Player:
         :class:`Dict`
             The parsed player data formatted kwargs friendly for the :class:`Player` constructors
         """
-        first_login = datetime.strptime(
-            player_data["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
+        first_login = (
+            datetime.strptime(player_data["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
+            if "timestamp" in player_data
+            else None
         )
+
         last_club_tag_change = (
             datetime.strptime(
                 player_data["clubtagtimestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
@@ -506,16 +517,36 @@ class Player:
         matchmaking = (
             PlayerMatchmaking.from_dict(player_data["matchmaking"])
             if "matchmaking" in player_data
+            else [None, None]
+        )
+
+        club_tag = (
+            player_data["clubtag"]
+            if "clubtag" in player_data
+            else player_data["tag"]
+            if "tag" in player_data
+            else None
+        )
+        name = (
+            player_data["displayname"]
+            if "displayname" in player_data
+            else player_data["name"]
+            if "name" in player_data
+            else None
+        )
+        player_id = (
+            player_data["accountid"]
+            if "accountid" in player_data
+            else player_data["id"]
+            if "id" in player_data
             else None
         )
 
         return {
-            "club_tag": player_data["clubtag"]
-            if "clubtag" in player_data or "tag" in player_data
-            else None,
+            "club_tag": club_tag,
             "first_login": first_login,
-            "name": player_data["displayname"],
-            "player_id": player_data["accountid"],
+            "name": name,
+            "player_id": player_id,
             "last_club_tag_change": last_club_tag_change,
             "meta": player_meta,
             "trophies": player_trophies,

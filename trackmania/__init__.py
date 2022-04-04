@@ -14,6 +14,7 @@ from .api import *
 from .config import *
 from .constants import *
 from .errors import *
+from .map import *
 from .matchmaking import *
 from .player import *
 from .trophy import *

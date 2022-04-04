@@ -78,7 +78,7 @@ Caching is not *required* but is highly recommended.
 		8. name
 		9. storage_id
 		10. thumbnail
-		11. thumnail_cached
+		11. thumbnail_cached
 		12. uid
 		13. uploaded
 		14. url
@@ -86,7 +86,7 @@ Caching is not *required* but is highly recommended.
 		1. author
 		2. leaderboard_get(position)
 		3. submitter()
-		
+
 4. Implement Room Class
 	* Parameters
 		1. id
@@ -115,7 +115,7 @@ Caching is not *required* but is highly recommended.
 	* Functions
 		1. campaign()
 		2. room()
-	
+
 6. Implement ClubMember class
 	* Parameters
 		1. is_admin
@@ -123,10 +123,10 @@ Caching is not *required* but is highly recommended.
 		3. is_vip
 		4. join_date
 		5. role
-	
+
 	* Functions
 		1. member()
-		
+
 7. Implement Club Class
 	* Parameters
 		1. background
@@ -135,7 +135,7 @@ Caching is not *required* but is highly recommended.
 		4. description
 		5. featured
 		6. id
-		7. logo	
+		7. logo
 		8. member_count
 		9. name
 		10. popularity
@@ -147,7 +147,7 @@ Caching is not *required* but is highly recommended.
 		1. creator()
 		2. fetch_activities(page)
 		3. fetch_members(page)
-		
+
 8. Implement Campaign class
 	* Parameters
 		1. created_at
@@ -174,7 +174,7 @@ Caching is not *required* but is highly recommended.
 		5. name
 	* Functions
 		1. get_campaign()
-		
+
 10. Implement CampaignMedia class
 	* Parameters
 		1. button_background
@@ -188,7 +188,7 @@ Caching is not *required* but is highly recommended.
 
 11. Implement CampaignLeaderboard class
 	* Parameters
-		1. 
+		1.
 	* Functions
 
 8. Implement the Campaign Manager class
@@ -199,8 +199,8 @@ Caching is not *required* but is highly recommended.
 		4. popular_campaigns(page)
 		5. search(query, page)
 
-			
-	
+
+
 #### By April 15th
 1. Implement MapManager class
 	* Functions

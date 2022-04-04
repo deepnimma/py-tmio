@@ -148,6 +148,7 @@ class PlayerMatchmaking:
         """
         Parses the matchmaking data of the player and returns 2 :class:`PlayerMatchmaking` objects.
             One for 3v3 Matchmaking and the other for Royal matchmaking.
+
         Parameters
         ----------
         mm_data : :class:`List[Dict]`
@@ -179,6 +180,7 @@ class PlayerMatchmaking:
     def __parse_3v3(cls, data: Dict, player_id: str = None):
         """
         Parses matchmaking data for 3v3 and royal type matchmaking.
+
         Parameters
         ----------
         data : :class:`Dict`
