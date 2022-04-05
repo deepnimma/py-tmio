@@ -14,6 +14,7 @@ Submodules
    trackmania.player
    trackmania.trophy
    trackmania.matchmaking
+   trackmania.map
 
 Module contents
 ---------------
