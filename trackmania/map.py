@@ -159,8 +159,8 @@ class Map:
 
     Parameters
     ----------
-    author : :class:`Player`
-        The author of the map
+    author_id : str
+        The author's player id
     environment : str
         The environment of the map
     exchange_id : str | None
@@ -175,8 +175,8 @@ class Map:
         The medal times of the map
     name : str
         The name of the map
-    submitter : :class:`Player`
-        The players of the map
+    submitter_id : str
+        The map's submitter's id
     thumbnail : str
         Link to the thumbnail of the map
     uid : str
@@ -189,7 +189,7 @@ class Map:
 
     def __init__(
         self,
-        author: Player,
+        author_id: str,
         environment: str,
         exchange_id: str | None,
         file_name: str,
@@ -197,13 +197,13 @@ class Map:
         leaderboard: List[Leaderboard] | None,
         medal_time: MedalTimes,
         name: str,
-        submitter: Player,
+        submitter_id: str,
         thumbnail: str,
         uid: str,
         uploaded: datetime,
         url: str,
     ):
-        self.author = author
+        self.author_id = author_id
         self.environment = environment
         self.exchange_id = exchange_id
         self.file_name = file_name
@@ -211,7 +211,7 @@ class Map:
         self.leaderboard = leaderboard
         self.medal_time = medal_time
         self.name = name
-        self.submitter = submitter
+        self.submitter_id = submitter_id
         self.thumbnail = thumbnail
         self.uid = uid
         self.uploaded = uploaded
@@ -221,7 +221,7 @@ class Map:
 
     @classmethod
     def from_dict(cls, raw: Dict):
-        author = Player(**Player._parse_player(raw["authorplayer"]))
+        author_id = raw["author"]
         environment = raw["collectionName"]
         exchange_id = raw["exchangeid"] if "exchangeid" in raw else None
         file_name = raw["filename"]
@@ -231,14 +231,14 @@ class Map:
             raw["bronzeScore"], raw["silverScore"], raw["goldScore"], raw["authorScore"]
         )
         name = raw["name"]
-        submitter = Player(**Player._parse_player(raw["submitterplayer"]))
+        submitter_id = raw["submitter"]
         thumbnail = raw["thumbnailUrl"]
         uid = raw["mapUid"]
         uploaded = datetime.strptime(raw["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
         url = raw["fileUrl"]
 
         return cls(
-            author,
+            author_id,
             environment,
             exchange_id,
             file_name,
@@ -246,7 +246,7 @@ class Map:
             leaderboard,
             medal_time,
             name,
-            submitter,
+            submitter_id,
             thumbnail,
             uid,
             uploaded,
@@ -286,3 +286,29 @@ class Map:
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
 
         return Map.from_dict(map_data)
+
+    async def author(self) -> Player:
+        """
+        .. versionadded :: 0.3.0
+
+        Returns the author as a player.
+
+        Returns
+        -------
+        :class:`Player`
+            The author as a :class:`Player` object
+        """
+        return await Player.get(self.author_id)
+
+    async def submitter(self) -> Player:
+        """
+        .. versionadded :: 0.3.0
+
+        Returns the submitter as a player.
+
+        Returns
+        -------
+        :class:`Player`
+            The submitter as a :class:`Player` object
+        """
+        return await Player.get(self.submitter_id)
