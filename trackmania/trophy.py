@@ -10,7 +10,7 @@ import redis
 from .api import APIClient
 from .config import Client
 from .constants import TMIO
-from .errors import InvalidIDError, InvalidTrophyNumber
+from .errors import InvalidIDError, InvalidTrophyNumber, TMIOException
 
 _log = logging.getLogger(__name__)
 
@@ -180,6 +180,9 @@ class PlayerTrophies:
 
         await api_client.close()
 
+        with suppress(KeyError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching trophy history for page: {page}")
             cache_client.set(f"trophy:{page}", json.dumps(history), ex=3600)
@@ -225,6 +228,9 @@ class PlayerTrophies:
 
         await api_client.close()
 
+        with suppress(KeyError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(top_trophies["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching trophy leaderboard for page: {page}")
             cache_client.set(f"trophies:{page}", json.dumps(top_trophies), ex=3600)

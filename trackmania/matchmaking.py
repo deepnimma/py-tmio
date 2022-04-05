@@ -9,7 +9,7 @@ import redis
 from .api import APIClient
 from .config import Client
 from .constants import TMIO
-from .errors import InvalidIDError
+from .errors import InvalidIDError, TMIOException
 
 _log = logging.getLogger(__name__)
 
@@ -281,6 +281,9 @@ class PlayerMatchmaking:
         )
         await api_client.close()
 
+        with suppress(KeyError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(match_history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Saving matchmaking history for page {page} to cache")
             cache_client.set(
@@ -342,6 +345,9 @@ class PlayerMatchmaking:
 
         await api_client.close()
 
+        with suppress(KeyError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(match_history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching top matchmaking players for page {page}")
             cache_client.set(

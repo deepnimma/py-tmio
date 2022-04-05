@@ -9,6 +9,7 @@ import redis
 from .api import APIClient
 from .config import Client
 from .constants import TMIO
+from .errors import TMIOException
 from .matchmaking import PlayerMatchmaking
 from .trophy import PlayerTrophies
 
@@ -332,6 +333,9 @@ class Player:
         player_data = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, player_id]))
         await api_client.close()
 
+        with suppress(KeyError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(player_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             cache_client.set(f"player:{player_id}", json.dumps(player_data))
             cache_client.set(f"{player_data['displayname'].lower()}:id", player_id)
@@ -364,6 +368,10 @@ class Player:
             TMIO.build([TMIO.TABS.PLAYERS]) + f"find?search={username}"
         )
         await api_client.close()
+
+        with suppress(KeyError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(search_result["error"])
 
         if len(search_result) == 0:
             return None

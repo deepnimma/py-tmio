@@ -1,5 +1,6 @@
 __all__ = (
     "TrackmaniaException",
+    "TMIOException",
     "NoUserAgentSetError",
     "InvalidUsernameError",
     "InvalidIDError",
@@ -9,6 +10,12 @@ __all__ = (
 # pylint: disable=unnecessary-pass
 class TrackmaniaException(Exception):
     """BASE exception class for py-tmio"""
+
+    pass
+
+
+class TMIOException(Exception):
+    """BASE exception class for errors from trackmania.io"""
 
     pass
 
