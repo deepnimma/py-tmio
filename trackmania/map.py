@@ -11,6 +11,7 @@ from trackmania.api import APIClient
 from .api import APIClient
 from .config import Client
 from .constants import TMIO
+from .errors import TMIOException
 from .player import Player
 
 _log = logging.getLogger(__name__)
@@ -185,6 +186,8 @@ class Map:
         The timestamp of when the map was uploaded
     url : str
         The url of the map download
+    lb_loaded : bool
+        Whether the leaderboard has been loaded
     """
 
     def __init__(
@@ -220,8 +223,17 @@ class Map:
         self.uid = uid
         self.uploaded = uploaded
         self.url = url
-        self.offset = 0
+        self._offset = 0
         self.length = 100
+        self._lb_loaded = False
+
+    @property
+    def offset(self):
+        return self._offset
+
+    @property
+    def lb_loaded(self):
+        return self._lb_loaded
 
     @classmethod
     def from_dict(cls, raw: Dict):
@@ -320,3 +332,86 @@ class Map:
             The submitter as a :class:`Player` object
         """
         return await Player.get(self.submitter_id)
+
+    async def get_leaderboard(
+        self, offset: int = 0, length: int = 100
+    ) -> List[Leaderboard]:
+        """
+        .. versionadded :: 0.3.0
+
+        Get's the leaderboard of a map.
+
+        Parameters
+        ----------
+        offset : int, optional
+            The offset of the leaderboard. Defaults to 0.
+        length : int, optional
+            How many leaderpositions to get. Should be between 1 and 100 both inclusive. by default 100
+
+        Returns
+        -------
+        :class:`List[Leaderboard]`
+            The leaderboard as a list of positions.
+
+        Raises
+        ------
+        :class:`ValueError`
+            If the length is not between 1 and 100.
+        """
+        if length < 1:
+            raise ValueError("Length must be greater than 0")
+        elif length > 100:
+            length = 100
+
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )
+
+        self._offset = offset
+        self.length = length
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(
+                f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
+            ):
+                _log.debug(
+                    f"Leaderboard {self.map_id}:{self.offset}:{self.length} found in cache"
+                )
+                leaderboards = []
+                for lb in json.loads(
+                    cache_client.get(
+                        f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
+                    ).decode("utf-8")
+                )["tops"]:
+                    leaderboards.append(Leaderboard.from_dict(lb))
+
+                return leaderboards
+
+        api_client = APIClient()
+        lb_data = await api_client.get(
+            TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.map_id])
+            + f"offset={self.offset}&length={self.length}"
+        )
+        await api_client.close()
+
+        with suppress(KeyError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(lb_data["error"])
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching leaderboard {self.map_id}:{self.offset}:{self.length}")
+            cache_client.set(
+                f"leaderboard:{self.map_id}:{self.offset}:{self.length}",
+                json.dumps(lb_data),
+            )
+
+        self._offset += self.length
+        self._lb_loaded = True
+
+        leaderboards = list()
+        for lb in lb_data["tops"]:
+            leaderboards.append(Leaderboard.from_dict(lb))
+
+        return leaderboards
