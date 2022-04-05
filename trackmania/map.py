@@ -380,7 +380,7 @@ class Map:
                 _log.debug(
                     f"Leaderboard {self.map_id}:{self.offset}:{self.length} found in cache"
                 )
-                leaderboards = []
+                leaderboards = list()
                 for lb in json.loads(
                     cache_client.get(
                         f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
@@ -397,7 +397,7 @@ class Map:
         )
         await api_client.close()
 
-        with suppress(KeyError):
+        with suppress(KeyError, TypeError):
             _log.error("This is a trackmania.io error")
             raise TMIOException(lb_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):

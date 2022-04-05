@@ -78,6 +78,8 @@ class TMIO:
             return url
         if len(endpoints) > 1:
             for item in endpoints:
+                if isinstance(item, int):
+                    item = str(item)
                 url = url + item + "/"
 
             # Removing the Final /
@@ -127,6 +129,8 @@ class TMX:
             return url
         if len(endpoints) > 1:
             for item in endpoints:
+                if isinstance(item, int):
+                    item = str(item)
                 url = url + item + "/"
 
             # Removing the Final /

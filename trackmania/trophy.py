@@ -175,12 +175,14 @@ class PlayerTrophies:
             raise InvalidIDError("ID Has not been set for the Object")
 
         history = await api_client.get(
-            TMIO.build([TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, page])
+            TMIO.build(
+                [TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, str(page)]
+            )
         )
 
         await api_client.close()
 
-        with suppress(KeyError):
+        with suppress(KeyError, TypeError):
             _log.error("This is a trackmania.io error")
             raise TMIOException(history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
@@ -224,11 +226,13 @@ class PlayerTrophies:
 
         api_client = APIClient()
 
-        top_trophies = await api_client.get(TMIO.build([TMIO.TABS.TOP_TROPHIES, page]))
+        top_trophies = await api_client.get(
+            TMIO.build([TMIO.TABS.TOP_TROPHIES, str(page)])
+        )
 
         await api_client.close()
 
-        with suppress(KeyError):
+        with suppress(KeyError, TypeError):
             _log.error("This is a trackmania.io error")
             raise TMIOException(top_trophies["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):

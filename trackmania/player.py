@@ -153,7 +153,7 @@ class PlayerZone:
             The list of :class:`PlayerZone` objects.
         """
         _log.debug("Parsing Zones")
-        player_zone_list: List = []
+        player_zone_list: List = list()
         i: int = 0
 
         while "zone" in zones:
@@ -211,7 +211,11 @@ class PlayerSearchResult:
 
     @classmethod
     def from_dict(cls, player_data: Dict):
-        zone = PlayerZone._parse_zones(player_data["player"]["zone"], [0, 0, 0, 0, 0])
+        zone = (
+            PlayerZone._parse_zones(player_data["player"]["zone"], [0, 0, 0, 0, 0])
+            if "zone" in player_data
+            else None
+        )
         club_tag = (
             player_data["player"]["club_tag"]
             if "club_tag" in player_data["player"]
@@ -219,7 +223,7 @@ class PlayerSearchResult:
         )
         name = player_data["player"]["name"]
         player_id = player_data["player"]["id"]
-        matchmaking = PlayerMatchmaking.from_dict(player_data["matchmaking"])
+        matchmaking = PlayerMatchmaking.from_dict(player_data["matchmaking"], player_id)
 
         return cls(club_tag, name, player_id, zone, matchmaking[0], matchmaking[1])
 
@@ -333,7 +337,7 @@ class Player:
         player_data = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, player_id]))
         await api_client.close()
 
-        with suppress(KeyError):
+        with suppress(KeyError, TypeError):
             _log.error("This is a trackmania.io error")
             raise TMIOException(player_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
@@ -365,11 +369,11 @@ class Player:
 
         api_client = APIClient()
         search_result = await api_client.get(
-            TMIO.build([TMIO.TABS.PLAYERS]) + f"find?search={username}"
+            TMIO.build([TMIO.TABS.PLAYERS]) + f"/find?search={username}"
         )
         await api_client.close()
 
-        with suppress(KeyError):
+        with suppress(KeyError, TypeError):
             _log.error("This is a trackmania.io error")
             raise TMIOException(search_result["error"])
 
@@ -378,7 +382,7 @@ class Player:
         elif len(search_result) == 1:
             return PlayerSearchResult.from_dict(search_result[0])
         else:
-            players = []
+            players = list()
             for player in search_result:
                 players.append(PlayerSearchResult.from_dict(player))
 
@@ -413,9 +417,7 @@ class Player:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"{username.lower()}:id"):
                 _log.debug(f"{username}'s id found in cache")
-                return json.loads(
-                    cache_client.get(f"{username.lower()}:id").decode("utf-8")
-                )
+                return cache_client.get(f"{username.lower()}:id").decode("utf-8")
 
         players = await Player.search(username)
 
@@ -522,8 +524,16 @@ class Player:
             else None
         )
 
+        player_id = (
+            player_data["accountid"]
+            if "accountid" in player_data
+            else player_data["id"]
+            if "id" in player_data
+            else None
+        )
+
         matchmaking = (
-            PlayerMatchmaking.from_dict(player_data["matchmaking"])
+            PlayerMatchmaking.from_dict(player_data["matchmaking"], player_id)
             if "matchmaking" in player_data
             else [None, None]
         )
@@ -540,13 +550,6 @@ class Player:
             if "displayname" in player_data
             else player_data["name"]
             if "name" in player_data
-            else None
-        )
-        player_id = (
-            player_data["accountid"]
-            if "accountid" in player_data
-            else player_data["id"]
-            if "id" in player_data
             else None
         )
 

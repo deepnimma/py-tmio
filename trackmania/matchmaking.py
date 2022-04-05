@@ -58,7 +58,7 @@ class PlayerMatchmakingResult:
 
     @classmethod
     def from_dict(cls, data: Dict, player_id: str = None):
-        after_score = data["after_score"]
+        after_score = data["afterscore"]
         leave = data["leave"]
         live_id = data["lid"]
         mvp = data["mvp"]
@@ -160,17 +160,19 @@ class PlayerMatchmaking:
         :class:`List[PlayerMatchmaking]`
             The list of matchmaking data, one for 3v3 and other other one for royal.
         """
-        matchmaking_data = []
+        matchmaking_data = list()
 
         if len(mm_data) == 0:
             matchmaking_data.extend([None, None])
         elif len(mm_data) == 1:
-            matchmaking_data.extend([PlayerMatchmaking.__parse_3v3(mm_data[0]), None])
+            matchmaking_data.extend(
+                [PlayerMatchmaking.__parse_3v3(mm_data[0], player_id), None]
+            )
         else:
             matchmaking_data.extend(
                 [
-                    PlayerMatchmaking.__parse_3v3(mm_data[0]),
-                    PlayerMatchmaking.__parse_3v3(mm_data[1]),
+                    PlayerMatchmaking.__parse_3v3(mm_data[0], player_id),
+                    PlayerMatchmaking.__parse_3v3(mm_data[1], player_id),
                 ]
             )
 
@@ -190,14 +192,24 @@ class PlayerMatchmaking:
         :class:`PlayerMatchmaking`
             The parsed data.
         """
-        typename = data["info"]["typename"]
-        typeid = data["info"]["typeid"]
-        rank = data["info"]["rank"]
-        score = data["info"]["score"]
-        progression = data["info"]["progression"]
-        division = data["info"]["division"]["position"]
-        min_points = data["info"]["division"]["minpoints"]
-        max_points = data["info"]["division"]["maxpoints"]
+        if "info" in data:
+            typename = data["info"]["typename"]
+            typeid = data["info"]["typeid"]
+            progression = data["info"]["progression"]
+            rank = data["info"]["rank"]
+            score = data["info"]["score"]
+            division = data["info"]["division"]["position"]
+            min_points = data["info"]["division"]["minpoints"]
+            max_points = data["info"]["division"]["maxpoints"]
+        else:
+            typename = data["typename"]
+            typeid = data["typeid"]
+            progression = data["progression"]
+            rank = data["rank"]
+            score = data["score"]
+            division = data["division"]["position"]
+            min_points = data["division"]["minpoints"]
+            max_points = data["division"]["maxpoints"]
 
         return cls(
             typename,
@@ -261,11 +273,18 @@ class PlayerMatchmaking:
                 f"mm_history:{page}:{self.type_id}:{self.player_id}"
             ):
                 _log.debug(f"Found matchmaking history for page {page} in cache")
-                return json.loads(
+
+                player_results = list()
+                history = json.loads(
                     cache_client.get(
                         f"mm_history:{page}:{self.type_id}:{self.player_id}"
                     ).decode("utf-8")
                 )
+
+                for item in history["matches"]:
+                    player_results.append(PlayerMatchmakingResult.from_dict(item))
+
+                return player_results
 
         api_client = APIClient()
         match_history = await api_client.get(
@@ -275,13 +294,13 @@ class PlayerMatchmaking:
                     self.player_id,
                     TMIO.TABS.MATCHES,
                     self.type_id,
-                    page,
+                    str(page),
                 ]
             )
         )
         await api_client.close()
 
-        with suppress(KeyError):
+        with suppress(KeyError, TypeError):
             _log.error("This is a trackmania.io error")
             raise TMIOException(match_history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
@@ -292,7 +311,7 @@ class PlayerMatchmaking:
                 ex=3600,
             )
 
-        player_results = []
+        player_results = list()
         for match in match_history["matches"]:
             player_results.append(PlayerMatchmakingResult.from_dict(match))
 
@@ -336,16 +355,16 @@ class PlayerMatchmaking:
 
         if not royal:
             match_history = await api_client.get(
-                TMIO.build([TMIO.TABS.TOP_MATCHMAKING, page])
+                TMIO.build([TMIO.TABS.TOP_MATCHMAKING, str(page)])
             )
         else:
             match_history = await api_client.get(
-                TMIO.build([TMIO.TABS.TOP_ROYAL, page])
+                TMIO.build([TMIO.TABS.TOP_ROYAL, str(page)])
             )
 
         await api_client.close()
 
-        with suppress(KeyError):
+        with suppress(KeyError, TypeError):
             _log.error("This is a trackmania.io error")
             raise TMIOException(match_history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
