@@ -190,6 +190,7 @@ class Map:
     def __init__(
         self,
         author_id: str,
+        author_name: str,
         environment: str,
         exchange_id: str | None,
         file_name: str,
@@ -198,12 +199,14 @@ class Map:
         medal_time: MedalTimes,
         name: str,
         submitter_id: str,
+        submitter_name: str,
         thumbnail: str,
         uid: str,
         uploaded: datetime,
         url: str,
     ):
         self.author_id = author_id
+        self.author_name = author_name
         self.environment = environment
         self.exchange_id = exchange_id
         self.file_name = file_name
@@ -212,6 +215,7 @@ class Map:
         self.medal_time = medal_time
         self.name = name
         self.submitter_id = submitter_id
+        self.submitter_name = submitter_name
         self.thumbnail = thumbnail
         self.uid = uid
         self.uploaded = uploaded
@@ -222,6 +226,7 @@ class Map:
     @classmethod
     def from_dict(cls, raw: Dict):
         author_id = raw["author"]
+        author_name = raw["authorplayer"]["name"]
         environment = raw["collectionName"]
         exchange_id = raw["exchangeid"] if "exchangeid" in raw else None
         file_name = raw["filename"]
@@ -232,6 +237,7 @@ class Map:
         )
         name = raw["name"]
         submitter_id = raw["submitter"]
+        submitter_name = raw["submitterplayer"]["name"]
         thumbnail = raw["thumbnailUrl"]
         uid = raw["mapUid"]
         uploaded = datetime.strptime(raw["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
@@ -239,6 +245,7 @@ class Map:
 
         return cls(
             author_id,
+            author_name,
             environment,
             exchange_id,
             file_name,
@@ -247,6 +254,7 @@ class Map:
             medal_time,
             name,
             submitter_id,
+            submitter_name,
             thumbnail,
             uid,
             uploaded,
