@@ -23,7 +23,7 @@ __title__ = "py-tmio"
 __author__ = "Deepesh Nimma"
 __license__ = "MIT"
 __copyright__ = "Copyright 2022-present Deepesh Nimma"
-__version__ = "0.3.0b1"
+__version__ = "0.3.0b2"
 
 __path__ = __import__("pkgutil").extend_path(__path__, __name__)
 
