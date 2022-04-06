@@ -7,6 +7,7 @@
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/NottCurious/py-tmio?logo=github)](https://github.com/NottCurious/py-tmio/pulls)
 [![GitHub Repo stars](https://img.shields.io/github/stars/NottCurious/py-tmio?logo=github&style=flat-square)](https://github.com/NottCurious/py-tmio/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/NottCurious/py-tmio?style=flat-square)](https://github.com/NottCurious/py-tmio/network/members)
+[![Documentation Status](https://readthedocs.org/projects/py-trackmaniaio/badge/?version=latest)](https://py-trackmaniaio.readthedocs.io/en/latest/?badge=latest)
 
 An Asyncio Friendly Trackmania API Wrapper for Python!
 </div>
