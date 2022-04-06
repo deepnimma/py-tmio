@@ -14,6 +14,8 @@ _log = logging.getLogger(__name__)
 
 class Ad:
     """
+    .. versionadded :: 0.3.0
+
     Represents an Ad in Trackmania
 
     Parameters
@@ -85,6 +87,8 @@ class Ad:
     @staticmethod
     async def list() -> List:
         """
+        .. versionadded :: 0.3.0
+
         Lists all ads currently in trackmania.
 
         Returns
@@ -129,6 +133,8 @@ class Ad:
     @staticmethod
     async def get(ad_uid: str):
         """
+        .. versionadded :: 0.3.0
+
         Gets an ad using its uid.
 
         Parameters
