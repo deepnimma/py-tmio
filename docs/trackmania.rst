@@ -16,6 +16,7 @@ Submodules
    trackmania.matchmaking
    trackmania.map
    trackmania.ad
+   trackmania.cotd
 
 Module contents
 ---------------
