@@ -61,7 +61,7 @@ class Ad:
         self.display_format = display_format
 
     @classmethod
-    def from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: Dict):
         uid = raw["uid"]
         name = raw["name"]
         type = raw["type"]
@@ -108,7 +108,7 @@ class Ad:
 
                 bads = list()
                 for ad in ads["ads"]:
-                    bads.append(Ad.from_dict(ad))
+                    bads.append(Ad._from_dict(ad))
 
                 return bads
 
@@ -122,7 +122,7 @@ class Ad:
 
         bads = list()
         for ad in all_ads["ads"]:
-            bads.append(Ad.from_dict(ad))
+            bads.append(Ad._from_dict(ad))
 
         return bads
 

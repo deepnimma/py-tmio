@@ -11,11 +11,6 @@ Logging
 =======
 - Learn how to setup logging: :doc:`/logging`
 
-
-Examples
-========
-- Learn how to use this package! :doc:`/examples`
-
 .. include:: trackmania.rst
 
 

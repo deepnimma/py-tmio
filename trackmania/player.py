@@ -81,7 +81,7 @@ class PlayerMetaInfo:
         self.vanity = vanity
 
     @classmethod
-    def from_dict(cls, meta_data: Dict):
+    def _from_dict(cls, meta_data: Dict):
         """
         Parses the meta data into a PlayerMetaInfo object.
 
@@ -210,7 +210,7 @@ class PlayerSearchResult:
         self.royal = royal
 
     @classmethod
-    def from_dict(cls, player_data: Dict):
+    def _from_dict(cls, player_data: Dict):
         zone = (
             PlayerZone._parse_zones(player_data["player"]["zone"], [0, 0, 0, 0, 0])
             if "zone" in player_data
@@ -223,7 +223,9 @@ class PlayerSearchResult:
         )
         name = player_data["player"]["name"]
         player_id = player_data["player"]["id"]
-        matchmaking = PlayerMatchmaking.from_dict(player_data["matchmaking"], player_id)
+        matchmaking = PlayerMatchmaking._from_dict(
+            player_data["matchmaking"], player_id
+        )
 
         return cls(club_tag, name, player_id, zone, matchmaking[0], matchmaking[1])
 
@@ -380,11 +382,11 @@ class Player:
         if len(search_result) == 0:
             return None
         elif len(search_result) == 1:
-            return PlayerSearchResult.from_dict(search_result[0])
+            return PlayerSearchResult._from_dict(search_result[0])
         else:
             players = list()
             for player in search_result:
-                players.append(PlayerSearchResult.from_dict(player))
+                players.append(PlayerSearchResult._from_dict(player))
 
             return players
 
@@ -506,12 +508,12 @@ class Player:
         )
 
         player_meta = (
-            PlayerMetaInfo.from_dict(player_data["meta"])
+            PlayerMetaInfo._from_dict(player_data["meta"])
             if "meta" in player_data
-            else PlayerMetaInfo.from_dict(dict())
+            else PlayerMetaInfo._from_dict(dict())
         )
         player_trophies = (
-            PlayerTrophies.from_dict(player_data["trophies"], player_data["accountid"])
+            PlayerTrophies._from_dict(player_data["trophies"], player_data["accountid"])
             if "trophies" in player_data
             else None
         )
@@ -533,7 +535,7 @@ class Player:
         )
 
         matchmaking = (
-            PlayerMatchmaking.from_dict(player_data["matchmaking"], player_id)
+            PlayerMatchmaking._from_dict(player_data["matchmaking"], player_id)
             if "matchmaking" in player_data
             else [None, None]
         )

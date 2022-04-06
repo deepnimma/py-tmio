@@ -53,7 +53,7 @@ class PlayerTrophies:
         self._player_id = player_id
 
     @classmethod
-    def from_dict(cls, raw_trophy_data: Dict, player_id: str):
+    def _from_dict(cls, raw_trophy_data: Dict, player_id: str):
         """
         Creates a :class:`PlayerTrophies` object from the given dictionary.
 

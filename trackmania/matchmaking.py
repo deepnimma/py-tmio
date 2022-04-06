@@ -57,7 +57,7 @@ class PlayerMatchmakingResult:
         self.win = win
 
     @classmethod
-    def from_dict(cls, data: Dict, player_id: str = None):
+    def _from_dict(cls, data: Dict, player_id: str = None):
         after_score = data["afterscore"]
         leave = data["leave"]
         live_id = data["lid"]
@@ -144,7 +144,7 @@ class PlayerMatchmaking:
             self.progress = 0
 
     @staticmethod
-    def from_dict(mm_data: Dict, player_id: str = None):
+    def _from_dict(mm_data: Dict, player_id: str = None):
         """
         Parses the matchmaking data of the player and returns 2 :class:`PlayerMatchmaking` objects.
             One for 3v3 Matchmaking and the other for Royal matchmaking.
@@ -282,7 +282,7 @@ class PlayerMatchmaking:
                 )
 
                 for item in history["matches"]:
-                    player_results.append(PlayerMatchmakingResult.from_dict(item))
+                    player_results.append(PlayerMatchmakingResult._from_dict(item))
 
                 return player_results
 
@@ -313,7 +313,7 @@ class PlayerMatchmaking:
 
         player_results = list()
         for match in match_history["matches"]:
-            player_results.append(PlayerMatchmakingResult.from_dict(match))
+            player_results.append(PlayerMatchmakingResult._from_dict(match))
 
         return player_results
 

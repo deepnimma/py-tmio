@@ -121,13 +121,13 @@ class Leaderboard:
         self.time = time
 
         if isinstance(player, dict):
-            self._player = Player.from_dict(player)
+            self._player = Player._from_dict(player)
         else:
             self._player = player
 
     @classmethod
-    def from_dict(cls, raw: Dict):
-        player = Player.from_dict(raw["player"]) if "player" in raw else None
+    def _from_dict(cls, raw: Dict):
+        player = Player._from_dict(raw["player"]) if "player" in raw else None
         player_name = raw["player"]["name"] if "player" in raw else None
         player_club_tag = (
             raw["player"]["tag"] if "player" in raw and "tag" in raw["player"] else None
@@ -236,7 +236,7 @@ class Map:
         return self._lb_loaded
 
     @classmethod
-    def from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: Dict):
         author_id = raw["author"]
         author_name = raw["authorplayer"]["name"]
         environment = raw["collectionName"]
@@ -295,7 +295,7 @@ class Map:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"map:{map_uid}"):
                 _log.debug(f"Map {map_uid} found in cache")
-                return Map.from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
+                return Map._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
 
         api_client = APIClient()
         map_data = await api_client.get(TMIO.build([TMIO.TABS.MAP, map_uid]))
@@ -305,7 +305,7 @@ class Map:
             _log.debug(f"Caching map {map_uid}")
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
 
-        return Map.from_dict(map_data)
+        return Map._from_dict(map_data)
 
     async def author(self) -> Player:
         """
@@ -386,7 +386,7 @@ class Map:
                         f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
                     ).decode("utf-8")
                 )["tops"]:
-                    leaderboards.append(Leaderboard.from_dict(lb))
+                    leaderboards.append(Leaderboard._from_dict(lb))
 
                 return leaderboards
 
@@ -412,6 +412,6 @@ class Map:
 
         leaderboards = list()
         for lb in lb_data["tops"]:
-            leaderboards.append(Leaderboard.from_dict(lb))
+            leaderboards.append(Leaderboard._from_dict(lb))
 
         return leaderboards
