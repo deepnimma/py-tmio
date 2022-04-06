@@ -301,6 +301,9 @@ class Map:
         map_data = await api_client.get(TMIO.build([TMIO.TABS.MAP, map_uid]))
         await api_client.close()
 
+        with suppress(KeyError, TypeError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(map_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching map {map_uid}")
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
@@ -415,3 +418,43 @@ class Map:
             leaderboards.append(Leaderboard._from_dict(lb))
 
         return leaderboards
+
+    async def load_more_leaderboard(self, length: int = 100) -> List[Leaderboard]:
+        """
+        .. versionadded :: 0.3.0
+
+        Gets more leaderboards for the map. If `get_leaderboards` wasn't used before then it just gets it from the start.
+
+        Parameters
+        ----------
+        length : int, optional
+            How many leaderboard positions to get, by default 100
+
+        Returns
+        -------
+        :class:`List[Leaderboard]`
+            The leaderboard positions.
+        """
+        if not self._lb_loaded:
+            _log.warn("Leaderboard is not loaded yet, loading from start")
+            return await self.get_leaderboard(length=length)
+
+        api_client = _APIClient()
+        leaderboards = await api_client.get(
+            TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.map_id])
+            + f"offset={self._offset}&length={length}"
+        )
+        await api_client.close()
+
+        with suppress(KeyError, TypeError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(leaderboards["error"])
+
+        self._offset += length
+        self._lb_loaded = True
+
+        lbs = list()
+        for lb in lbs["tops"]:
+            lbs.append(Leaderboard._from_dict(lb))
+
+        return lbs
