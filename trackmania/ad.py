@@ -5,6 +5,8 @@ from typing import Dict, List
 
 import redis
 
+from trackmania.errors import TMIOException
+
 from .api import _APIClient
 from .config import Client
 from .constants import TMIO
@@ -120,6 +122,9 @@ class Ad:
         all_ads = await api_client.get(TMIO.build([TMIO.TABS.ADS]))
         await api_client.close()
 
+        with suppress(KeyError, TypeError):
+            _log.error("This is a trackmania.io error")
+            raise TMIOException(all_ads["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug("Caching all ads for 12hours")
             cache_client.set("ads", json.dumps(all_ads), ex=43200)
