@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import redis
 
-from .api import APIClient
+from .api import _APIClient
 from .config import Client
 from .constants import TMIO
 
@@ -112,7 +112,7 @@ class Ad:
 
                 return bads
 
-        api_client = APIClient()
+        api_client = _APIClient()
         all_ads = await api_client.get(TMIO.build([TMIO.TABS.ADS]))
         await api_client.close()
 

@@ -6,7 +6,7 @@ from typing import Dict, List
 
 import redis
 
-from .api import APIClient
+from .api import _APIClient
 from .config import Client
 from .constants import TMIO
 from .errors import InvalidIDError, TMIOException
@@ -286,7 +286,7 @@ class PlayerMatchmaking:
 
                 return player_results
 
-        api_client = APIClient()
+        api_client = _APIClient()
         match_history = await api_client.get(
             TMIO.build(
                 [
@@ -351,7 +351,7 @@ class PlayerMatchmaking:
                 return json.loads(
                     cache_client.get(f"top_matchmaking:{page}:{royal}").decode("utf-8")
                 )["ranks"]
-        api_client = APIClient()
+        api_client = _APIClient()
 
         if not royal:
             match_history = await api_client.get(

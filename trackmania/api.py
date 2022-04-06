@@ -6,7 +6,7 @@ import aiohttp
 from .config import Client
 from .errors import NoUserAgentSetError
 
-__all__ = ("ResponseCodeError", "APIClient")
+__all__ = ("ResponseCodeError", "_APIClient")
 _log = logging.getLogger(__name__)
 
 
@@ -45,7 +45,7 @@ class ResponseCodeError(ValueError):
 
 
 # pylint: disable=W0612
-class APIClient:
+class _APIClient:
     """
     .. versionadded:: 0.1.0
 

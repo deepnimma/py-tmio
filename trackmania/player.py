@@ -6,7 +6,7 @@ from typing import Dict, List
 
 import redis
 
-from .api import APIClient
+from .api import _APIClient
 from .config import Client
 from .constants import TMIO
 from .errors import TMIOException
@@ -335,7 +335,7 @@ class Player:
                     )
                 )
 
-        api_client = APIClient()
+        api_client = _APIClient()
         player_data = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, player_id]))
         await api_client.close()
 
@@ -369,7 +369,7 @@ class Player:
         """
         _log.debug(f"Searching for players with the username -> {username}")
 
-        api_client = APIClient()
+        api_client = _APIClient()
         search_result = await api_client.get(
             TMIO.build([TMIO.TABS.PLAYERS]) + f"/find?search={username}"
         )

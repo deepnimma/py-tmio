@@ -6,9 +6,9 @@ from typing import Dict, List
 
 import redis
 
-from trackmania.api import APIClient
+from trackmania.api import _APIClient
 
-from .api import APIClient
+from .api import _APIClient
 from .config import Client
 from .constants import TMIO
 from .errors import TMIOException
@@ -297,7 +297,7 @@ class Map:
                 _log.debug(f"Map {map_uid} found in cache")
                 return Map._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
 
-        api_client = APIClient()
+        api_client = _APIClient()
         map_data = await api_client.get(TMIO.build([TMIO.TABS.MAP, map_uid]))
         await api_client.close()
 
@@ -390,7 +390,7 @@ class Map:
 
                 return leaderboards
 
-        api_client = APIClient()
+        api_client = _APIClient()
         lb_data = await api_client.get(
             TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.map_id])
             + f"offset={self.offset}&length={self.length}"

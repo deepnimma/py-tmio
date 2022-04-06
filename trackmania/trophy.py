@@ -7,7 +7,7 @@ from typing import Dict, List
 
 import redis
 
-from .api import APIClient
+from .api import _APIClient
 from .config import Client
 from .constants import TMIO
 from .errors import InvalidIDError, InvalidTrophyNumber, TMIOException
@@ -169,7 +169,7 @@ class PlayerTrophies:
                     "gains"
                 ]
 
-        api_client = APIClient()
+        api_client = _APIClient()
 
         if self.player_id is None:
             raise InvalidIDError("ID Has not been set for the Object")
@@ -224,7 +224,7 @@ class PlayerTrophies:
                     "ranks"
                 ]
 
-        api_client = APIClient()
+        api_client = _APIClient()
 
         top_trophies = await api_client.get(
             TMIO.build([TMIO.TABS.TOP_TROPHIES, str(page)])

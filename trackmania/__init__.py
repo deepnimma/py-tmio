@@ -10,7 +10,6 @@ import asyncio
 import logging
 import os
 
-from .api import *
 from .config import *
 from .constants import *
 from .errors import *
