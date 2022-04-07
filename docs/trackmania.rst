@@ -14,7 +14,7 @@ Submodules
    trackmania.player
    trackmania.trophy
    trackmania.matchmaking
-   trackmania.map
+   trackmania.tmmap
    trackmania.ad
    trackmania.cotd
    trackmania.totd
