@@ -399,6 +399,8 @@ class COTD:
     @staticmethod
     async def get(page: int = 0) -> List:
         """
+        .. versionadded :: 0.3.0
+
         Fetches the Latest COTDs and returns its data.
 
         Parameters
