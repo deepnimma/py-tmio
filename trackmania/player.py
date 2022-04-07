@@ -83,6 +83,8 @@ class PlayerMetaInfo:
     @classmethod
     def _from_dict(cls, meta_data: Dict):
         """
+        .. versionadded :: 0.1.0
+
         Parses the meta data into a PlayerMetaInfo object.
 
         Parameters
@@ -139,18 +141,20 @@ class PlayerZone:
     @classmethod
     def _parse_zones(cls, zones: Dict, zone_positions: List[int]) -> List:
         """
+          .. versionadded :: 0.1.0
+
         Parses the Data from the API into a list of PlayerZone objects.
 
-        Parameters
-        ----------
-        zones : :class:`Dict`
-            the zones data from the API.
-        zone_positions : :class:`List[int]`
-            The zone positions data from the API.
-        Returns
-        -------
-        class:`List[PlayerZone]`
-            The list of :class:`PlayerZone` objects.
+         Parameters
+         ----------
+         zones : :class:`Dict`
+             the zones data from the API.
+         zone_positions : :class:`List[int]`
+             The zone positions data from the API.
+         Returns
+         -------
+         class:`List[PlayerZone]`
+             The list of :class:`PlayerZone` objects.
         """
         _log.debug("Parsing Zones")
         player_zone_list: List = list()
@@ -483,6 +487,8 @@ class Player:
     @staticmethod
     def _parse_player(player_data: Dict) -> Dict:
         """
+        .. versionadded :: 0.1.0
+
         Parses the player data
 
         Parameters
