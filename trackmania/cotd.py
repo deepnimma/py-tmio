@@ -15,6 +15,14 @@ from .errors import TMIOException
 
 _log = logging.getLogger(__name__)
 
+__all__ = (
+    "BestCOTDStats",
+    "PlayerCOTDStats",
+    "PlayerCOTDResults",
+    "PlayerCOTD",
+    "COTD",
+)
+
 
 class BestCOTDStats:
     """
@@ -334,3 +342,107 @@ class PlayerCOTD:
             cache_client.set(f"playercotd:{player_id}:{page}", json.dumps(page_data))
 
         return PlayerCOTD._from_dict(page_data, player_id)
+
+
+class COTD:
+    """
+    .. versionadded :: 0.3.0
+
+    Represents a Cup of the Day
+
+    Parameters
+    ----------
+    cotd_id : int
+        The cotd id
+    name : str
+        The name of the cotd
+    player_count : int
+        The number of players that played the :class:`COTD`
+    start_date : :class:`datetime`
+        The start date of the COTD
+    end_date : :class:`datetime`
+        The end date of the COTD
+    """
+
+    def __init__(
+        self,
+        cotd_id: int,
+        name: str,
+        player_count: int,
+        start_date: datetime,
+        end_date: datetime,
+    ):
+        self.cotd_id = cotd_id
+        self.name = name
+        self.player_count = player_count
+        self.start_date = start_date
+        self.end_date = end_date
+
+    @classmethod
+    def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a COTD class from given dictionary")
+
+        cotd_id = raw["id"]
+        name = raw["name"]
+        player_count = raw["players"]
+        start_date = datetime.fromtimestamp(raw["starttime"])
+        end_date = datetime.fromtimestamp(raw["endtime"])
+
+        return cls(
+            cotd_id,
+            name,
+            player_count,
+            start_date,
+            end_date,
+        )
+
+    @staticmethod
+    async def get(page: int = 0) -> List:
+        """
+        Fetches the Latest COTDs and returns its data.
+
+        Parameters
+        ----------
+        page : int, optional
+            The page, each page contains 12 items. by default 0
+
+        Returns
+        -------
+        :class:`List[COTD]`
+            The COTDs
+        """
+        _log.debug(f"Getting COTD Page {page}")
+
+        cache_client = redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(f"cotd:{page}"):
+                _log.debug(f"COTD Page {page} found in cache")
+                cotds = json.loads(cache_client.get(f"cotd:{page}").decode("utf-8"))
+
+                acotds = list()
+                for cotd in cotds:
+                    acotds.append(COTD._from_dict(cotd))
+
+                return acotds
+
+        api_client = _APIClient()
+        all_cotds = await api_client.get(TMIO.build([TMIO.TABS.COTD, page]))
+        await api_client.close()
+
+        with suppress(KeyError, TypeError):
+            raise TMIOException(all_cotds["error"])
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching COTD Page {page}")
+            cache_client.set(f"cotd:{page}", json.dumps(all_cotds), ex=7200)
+
+        acotds = list()
+        for cotd in all_cotds:
+            acotds.append(COTD._from_dict(cotd))
+
+        return acotds

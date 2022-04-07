@@ -12,6 +12,7 @@ import os
 
 from .config import *
 from .constants import *
+from .cotd import *
 from .errors import *
 from .map import *
 from .matchmaking import *
