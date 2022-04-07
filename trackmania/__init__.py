@@ -14,9 +14,9 @@ from .config import *
 from .constants import *
 from .cotd import *
 from .errors import *
-from .map import *
 from .matchmaking import *
 from .player import *
+from .tmmap import *
 from .trophy import *
 
 __title__ = "py-tmio"

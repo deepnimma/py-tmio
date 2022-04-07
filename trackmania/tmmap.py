@@ -17,7 +17,7 @@ _log = logging.getLogger(__name__)
 __all__ = (
     "MedalTimes",
     "Leaderboard",
-    "TMMap",
+    "Map",
 )
 
 
@@ -83,7 +83,7 @@ class Leaderboard:
     """
     .. versionadded :: 0.3.0
 
-    Represents the TMMap's Leaderboard
+    Represents the Map's Leaderboard
 
     Parameters
     ----------
@@ -158,7 +158,7 @@ class TMMap:
     """
     .. versionadded :: 0.3.0
 
-    Represents a Trackmania TMMap
+    Represents a Trackmania Map
 
     Parameters
     ----------
@@ -239,7 +239,7 @@ class TMMap:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
-        _log.debug("Creating a TMMap class from given dictionary")
+        _log.debug("Creating a Map class from given dictionary")
 
         author_id = raw["author"]
         author_name = raw["authorplayer"]["name"]
@@ -282,7 +282,7 @@ class TMMap:
         """
         .. versionadded :: 0.3.0
 
-        Gets the TM TMMap from the TMMap's UID
+        Gets the TM Map from the Map's UID
 
         Parameters
         ----------
@@ -295,7 +295,7 @@ class TMMap:
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"map:{map_uid}"):
-                _log.debug(f"TMMap {map_uid} found in cache")
+                _log.debug(f"Map {map_uid} found in cache")
                 return TMMap._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
 
         api_client = _APIClient()
@@ -370,7 +370,7 @@ class TMMap:
             length = 100
 
         _log.debug(
-            f"Getting Leaderboard of the TMMap with Length {length} and offset {offset}"
+            f"Getting Leaderboard of the Map with Length {length} and offset {offset}"
         )
 
         cache_client = Client.get_cache_client()
