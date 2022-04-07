@@ -66,6 +66,8 @@ class Ad:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating an Ad object from given dictionary")
+
         uid = raw["uid"]
         name = raw["name"]
         type = raw["type"]

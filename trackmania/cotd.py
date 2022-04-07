@@ -46,6 +46,8 @@ class BestCOTDStats:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a BestCOTDStats class from given dictionary")
+
         best_rank = raw["bestrank"]
         best_rank_time = datetime.strptime(
             raw["bestranktime"], "%Y-%m-%dT%H:%M:%S+00:00"
@@ -121,6 +123,8 @@ class PlayerCOTDStats:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a PlayerCOTDStats class from given dictionary")
+
         average_div = raw["avgdiv"]
         average_div_rank = raw["avgdivrank"]
         average_rank = raw["avgrank"]

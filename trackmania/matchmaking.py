@@ -58,6 +58,8 @@ class PlayerMatchmakingResult:
 
     @classmethod
     def _from_dict(cls, data: Dict, player_id: str = None):
+        _log.debug("Creating a PlayerMatchmakingResult class from given dictionary")
+
         after_score = data["afterscore"]
         leave = data["leave"]
         live_id = data["lid"]
@@ -160,6 +162,8 @@ class PlayerMatchmaking:
         :class:`List[PlayerMatchmaking]`
             The list of matchmaking data, one for 3v3 and other other one for royal.
         """
+        _log.debug("Creating a PlayerMatchmaking class from given dictionary")
+
         matchmaking_data = list()
 
         if len(mm_data) == 0:
@@ -192,6 +196,10 @@ class PlayerMatchmaking:
         :class:`PlayerMatchmaking`
             The parsed data.
         """
+        _log.debug(
+            f"Parsing Data from Dictionary for PlayerMatchmaking class. ID supplied: {player_id}"
+        )
+
         if "info" in data:
             typename = data["info"]["typename"]
             typeid = data["info"]["typeid"]

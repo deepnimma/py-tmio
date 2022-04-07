@@ -211,6 +211,8 @@ class PlayerSearchResult:
 
     @classmethod
     def _from_dict(cls, player_data: Dict):
+        _log.debug("Creating a PlayerSearchResult class from given dictionary")
+
         zone = (
             PlayerZone._parse_zones(player_data["player"]["zone"], [0, 0, 0, 0, 0])
             if "zone" in player_data

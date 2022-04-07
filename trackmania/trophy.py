@@ -120,7 +120,8 @@ class PlayerTrophies:
 
     def score(self) -> int:
         """Returns the trophy score of the player."""
-        return (
+
+        score = (
             0
             + self.trophy(1) * 1
             + self.trophy(2) * 10
@@ -131,6 +132,10 @@ class PlayerTrophies:
             + self.trophy(7) * 1_000_000
             + self.trophy(8) * 10_000_000
         )
+
+        _log.debug(f"Score of {self.player_id} is {score}")
+
+        return score
 
     async def history(self, page: int = 0) -> Dict:
         """
@@ -153,7 +158,9 @@ class PlayerTrophies:
         InvalidIDError
             If an invalid id has been set for the object.
         """
-        _log.debug(f"Getting Trophy Leaderboard for Page: {page}")
+        _log.debug(
+            f"Getting Trophy Leaderboard for Page: {page} and Player Id: {self.player_id}"
+        )
 
         cache_client = redis.Redis(
             host=Client.REDIS_HOST,
@@ -183,7 +190,6 @@ class PlayerTrophies:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching trophy history for page: {page}")
@@ -233,7 +239,6 @@ class PlayerTrophies:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(top_trophies["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching trophy leaderboard for page: {page}")

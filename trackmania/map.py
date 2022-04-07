@@ -73,6 +73,8 @@ class MedalTimes:
         str
             The time in mm:ss:msmsms format
         """
+        _log.debug(f"Parsing {time} to string")
+
         sec, ms = divmod(time, 1000)
         min, sec = divmod(time, 60)
 
@@ -127,6 +129,8 @@ class Leaderboard:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a Leaderboards class from given dictionary")
+
         player = Player._from_dict(raw["player"]) if "player" in raw else None
         player_name = raw["player"]["name"] if "player" in raw else None
         player_club_tag = (
@@ -237,6 +241,8 @@ class Map:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a Map class from given dictionary")
+
         author_id = raw["author"]
         author_name = raw["authorplayer"]["name"]
         environment = raw["collectionName"]
@@ -285,6 +291,8 @@ class Map:
         map_uid : str
             The map's UID
         """
+        _log.debug(f"Getting the map with the UID {map_uid}")
+
         cache_client = redis.Redis(
             host=Client.REDIS_HOST,
             port=Client.REDIS_PORT,
@@ -321,6 +329,7 @@ class Map:
         :class:`Player`
             The author as a :class:`Player` object
         """
+        _log.debug(f"Getting the author of the map {self.uid}")
         return await Player.get(self.author_id)
 
     async def submitter(self) -> Player:
@@ -334,6 +343,7 @@ class Map:
         :class:`Player`
             The submitter as a :class:`Player` object
         """
+        _log.debug(f"Getting the submitter of the map {self.uid}")
         return await Player.get(self.submitter_id)
 
     async def get_leaderboard(
@@ -365,6 +375,10 @@ class Map:
             raise ValueError("Length must be greater than 0")
         elif length > 100:
             length = 100
+
+        _log.debug(
+            f"Getting Leaderboard of the Map with Length {length} and offset {offset}"
+        )
 
         cache_client = redis.Redis(
             host=Client.REDIS_HOST,
