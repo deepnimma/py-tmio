@@ -309,9 +309,9 @@ class PlayerCOTD:
 
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"playercotd:{player_id}:{page}"):
-                # _log.debug(
-                #     f"Player {player_id}'s page {page} cotd results found in cache"
-                # )
+                _log.debug(
+                    f"Player {player_id}'s page {page} cotd results found in cache"
+                )
                 return PlayerCOTD._from_dict(
                     json.loads(
                         cache_client.get(f"playercotd:{player_id}:{page}").decode(
