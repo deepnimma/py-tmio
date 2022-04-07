@@ -17,6 +17,7 @@ Submodules
    trackmania.map
    trackmania.ad
    trackmania.cotd
+   trackmania.totd
 
 Module contents
 ---------------

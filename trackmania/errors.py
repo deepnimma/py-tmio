@@ -86,3 +86,13 @@ class InvalidTrophyNumber(TrackmaniaException):
             message = None
 
         super().__init__(message)
+
+
+class InvalidTOTDDate(TrackmaniaException):
+    def __init__(self, *args):
+        if args:
+            message = args[0]
+        else:
+            message = None
+
+        super().__init__(message)
