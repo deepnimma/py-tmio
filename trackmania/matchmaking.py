@@ -4,8 +4,6 @@ from contextlib import suppress
 from datetime import datetime
 from typing import Dict, List
 
-import redis
-
 from .api import _APIClient
 from .config import Client
 from .constants import TMIO
@@ -269,14 +267,9 @@ class PlayerMatchmaking:
             f"Getting matchmaking history page {page} for player {self.player_id}"
         )
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(
                 f"mm_history:{page}:{self.type_id}:{self.player_id}"
             ):
@@ -311,7 +304,7 @@ class PlayerMatchmaking:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(match_history["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug(f"Saving matchmaking history for page {page} to cache")
             cache_client.set(
                 f"mm_history:{page}:{self.type_id}:{self.player_id}",
@@ -346,14 +339,9 @@ class PlayerMatchmaking:
         """
         _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"top_matchmaking:{page}:{royal}"):
                 _log.debug(f"Found top matchmaking players for page {page} in cache")
                 return json.loads(
@@ -375,7 +363,7 @@ class PlayerMatchmaking:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(match_history["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug(f"Caching top matchmaking players for page {page}")
             cache_client.set(
                 f"top_matchmaking:{page}:{royal}", json.dumps(match_history), ex=3600

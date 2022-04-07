@@ -4,8 +4,6 @@ from contextlib import suppress
 from datetime import datetime
 from typing import Dict, List
 
-import redis
-
 from trackmania.errors import TMIOException
 
 from .api import _APIClient
@@ -308,14 +306,9 @@ class PlayerCOTD:
         """
         _log.debug(f"Getting COTD Stats for Player {player_id} and page {page}")
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"playercotd:{player_id}:{page}"):
                 _log.debug(
                     f"Player {player_id}'s page {page} cotd results found in cache"
@@ -337,7 +330,7 @@ class PlayerCOTD:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(page_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug(f"Caching Player {player_id} Page {page}")
             cache_client.set(f"playercotd:{player_id}:{page}", json.dumps(page_data))
 
@@ -415,14 +408,9 @@ class COTD:
         """
         _log.debug(f"Getting COTD Page {page}")
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"cotd:{page}"):
                 _log.debug(f"COTD Page {page} found in cache")
                 cotds = json.loads(cache_client.get(f"cotd:{page}").decode("utf-8"))
@@ -439,7 +427,7 @@ class COTD:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(all_cotds["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug(f"Caching COTD Page {page}")
             cache_client.set(f"cotd:{page}", json.dumps(all_cotds), ex=7200)
 

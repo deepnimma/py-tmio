@@ -5,8 +5,6 @@ from datetime import datetime
 from types import NoneType
 from typing import Dict, List
 
-import redis
-
 from .api import _APIClient
 from .config import Client
 from .constants import TMIO
@@ -162,14 +160,9 @@ class PlayerTrophies:
             f"Getting Trophy Leaderboard for Page: {page} and Player Id: {self.player_id}"
         )
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"trophy:{page}"):
                 _log.debug(f"Found trophy leaderboard for page {page} in cache")
                 return json.loads(cache_client.get(f"trophy:{page}").decode("utf-8"))[
@@ -191,7 +184,7 @@ class PlayerTrophies:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(history["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug(f"Caching trophy history for page: {page}")
             cache_client.set(f"trophy:{page}", json.dumps(history), ex=3600)
 
@@ -216,14 +209,9 @@ class PlayerTrophies:
         """
         _log.debug(f"Getting Page {page} of Trophy Leaderboards")
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"trophies:{page}"):
                 _log.debug(f"Found trophy leaderboard for page {page} in cache")
                 return json.loads(cache_client.get(f"trophies:{page}").decode("utf-8"))[
@@ -240,7 +228,7 @@ class PlayerTrophies:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(top_trophies["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug(f"Caching trophy leaderboard for page: {page}")
             cache_client.set(f"trophies:{page}", json.dumps(top_trophies), ex=3600)
 

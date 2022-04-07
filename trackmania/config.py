@@ -1,4 +1,4 @@
-from redis import Redis
+import redis
 
 __all__ = ("Client",)
 
@@ -40,3 +40,20 @@ class Client:
 
     RATELIMIT_LIMIT: int = 40
     RATELIMIT_REMAINING: int = None
+
+    @staticmethod
+    def get_cache_client() -> redis.Redis:
+        """
+        Gets the Cache Client
+
+        Returns
+        -------
+        :class:`redis.Redis`
+            The cache_client
+        """
+        return redis.Redis(
+            host=Client.REDIS_HOST,
+            port=Client.REDIS_PORT,
+            db=Client.REDIS_DB,
+            password=Client.REDIS_PASSWORD,
+        )

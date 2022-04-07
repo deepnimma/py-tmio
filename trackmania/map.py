@@ -4,8 +4,6 @@ from contextlib import suppress
 from datetime import datetime
 from typing import Dict, List
 
-import redis
-
 from trackmania.api import _APIClient
 
 from .api import _APIClient
@@ -293,14 +291,9 @@ class Map:
         """
         _log.debug(f"Getting the map with the UID {map_uid}")
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"map:{map_uid}"):
                 _log.debug(f"Map {map_uid} found in cache")
                 return Map._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
@@ -312,7 +305,7 @@ class Map:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(map_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug(f"Caching map {map_uid}")
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
 
@@ -380,17 +373,12 @@ class Map:
             f"Getting Leaderboard of the Map with Length {length} and offset {offset}"
         )
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
         self._offset = offset
         self.length = length
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(
                 f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
             ):
@@ -417,7 +405,7 @@ class Map:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(lb_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug(f"Caching leaderboard {self.map_id}:{self.offset}:{self.length}")
             cache_client.set(
                 f"leaderboard:{self.map_id}:{self.offset}:{self.length}",

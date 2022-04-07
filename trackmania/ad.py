@@ -3,8 +3,6 @@ import logging
 from contextlib import suppress
 from typing import Dict, List
 
-import redis
-
 from trackmania.errors import TMIOException
 
 from .api import _APIClient
@@ -102,14 +100,9 @@ class Ad:
         """
         _log.debug("Getting all ads")
 
-        cache_client = redis.Redis(
-            host=Client.REDIS_HOST,
-            port=Client.REDIS_PORT,
-            db=Client.REDIS_DB,
-            password=Client.REDIS_PASSWORD,
-        )
+        cache_client = Client.get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists("ads"):
                 _log.debug("Found all ads in cache")
                 ads = json.loads(cache_client.get("ads").decode("utf-8"))
@@ -126,7 +119,7 @@ class Ad:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(all_ads["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(ConnectionRefusedError, ConnectionError):
             _log.debug("Caching all ads for 12hours")
             cache_client.set("ads", json.dumps(all_ads), ex=43200)
 
