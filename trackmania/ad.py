@@ -100,7 +100,7 @@ class Ad:
         """
         _log.debug("Getting all ads")
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists("ads"):

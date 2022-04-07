@@ -160,7 +160,7 @@ class PlayerTrophies:
             f"Getting Trophy Leaderboard for Page: {page} and Player Id: {self.player_id}"
         )
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"trophy:{page}"):
@@ -209,7 +209,7 @@ class PlayerTrophies:
         """
         _log.debug(f"Getting Page {page} of Trophy Leaderboards")
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"trophies:{page}"):

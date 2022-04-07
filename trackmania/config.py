@@ -42,7 +42,7 @@ class Client:
     RATELIMIT_REMAINING: int = None
 
     @staticmethod
-    def get_cache_client() -> redis.Redis:
+    def _get_cache_client() -> redis.Redis:
         """
         Gets the Cache Client
 

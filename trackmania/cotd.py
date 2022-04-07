@@ -306,7 +306,7 @@ class PlayerCOTD:
         """
         _log.debug(f"Getting COTD Stats for Player {player_id} and page {page}")
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"playercotd:{player_id}:{page}"):
@@ -408,7 +408,7 @@ class COTD:
         """
         _log.debug(f"Getting COTD Page {page}")
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"cotd:{page}"):

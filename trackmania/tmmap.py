@@ -291,7 +291,7 @@ class TMMap:
         """
         _log.debug(f"Getting the map with the UID {map_uid}")
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"map:{map_uid}"):
@@ -373,7 +373,7 @@ class TMMap:
             f"Getting Leaderboard of the Map with Length {length} and offset {offset}"
         )
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         self._offset = offset
         self.length = length

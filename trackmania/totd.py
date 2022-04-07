@@ -114,7 +114,7 @@ class TOTD:
         """
         _log.debug("Getting TOTD for date: %s", date)
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"totd:{date.year}:{date.month}:{date.day}"):
                 _log.debug(

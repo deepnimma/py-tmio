@@ -267,7 +267,7 @@ class PlayerMatchmaking:
             f"Getting matchmaking history page {page} for player {self.player_id}"
         )
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(
@@ -339,7 +339,7 @@ class PlayerMatchmaking:
         """
         _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"top_matchmaking:{page}:{royal}"):

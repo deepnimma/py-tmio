@@ -319,7 +319,7 @@ class Player:
         """
         _log.debug(f"Getting {player_id}'s data")
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"player:{player_id}"):
@@ -408,7 +408,7 @@ class Player:
         """
         _log.debug(f"Getting {username}'s id")
 
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"{username.lower()}:id"):
@@ -450,7 +450,7 @@ class Player:
             The player's username
         """
         _log.debug(f"Getting the username for {player_id}")
-        cache_client = Client.get_cache_client()
+        cache_client = Client._get_cache_client()
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"{player_id}:username"):
