@@ -123,9 +123,7 @@ class Ad:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            if "error" in all_ads:
-
-                raise TMIOException(all_ads["error"])
+            raise TMIOException(all_ads["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug("Caching all ads for 12hours")
             cache_client.set("ads", json.dumps(all_ads), ex=43200)
