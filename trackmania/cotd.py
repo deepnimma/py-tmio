@@ -385,8 +385,8 @@ class COTD:
         cotd_id = raw["id"]
         name = raw["name"]
         player_count = raw["players"]
-        start_date = datetime.fromtimestamp(raw["starttime"])
-        end_date = datetime.fromtimestamp(raw["endtime"])
+        start_date = datetime.utcfromtimestamp(raw["starttime"])
+        end_date = datetime.utcfromtimestamp(raw["endtime"])
 
         return cls(
             cotd_id,
