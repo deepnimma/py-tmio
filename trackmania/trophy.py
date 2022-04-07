@@ -183,7 +183,7 @@ class PlayerTrophies:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching trophy history for page: {page}")
@@ -233,7 +233,7 @@ class PlayerTrophies:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(top_trophies["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching trophy leaderboard for page: {page}")

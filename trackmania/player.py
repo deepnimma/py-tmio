@@ -340,7 +340,7 @@ class Player:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(player_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             cache_client.set(f"player:{player_id}", json.dumps(player_data))
@@ -376,7 +376,7 @@ class Player:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(search_result["error"])
 
         if len(search_result) == 0:

@@ -302,7 +302,7 @@ class Map:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(map_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching map {map_uid}")
@@ -401,7 +401,7 @@ class Map:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(lb_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching leaderboard {self.map_id}:{self.offset}:{self.length}")
@@ -447,7 +447,7 @@ class Map:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(leaderboards["error"])
 
         self._offset += length

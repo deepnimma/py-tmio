@@ -301,7 +301,7 @@ class PlayerMatchmaking:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(match_history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Saving matchmaking history for page {page} to cache")
@@ -365,7 +365,7 @@ class PlayerMatchmaking:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
+
             raise TMIOException(match_history["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching top matchmaking players for page {page}")

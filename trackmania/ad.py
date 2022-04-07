@@ -123,8 +123,9 @@ class Ad:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-            _log.error("This is a trackmania.io error")
-            raise TMIOException(all_ads["error"])
+            if "error" in all_ads:
+
+                raise TMIOException(all_ads["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug("Caching all ads for 12hours")
             cache_client.set("ads", json.dumps(all_ads), ex=43200)
