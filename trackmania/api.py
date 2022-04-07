@@ -76,9 +76,15 @@ class _APIClient:
         if should_raise and response.status >= 400:
             try:
                 response_json = await response.json()
+                if "error" in response_json:
+                    return
+                await self.session.close()
                 raise ResponseCodeError(response=response, response_json=response_json)
             except aiohttp.ContentTypeError as content_type_error:
                 response_text = await response.text()
+                if "error" in response_text:
+                    return
+                await self.session.close()
                 raise ResponseCodeError(
                     response=response, response_text=response_text
                 ) from content_type_error
