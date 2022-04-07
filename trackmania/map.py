@@ -17,7 +17,7 @@ _log = logging.getLogger(__name__)
 __all__ = (
     "MedalTimes",
     "Leaderboard",
-    "Map",
+    "TMMap",
 )
 
 
@@ -83,7 +83,7 @@ class Leaderboard:
     """
     .. versionadded :: 0.3.0
 
-    Represents the Map's Leaderboard
+    Represents the TMMap's Leaderboard
 
     Parameters
     ----------
@@ -154,11 +154,11 @@ class Leaderboard:
         return self._player
 
 
-class Map:
+class TMMap:
     """
     .. versionadded :: 0.3.0
 
-    Represents a Trackmania Map
+    Represents a Trackmania TMMap
 
     Parameters
     ----------
@@ -239,7 +239,7 @@ class Map:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
-        _log.debug("Creating a Map class from given dictionary")
+        _log.debug("Creating a TMMap class from given dictionary")
 
         author_id = raw["author"]
         author_name = raw["authorplayer"]["name"]
@@ -282,7 +282,7 @@ class Map:
         """
         .. versionadded :: 0.3.0
 
-        Gets the TM Map from the Map's UID
+        Gets the TM TMMap from the TMMap's UID
 
         Parameters
         ----------
@@ -295,8 +295,8 @@ class Map:
 
         with suppress(ConnectionRefusedError, ConnectionError):
             if cache_client.exists(f"map:{map_uid}"):
-                _log.debug(f"Map {map_uid} found in cache")
-                return Map._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
+                _log.debug(f"TMMap {map_uid} found in cache")
+                return TMMap._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
 
         api_client = _APIClient()
         map_data = await api_client.get(TMIO.build([TMIO.TABS.MAP, map_uid]))
@@ -309,7 +309,7 @@ class Map:
             _log.debug(f"Caching map {map_uid}")
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
 
-        return Map._from_dict(map_data)
+        return TMMap._from_dict(map_data)
 
     async def author(self) -> Player:
         """
@@ -370,7 +370,7 @@ class Map:
             length = 100
 
         _log.debug(
-            f"Getting Leaderboard of the Map with Length {length} and offset {offset}"
+            f"Getting Leaderboard of the TMMap with Length {length} and offset {offset}"
         )
 
         cache_client = Client.get_cache_client()

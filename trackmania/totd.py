@@ -11,7 +11,7 @@ from .api import _APIClient
 from .config import Client
 from .constants import TMIO
 from .errors import TMIOException, TrackmaniaException
-from .map import Map
+from .map import TMMap
 
 _log = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class TOTD:
         The day of the month when the totd was played
     week_day : int
         The day of the week when the totd was played
-    map : :class:`Map`
+    map : :class:`TMMap`
         The map that was played
     """
 
@@ -42,7 +42,7 @@ class TOTD:
         leaderboard_uid: int,
         month_day: int,
         week_day: int,
-        map: Map,
+        map: TMMap,
     ):
         self.campaign_id = campaign_id
         self.leaderboard_uid = leaderboard_uid
@@ -53,7 +53,7 @@ class TOTD:
     @classmethod
     def _from_dict(cls, raw: Dict):
         campaign_id = raw["campaignid"]
-        map = Map._from_dict(raw["map"])
+        map = TMMap._from_dict(raw["map"])
         week_day = raw["weekday"]
         month_day = raw["monthday"]
         leaderboard_uid = raw["leaderboarduid"]
@@ -92,7 +92,7 @@ class TOTD:
 
     @property
     def map(self):
-        """Map Property"""
+        """TMMap Property"""
         return self._map
 
     @staticmethod
