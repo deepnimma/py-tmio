@@ -17,6 +17,7 @@ from .errors import *
 from .matchmaking import *
 from .player import *
 from .tmmap import *
+from .totd import *
 from .trophy import *
 
 __title__ = "py-tmio"
