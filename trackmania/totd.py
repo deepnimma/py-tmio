@@ -95,7 +95,7 @@ class TOTD:
     @property
     def map(self):
         """TMMap Property"""
-        return self._map
+        return self._mapobj
 
     @staticmethod
     async def get(date: datetime):
