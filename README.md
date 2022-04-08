@@ -65,18 +65,6 @@ Caching is done using a redis server. The client defaults to `127.0.0.1:6379`.
 
 Caching is not *required* but is highly recommended.
 
-## Examples
-
-### Latest TOTD
-
-```python
-from trackmania.managers import totd_manager
-
-# In Async Function
-latest_totd = await totd_manager.latest_totd()
-
-print(latest_totd.map_name)
-```
 
 ## Pull Requests and Issues
 
