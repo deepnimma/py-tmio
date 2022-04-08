@@ -1,10 +1,8 @@
-# pylint: disable=too-many-instance-attributes
 from typing import List
 
 __all__ = ("TMIO", "TMX")
 
 
-# pylint: disable=too-few-public-methods
 class TMIOTabs:
     """
     .. versionadded:: 0.1.0
@@ -32,7 +30,6 @@ class TMIOTabs:
         self.ADS: str = "ads"
 
 
-# pylint: disable=too-few-public-methods
 class TMIO:
     """
     .. versionadded:: 0.1.0
@@ -87,7 +84,6 @@ class TMIO:
         return url + endpoints[0]
 
 
-# pylint: disable=too-few-public-methods
 class TMX:
     """
     .. versionadded:: 0.1.0
