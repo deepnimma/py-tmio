@@ -17,7 +17,7 @@ _log = logging.getLogger(__name__)
 __all__ = (
     "MedalTimes",
     "Leaderboard",
-    "Map",
+    "TMMap",
 )
 
 

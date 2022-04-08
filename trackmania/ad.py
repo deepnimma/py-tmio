@@ -11,6 +11,8 @@ from .constants import TMIO
 
 _log = logging.getLogger(__name__)
 
+__all__ = ("Ad",)
+
 
 class Ad:
     """

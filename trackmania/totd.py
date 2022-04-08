@@ -15,6 +15,8 @@ from .tmmap import TMMap
 
 _log = logging.getLogger(__name__)
 
+__all__ = ("TOTD",)
+
 
 class TOTD:
     """

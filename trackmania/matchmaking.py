@@ -11,6 +11,11 @@ from .errors import InvalidIDError, TMIOException
 
 _log = logging.getLogger(__name__)
 
+__all__ = (
+    "PlayerMatchmakingResult",
+    "PlayerMatchmaking",
+)
+
 
 class PlayerMatchmakingResult:
     """
