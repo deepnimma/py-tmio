@@ -12,7 +12,7 @@ _log = logging.getLogger(__name__)
 
 class ResponseCodeError(ValueError):
     """
-    .. versionadded:: 0.1.0
+    .. versionadded:: 0.3.0
 
     Raised when a non-OK HTTP Response is received
 
@@ -47,7 +47,7 @@ class ResponseCodeError(ValueError):
 # pylint: disable=W0612
 class _APIClient:
     """
-    .. versionadded:: 0.1.0
+    .. versionadded:: 0.3.0
 
     API Wrappers
     """

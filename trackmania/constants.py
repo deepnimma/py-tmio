@@ -3,7 +3,7 @@ from typing import List
 
 class _TMIOTabs:
     """
-    .. versionadded:: 0.1.0
+    .. versionadded:: 0.3.0
 
     _TMIO Endpoints
     """
@@ -30,7 +30,7 @@ class _TMIOTabs:
 
 class _TMIO:
     """
-    .. versionadded:: 0.1.0
+    .. versionadded:: 0.3.0
 
     Basic _TMIO Api Details
 
@@ -84,7 +84,7 @@ class _TMIO:
 
 class _TMX:
     """
-    .. versionadded:: 0.1.0
+    .. versionadded:: 0.3.0
 
     Basic _TMX Api Details
 
