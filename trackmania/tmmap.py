@@ -387,7 +387,7 @@ class TMMap:
                 _log.debug(
                     f"Leaderboard {self.map_id}:{self.offset}:{self.length} found in cache"
                 )
-                leaderboards = list()
+                leaderboards = []
                 for lb in json.loads(
                     cache_client.get(
                         f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
@@ -417,7 +417,7 @@ class TMMap:
         self._offset += self.length
         self._lb_loaded = True
 
-        leaderboards = list()
+        leaderboards = []
         for lb in lb_data["tops"]:
             leaderboards.append(Leaderboard._from_dict(lb))
 
@@ -457,7 +457,7 @@ class TMMap:
         self._offset += length
         self._lb_loaded = True
 
-        lbs = list()
+        lbs = []
         for lb in lbs["tops"]:
             lbs.append(Leaderboard._from_dict(lb))
 

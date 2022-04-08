@@ -169,7 +169,7 @@ class PlayerMatchmaking:
         """
         _log.debug("Creating a PlayerMatchmaking class from given dictionary")
 
-        matchmaking_data = list()
+        matchmaking_data = []
 
         if len(mm_data) == 0:
             matchmaking_data.extend([None, None])
@@ -282,7 +282,7 @@ class PlayerMatchmaking:
             ):
                 _log.debug(f"Found matchmaking history for page {page} in cache")
 
-                player_results = list()
+                player_results = []
                 history = json.loads(
                     cache_client.get(
                         f"mm_history:{page}:{self.type_id}:{self.player_id}"
@@ -319,7 +319,7 @@ class PlayerMatchmaking:
                 ex=3600,
             )
 
-        player_results = list()
+        player_results = []
         for match in match_history["matches"]:
             player_results.append(PlayerMatchmakingResult._from_dict(match))
 

@@ -111,7 +111,7 @@ class Ad:
                 _log.debug("Found all ads in cache")
                 ads = json.loads(cache_client.get("ads").decode("utf-8"))
 
-                bads = list()
+                bads = []
                 for ad in ads["ads"]:
                     bads.append(Ad._from_dict(ad))
 
@@ -127,7 +127,7 @@ class Ad:
             _log.debug("Caching all ads for 12hours")
             cache_client.set("ads", json.dumps(all_ads), ex=43200)
 
-        bads = list()
+        bads = []
         for ad in all_ads["ads"]:
             bads.append(Ad._from_dict(ad))
 

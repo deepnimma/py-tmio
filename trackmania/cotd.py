@@ -282,7 +282,7 @@ class PlayerCOTD:
         stats = PlayerCOTDStats._from_dict(page_data["stats"])
         player_id = player_id
 
-        recent_results = list()
+        recent_results = []
         for cotd in page_data["cotds"]:
             recent_results.append(PlayerCOTDResults._from_dict(cotd))
 
@@ -420,7 +420,7 @@ class COTD:
                 _log.debug(f"COTD Page {page} found in cache")
                 cotds = json.loads(cache_client.get(f"cotd:{page}").decode("utf-8"))
 
-                acotds = list()
+                acotds = []
                 for cotd in cotds["competitions"]:
                     acotds.append(COTD._from_dict(cotd))
 
@@ -436,7 +436,7 @@ class COTD:
             _log.debug(f"Caching COTD Page {page}")
             cache_client.set(f"cotd:{page}", json.dumps(all_cotds), ex=7200)
 
-        acotds = list()
+        acotds = []
         for cotd in all_cotds["competitions"]:
             acotds.append(COTD._from_dict(cotd))
 

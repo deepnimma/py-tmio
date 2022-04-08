@@ -157,7 +157,7 @@ class PlayerZone:
              The list of :class:`PlayerZone` objects.
         """
         _log.debug("Parsing Zones")
-        player_zone_list: List = list()
+        player_zone_list: List = []
         i: int = 0
 
         while "zone" in zones:
@@ -385,7 +385,7 @@ class Player:
         elif len(search_result) == 1:
             return PlayerSearchResult._from_dict(search_result[0])
         else:
-            players = list()
+            players = []
             for player in search_result:
                 players.append(PlayerSearchResult._from_dict(player))
 
