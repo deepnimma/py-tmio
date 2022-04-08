@@ -122,10 +122,10 @@ class Leaderboard:
         self.position = position
         self.time = time
 
-        if isinstance(player, dict):
-            self._player = Player._parse_player(player)
-        else:
+        if isinstance(player, Player):
             self._player = player
+        else:
+            self._player = Player._parse_player(player)
 
     @classmethod
     def _from_dict(cls, raw: Dict):
@@ -381,15 +381,15 @@ class TMMap:
 
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(
-                f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
+                f"leaderboard:{self.uid}:{self.offset}:{self.length}"
             ):
                 _log.debug(
-                    f"Leaderboard {self.map_id}:{self.offset}:{self.length} found in cache"
+                    f"Leaderboard {self.uid}:{self.offset}:{self.length} found in cache"
                 )
                 leaderboards = []
                 for lb in json.loads(
                     cache_client.get(
-                        f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
+                        f"leaderboard:{self.uid}:{self.offset}:{self.length}"
                     ).decode("utf-8")
                 )["tops"]:
                     leaderboards.append(Leaderboard._from_dict(lb))
@@ -398,8 +398,8 @@ class TMMap:
 
         api_client = _APIClient()
         lb_data = await api_client.get(
-            TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.map_id])
-            + f"offset={self.offset}&length={self.length}"
+            TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.uid])
+            + f"?offset={self.offset}&length={self.length}"
         )
         await api_client.close()
 
@@ -407,9 +407,9 @@ class TMMap:
 
             raise TMIOException(lb_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching leaderboard {self.map_id}:{self.offset}:{self.length}")
+            _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
             cache_client.set(
-                f"leaderboard:{self.map_id}:{self.offset}:{self.length}",
+                f"leaderboard:{self.uid}:{self.offset}:{self.length}",
                 json.dumps(lb_data),
             )
 
@@ -444,8 +444,8 @@ class TMMap:
 
         api_client = _APIClient()
         leaderboards = await api_client.get(
-            TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.map_id])
-            + f"offset={self._offset}&length={length}"
+            TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.uid])
+            + f"?offset={self._offset}&length={length}"
         )
         await api_client.close()
 

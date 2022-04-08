@@ -2,6 +2,7 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
+from types import NoneType
 from typing import Dict, List
 
 import redis
@@ -500,14 +501,31 @@ class Player:
             else None
         )
 
+        # player_meta = (
+        #     PlayerMetaInfo._from_dict(player_data["meta"])
+        #     if "meta" in player_data
+        #     else PlayerMetaInfo._from_dict(dict())
+        # )
+
         player_meta = (
-            PlayerMetaInfo._from_dict(player_data["meta"])
+            player_data["meta"]
+            if "meta" in player_data and isinstance(player_data["meta"], PlayerMetaInfo)
+            else PlayerMetaInfo._from_dict(player_data["meta"])
             if "meta" in player_data
             else PlayerMetaInfo._from_dict(dict())
         )
+
         player_trophies = (
-            PlayerTrophies._from_dict(player_data["trophies"], player_data["accountid"])
+            PlayerTrophies._from_dict(
+                player_data["trophies"],
+                player_data["accountid"]
+                if "accountid" in player_data
+                else player_data["player_id"]
+                if "player_id" in player_data
+                else None,
+            )
             if "trophies" in player_data
+            and not isinstance(player_data["trophies"], NoneType)
             else None
         )
         player_zone = (
@@ -515,7 +533,9 @@ class Player:
                 player_data["trophies"]["zone"],
                 player_data["trophies"]["zonepositions"],
             )
-            if "trophies" in player_data and "zone" in player_data["trophies"]
+            if "trophies" in player_data
+            and not isinstance(player_data["trophies"], NoneType)
+            and "zone" in player_data["trophies"]
             else None
         )
 
