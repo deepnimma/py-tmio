@@ -5,6 +5,8 @@ from contextlib import suppress
 from datetime import datetime
 from typing import Dict, List
 
+import redis
+
 from trackmania.errors import InvalidTOTDDate, TMIOException
 
 from .api import _APIClient
@@ -117,7 +119,7 @@ class TOTD:
         _log.debug("Getting TOTD for date: %s", date)
 
         cache_client = Client._get_cache_client()
-        with suppress(ConnectionRefusedError, ConnectionError):
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"totd:{date.year}:{date.month}:{date.day}"):
                 _log.debug(
                     f"Found TOTD for date {date.day}:{date.month}:{date.year} in cache"
@@ -153,7 +155,7 @@ class TOTD:
                 f"Something Unexpected has occured. Please contact the developer of the Package.\nMessage: {e}"
             )
 
-        with suppress(ConnectionRefusedError, ConnectionError):
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching TOTD for date {date.day}:{date.month}:{date.year}")
             cache_client.set(
                 f"totd:{date.year}:{date.month}:{date.day}", json.dumps(totd)

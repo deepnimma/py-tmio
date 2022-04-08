@@ -4,6 +4,8 @@ from contextlib import suppress
 from datetime import datetime
 from typing import Dict, List
 
+import redis
+
 from trackmania.api import _APIClient
 
 from .api import _APIClient
@@ -293,7 +295,7 @@ class TMMap:
 
         cache_client = Client._get_cache_client()
 
-        with suppress(ConnectionRefusedError, ConnectionError):
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"map:{map_uid}"):
                 _log.debug(f"Map {map_uid} found in cache")
                 return TMMap._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
@@ -305,7 +307,7 @@ class TMMap:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(map_data["error"])
-        with suppress(ConnectionRefusedError, ConnectionError):
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching map {map_uid}")
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
 
@@ -378,7 +380,7 @@ class TMMap:
         self._offset = offset
         self.length = length
 
-        with suppress(ConnectionRefusedError, ConnectionError):
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(
                 f"leaderboard:{self.map_id}:{self.offset}:{self.length}"
             ):
@@ -405,7 +407,7 @@ class TMMap:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(lb_data["error"])
-        with suppress(ConnectionRefusedError, ConnectionError):
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching leaderboard {self.map_id}:{self.offset}:{self.length}")
             cache_client.set(
                 f"leaderboard:{self.map_id}:{self.offset}:{self.length}",
