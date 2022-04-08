@@ -1,9 +1,12 @@
 __all__ = (
     "TrackmaniaException",
     "TMIOException",
+    "InvalidPlayerException",
     "NoUserAgentSetError",
     "InvalidUsernameError",
     "InvalidIDError",
+    "InvalidTrophyNumber",
+    "InvalidTOTDDate",
 )
 
 
