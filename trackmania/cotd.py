@@ -2,6 +2,7 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
+from types import NoneType
 from typing import Dict, List
 
 import redis
@@ -11,7 +12,7 @@ from trackmania.errors import TMIOException
 from .api import _APIClient
 from .config import Client
 from .constants import TMIO
-from .errors import TMIOException
+from .errors import InvalidIDError, TMIOException
 
 _log = logging.getLogger(__name__)
 
@@ -76,7 +77,7 @@ class BestCOTDStats:
         best_rank_time = datetime.strptime(
             raw["bestranktime"], "%Y-%m-%dT%H:%M:%S+00:00"
         )
-        best_rank_div_rank = raw["bestrankdivtime"]
+        best_rank_div_rank = raw["bestrankdivrank"]
         best_div = raw["bestdiv"]
         best_div_time = datetime.strptime(raw["bestdivtime"], "%Y-%m-%dT%H:%M:%S+00:00")
         best_rank_in_div = raw["bestrankindiv"]
@@ -332,6 +333,8 @@ class PlayerCOTD:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(page_data["error"])
+        if isinstance(page_data, NoneType):
+            raise InvalidIDError("Invalid PlayerID Given")
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching Player {player_id} Page {page}")
             cache_client.set(f"playercotd:{player_id}:{page}", json.dumps(page_data))
@@ -418,7 +421,7 @@ class COTD:
                 cotds = json.loads(cache_client.get(f"cotd:{page}").decode("utf-8"))
 
                 acotds = list()
-                for cotd in cotds:
+                for cotd in cotds["competitions"]:
                     acotds.append(COTD._from_dict(cotd))
 
                 return acotds
@@ -434,7 +437,7 @@ class COTD:
             cache_client.set(f"cotd:{page}", json.dumps(all_cotds), ex=7200)
 
         acotds = list()
-        for cotd in all_cotds:
+        for cotd in all_cotds["competitions"]:
             acotds.append(COTD._from_dict(cotd))
 
         return acotds
