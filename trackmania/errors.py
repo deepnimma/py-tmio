@@ -21,19 +21,13 @@ class TMIOException(Exception):
 
 
 class InvalidPlayerException(TrackmaniaException):
-    """ """
+    """Base Exception class for Player-Related exceptions"""
 
-    def __init__(self, *args):
-        if args:
-            message = args[0]
-        else:
-            message = None
-
-        super().__init__(message)
+    pass
 
 
 class NoUserAgentSetError(Exception):
-    """ """
+    """Raised when a User-Agent is not set."""
 
     def __init__(self):
         message = "No User Agent has been set.\nPlease read the README for instructions on how to set the USER_AGENT."
@@ -41,7 +35,7 @@ class NoUserAgentSetError(Exception):
 
 
 class InvalidUsernameError(InvalidPlayerException):
-    """ """
+    """Raised when a username is not valid."""
 
     def __init__(self, *args):
         if args:
@@ -53,19 +47,7 @@ class InvalidUsernameError(InvalidPlayerException):
 
 
 class InvalidIDError(InvalidPlayerException):
-    """ """
-
-    def __init__(self, *args):
-        if args:
-            message = args[0]
-        else:
-            message = None
-
-        super().__init__(message)
-
-
-class InvalidMatchmakingGroupError(TrackmaniaException):
-    """ """
+    """Raised when an Invalid ID is given."""
 
     def __init__(self, *args):
         if args:
@@ -89,6 +71,8 @@ class InvalidTrophyNumber(TrackmaniaException):
 
 
 class InvalidTOTDDate(TrackmaniaException):
+    """Raised when an invalid TOTD Date is given."""
+
     def __init__(self, *args):
         if args:
             message = args[0]
