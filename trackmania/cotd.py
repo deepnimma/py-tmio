@@ -11,7 +11,7 @@ from trackmania.errors import TMIOException
 
 from .api import _APIClient
 from .config import Client
-from .constants import TMIO
+from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
 
 _log = logging.getLogger(__name__)
@@ -327,7 +327,7 @@ class PlayerCOTD:
 
         api_client = _APIClient()
         page_data = await api_client.get(
-            TMIO.build([TMIO.TABS.PLAYER, player_id, TMIO.TABS.COTD, str(page)])
+            _TMIO.build([_TMIO.TABS.PLAYER, player_id, _TMIO.TABS.COTD, str(page)])
         )
         await api_client.close()
 
@@ -427,7 +427,7 @@ class COTD:
                 return acotds
 
         api_client = _APIClient()
-        all_cotds = await api_client.get(TMIO.build([TMIO.TABS.COTD, page]))
+        all_cotds = await api_client.get(_TMIO.build([_TMIO.TABS.COTD, page]))
         await api_client.close()
 
         with suppress(KeyError, TypeError):

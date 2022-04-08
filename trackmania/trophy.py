@@ -9,7 +9,7 @@ import redis
 
 from .api import _APIClient
 from .config import Client
-from .constants import TMIO
+from .constants import _TMIO
 from .errors import InvalidIDError, InvalidTrophyNumber, TMIOException
 
 _log = logging.getLogger(__name__)
@@ -177,8 +177,8 @@ class PlayerTrophies:
             raise InvalidIDError("ID Has not been set for the Object")
 
         history = await api_client.get(
-            TMIO.build(
-                [TMIO.TABS.PLAYER, self.player_id, TMIO.TABS.TROPHIES, str(page)]
+            _TMIO.build(
+                [_TMIO.TABS.PLAYER, self.player_id, _TMIO.TABS.TROPHIES, str(page)]
             )
         )
 
@@ -223,7 +223,7 @@ class PlayerTrophies:
         api_client = _APIClient()
 
         top_trophies = await api_client.get(
-            TMIO.build([TMIO.TABS.TOP_TROPHIES, str(page)])
+            _TMIO.build([_TMIO.TABS.TOP_TROPHIES, str(page)])
         )
 
         await api_client.close()

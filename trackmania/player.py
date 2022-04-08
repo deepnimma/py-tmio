@@ -9,7 +9,7 @@ import redis
 
 from .api import _APIClient
 from .config import Client
-from .constants import TMIO
+from .constants import _TMIO
 from .errors import TMIOException
 from .matchmaking import PlayerMatchmaking
 from .trophy import PlayerTrophies
@@ -28,7 +28,7 @@ class PlayerMetaInfo:
     """
     .. versionadded :: 0.1.0
 
-    Represents Player Meta Data, which inclues YT, Twitch, Twitter or TMIO Vanity Link
+    Represents Player Meta Data, which inclues YT, Twitch, Twitter or _TMIO Vanity Link
 
     Parameters
     ----------
@@ -39,7 +39,7 @@ class PlayerMetaInfo:
     in_tmgl : bool
         Whether the player is in TMGL
     in_tmio_dev_team : bool
-        Whether the player is in TMIO Dev Team
+        Whether the player is in _TMIO Dev Team
     is_sponsor : bool
         Whether the player is a sponsor
     sponsor_level : int | None
@@ -51,7 +51,7 @@ class PlayerMetaInfo:
     youtube : str | None
         The YouTube URL of the player, `NoneType` if the player has no YouTube
     vanity : str | None
-        The TMIO Vanity URL of the player, `NoneType` if the player has no TMIO Vanity URL
+        The _TMIO Vanity URL of the player, `NoneType` if the player has no _TMIO Vanity URL
     """
 
     def __init__(
@@ -338,7 +338,7 @@ class Player:
                 )
 
         api_client = _APIClient()
-        player_data = await api_client.get(TMIO.build([TMIO.TABS.PLAYER, player_id]))
+        player_data = await api_client.get(_TMIO.build([_TMIO.TABS.PLAYER, player_id]))
         await api_client.close()
 
         with suppress(KeyError, TypeError):
@@ -373,7 +373,7 @@ class Player:
 
         api_client = _APIClient()
         search_result = await api_client.get(
-            TMIO.build([TMIO.TABS.PLAYERS]) + f"/find?search={username}"
+            _TMIO.build([_TMIO.TABS.PLAYERS]) + f"/find?search={username}"
         )
         await api_client.close()
 

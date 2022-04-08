@@ -10,7 +10,7 @@ from trackmania.api import _APIClient
 
 from .api import _APIClient
 from .config import Client
-from .constants import TMIO
+from .constants import _TMIO
 from .errors import TMIOException
 from .player import Player
 
@@ -301,7 +301,7 @@ class TMMap:
                 return TMMap._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
 
         api_client = _APIClient()
-        map_data = await api_client.get(TMIO.build([TMIO.TABS.MAP, map_uid]))
+        map_data = await api_client.get(_TMIO.build([_TMIO.TABS.MAP, map_uid]))
         await api_client.close()
 
         with suppress(KeyError, TypeError):
@@ -398,7 +398,7 @@ class TMMap:
 
         api_client = _APIClient()
         lb_data = await api_client.get(
-            TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.uid])
+            _TMIO.build([_TMIO.TABS.LEADERBOARD, _TMIO.TABS.MAP, self.uid])
             + f"?offset={self.offset}&length={self.length}"
         )
         await api_client.close()
@@ -444,7 +444,7 @@ class TMMap:
 
         api_client = _APIClient()
         leaderboards = await api_client.get(
-            TMIO.build([TMIO.TABS.LEADERBOARD, TMIO.TABS.MAP, self.uid])
+            _TMIO.build([_TMIO.TABS.LEADERBOARD, _TMIO.TABS.MAP, self.uid])
             + f"?offset={self._offset}&length={length}"
         )
         await api_client.close()

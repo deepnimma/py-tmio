@@ -9,7 +9,7 @@ from trackmania.errors import TMIOException
 
 from .api import _APIClient
 from .config import Client
-from .constants import TMIO
+from .constants import _TMIO
 
 _log = logging.getLogger(__name__)
 
@@ -118,7 +118,7 @@ class Ad:
                 return bads
 
         api_client = _APIClient()
-        all_ads = await api_client.get(TMIO.build([TMIO.TABS.ADS]))
+        all_ads = await api_client.get(_TMIO.build([_TMIO.TABS.ADS]))
         await api_client.close()
 
         with suppress(KeyError, TypeError):

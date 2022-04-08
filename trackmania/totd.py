@@ -10,7 +10,7 @@ from trackmania.errors import InvalidTOTDDate, TMIOException
 
 from .api import _APIClient
 from .config import Client
-from .constants import TMIO
+from .constants import _TMIO
 from .errors import TMIOException, TrackmaniaException
 from .tmmap import TMMap
 
@@ -133,7 +133,7 @@ class TOTD:
 
         api_client = _APIClient()
         all_totds = await api_client.get(
-            TMIO.build([TMIO.TABS.TOTD, TOTD._calculate_months(date)])
+            _TMIO.build([_TMIO.TABS.TOTD, TOTD._calculate_months(date)])
         )
         await api_client.close()
 

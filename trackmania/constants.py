@@ -1,13 +1,11 @@
 from typing import List
 
-__all__ = ("TMIO", "TMX")
 
-
-class TMIOTabs:
+class _TMIOTabs:
     """
     .. versionadded:: 0.1.0
 
-    TMIO Endpoints
+    _TMIO Endpoints
     """
 
     def __init__(self):
@@ -30,11 +28,11 @@ class TMIOTabs:
         self.ADS: str = "ads"
 
 
-class TMIO:
+class _TMIO:
     """
     .. versionadded:: 0.1.0
 
-    Basic TMIO Api Details
+    Basic _TMIO Api Details
 
     Parameters
     ----------
@@ -44,7 +42,7 @@ class TMIO:
         The BASE url for the api. Equal to "trackmania.io"
     api : str
         The api endpoint for `trackmania.io`. Equal to "api".
-    TABS : :class:`TMIOTabs`
+    TABS : :class:`_TMIOTabs`
         The TABS for the api.
     """
 
@@ -52,11 +50,11 @@ class TMIO:
     BASE: str = "trackmania.io"
     API: str = "api"
 
-    TABS: TMIOTabs = TMIOTabs()
+    TABS: _TMIOTabs = _TMIOTabs()
 
     @staticmethod
     def build(endpoints: List[str]) -> str:
-        """Builds a TMIO endpoint url.
+        """Builds a _TMIO endpoint url.
 
         Parameters
         ----------
@@ -69,7 +67,7 @@ class TMIO:
             The built endpoint url.
 
         """
-        url = f"{TMIO.PROTOCOL}://{TMIO.BASE}/{TMIO.API}/"
+        url = f"{_TMIO.PROTOCOL}://{_TMIO.BASE}/{_TMIO.API}/"
 
         if len(endpoints) == 0:
             return url
@@ -84,11 +82,11 @@ class TMIO:
         return url + endpoints[0]
 
 
-class TMX:
+class _TMX:
     """
     .. versionadded:: 0.1.0
 
-    Basic TMX Api Details
+    Basic _TMX Api Details
 
     Parameters
     ----------
@@ -107,7 +105,7 @@ class TMX:
 
     @staticmethod
     def build(endpoints: List[str]) -> str:
-        """URL Builder for TMX API
+        """URL Builder for _TMX API
 
         Parameters
         ----------
@@ -119,7 +117,7 @@ class TMX:
         str
             The URL.
         """
-        url = f"{TMX.PROTOCOL}://{TMX.BASE}/{TMX.API}/"
+        url = f"{_TMX.PROTOCOL}://{_TMX.BASE}/{_TMX.API}/"
 
         if len(endpoints) == 0:
             return url

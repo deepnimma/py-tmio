@@ -8,7 +8,7 @@ import redis
 
 from .api import _APIClient
 from .config import Client
-from .constants import TMIO
+from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
 
 _log = logging.getLogger(__name__)
@@ -296,11 +296,11 @@ class PlayerMatchmaking:
 
         api_client = _APIClient()
         match_history = await api_client.get(
-            TMIO.build(
+            _TMIO.build(
                 [
-                    TMIO.TABS.PLAYER,
+                    _TMIO.TABS.PLAYER,
                     self.player_id,
-                    TMIO.TABS.MATCHES,
+                    _TMIO.TABS.MATCHES,
                     self.type_id,
                     str(page),
                 ]
@@ -358,11 +358,11 @@ class PlayerMatchmaking:
 
         if not royal:
             match_history = await api_client.get(
-                TMIO.build([TMIO.TABS.TOP_MATCHMAKING, str(page)])
+                _TMIO.build([_TMIO.TABS.TOP_MATCHMAKING, str(page)])
             )
         else:
             match_history = await api_client.get(
-                TMIO.build([TMIO.TABS.TOP_ROYAL, str(page)])
+                _TMIO.build([_TMIO.TABS.TOP_ROYAL, str(page)])
             )
 
         await api_client.close()

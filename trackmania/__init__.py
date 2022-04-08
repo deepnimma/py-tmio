@@ -12,7 +12,6 @@ import os
 
 from .ad import *
 from .config import *
-from .constants import *
 from .cotd import *
 from .errors import *
 from .matchmaking import *
