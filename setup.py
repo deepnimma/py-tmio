@@ -1,6 +1,6 @@
 from setuptools import setup
 
-requirements = ["python-dotenv", "aiohttp", "redis"]
+requirements = ["aiohttp", "redis"]
 
 version = "v0.3.0b3"
 
