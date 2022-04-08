@@ -544,6 +544,8 @@ class Player:
             if "accountid" in player_data
             else player_data["id"]
             if "id" in player_data
+            else player_data["playerid"]
+            if "playerid" in player_data
             else None
         )
 
