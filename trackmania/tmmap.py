@@ -123,7 +123,7 @@ class Leaderboard:
         self.time = time
 
         if isinstance(player, dict):
-            self._player = Player._from_dict(player)
+            self._player = Player._parse_player(player)
         else:
             self._player = player
 
@@ -131,7 +131,7 @@ class Leaderboard:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a Leaderboards class from given dictionary")
 
-        player = Player._from_dict(raw["player"]) if "player" in raw else None
+        player = Player._parse_player(raw["player"]) if "player" in raw else None
         player_name = raw["player"]["name"] if "player" in raw else None
         player_club_tag = (
             raw["player"]["tag"] if "player" in raw and "tag" in raw["player"] else None
@@ -368,8 +368,7 @@ class TMMap:
         """
         if length < 1:
             raise ValueError("Length must be greater than 0")
-        elif length > 100:
-            length = 100
+        length = min(length, 100)
 
         _log.debug(
             f"Getting Leaderboard of the Map with Length {length} and offset {offset}"

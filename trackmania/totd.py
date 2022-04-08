@@ -1,9 +1,8 @@
 import json
 import logging
-from calendar import month, week
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict
 
 import redis
 
@@ -148,12 +147,12 @@ class TOTD:
 
         try:
             totd = all_totds["days"][date.day - 1]
-        except (IndexError):
-            raise InvalidTOTDDate("That TOTD Date is not correct.")
-        except (KeyError, TypeError) as e:
+        except (IndexError) as excp:
+            raise InvalidTOTDDate("That TOTD Date is not correct.") from excp
+        except (KeyError, TypeError) as excp:
             raise TrackmaniaException(
-                f"Something Unexpected has occured. Please contact the developer of the Package.\nMessage: {e}"
-            )
+                f"Something Unexpected has occured. Please contact the developer of the Package.\nMessage: {excp}"
+            ) from excp
 
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching TOTD for date {date.day}:{date.month}:{date.year}")

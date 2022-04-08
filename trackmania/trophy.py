@@ -68,7 +68,7 @@ class PlayerTrophies:
         :class:`PlayerTrophies`
             The parsed trophy data.
         """
-        _log.debug(f"Creating a PlayerTrophies class from the given dictionary.")
+        _log.debug("Creating a PlayerTrophies class from the given dictionary.")
 
         return cls(
             echelon=raw_trophy_data["echelon"],
