@@ -2,12 +2,15 @@
 <h1>py-trackmania.io</h1>
 
 [![Trackmania.io API Status](https://img.shields.io/website?down_message=Offline&label=Trackmania.io%20API&up_message=Online&url=https%3A%2F%2Ftrackmania.io)](https://trackmania.io)
+[![Pypi Version](https://img.shields.io/pypi/v/py-tmio?style=flat-square)](https://pypi.org/project/py-tmio)
 
-[![GitHub issues](https://img.shields.io/github/issues/NottCurious/py-tmio?logo=github)](https://github.com/NottCurious/py-tmio/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/NottCurious/py-tmio?logo=github)](https://github.com/NottCurious/py-tmio/pulls)
+[![GitHub issues](https://img.shields.io/github/issues/NottCurious/py-tmio?logo=github&style=flat-square)](https://github.com/NottCurious/py-tmio/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/NottCurious/py-tmio?logo=github&style=flat-square)](https://github.com/NottCurious/py-tmio/pulls)
 [![GitHub Repo stars](https://img.shields.io/github/stars/NottCurious/py-tmio?logo=github&style=flat-square)](https://github.com/NottCurious/py-tmio/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/NottCurious/py-tmio?style=flat-square)](https://github.com/NottCurious/py-tmio/network/members)
-[![Documentation Status](https://readthedocs.org/projects/py-trackmaniaio/badge/?version=latest)](https://py-trackmaniaio.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/py-trackmaniaio/badge/?version=latest&style=flat-square)](https://py-trackmaniaio.readthedocs.io/en/latest/?badge=latest)
+[![Python Version](https://img.shields.io/pypi/pyversions/py-tmio?style=flat-square)](https://pypi.org/project/py-tmio)
+[![Discord Server](https://img.shields.io/discord/962190413073088554?style=flat-square)](https://discord.gg/uFgjx5rEgr)
 
 An Asyncio Friendly Trackmania API Wrapper for Python!
 </div>
@@ -45,6 +48,13 @@ Client.REDIS_DB = 0 # 0 is default
 Client.REDIS_PASSWORD = "yadayadayada" # Defaults to None. Don't need to change this if your redis server does not have a password.
 ```
 
+## Support Server
+
+You can report bug fixes, issues, feature request or ask for help at the discord server! (Click the Badge!)
+
+
+[![Discord Server](https://img.shields.io/discord/962190413073088554?style=flat-square)](https://discord.gg/uFgjx5rEgr)
+
 ## Docs
 
 Docs can be found on [readthedocs.org](https://py-trackmaniaio.readthedocs.io/en/latest/).
@@ -75,6 +85,8 @@ or [Issue](https://github.com/NottCurious/py-tmio/issues/new)
 ## Discord
 
 Contact me on Discord if you have any questions, NottCurious#4351
+
+Or join the [support server here!](https://discord.gg/uFgjx5rEgr)
 
 ## License
 
