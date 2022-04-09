@@ -420,16 +420,12 @@ class Player:
 
         players = await Player.search(username)
 
-        if players is None:
-            with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-                _log.debug(f"Caching {username.lower()} id as None")
-                cache_client.set(f"{username.lower()}:id", None)
-        elif isinstance(players, PlayerSearchResult):
+        if isinstance(players, PlayerSearchResult):
             with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
                 _log.debug(f"Caching {username.lower()} id as {players.player_id}")
                 cache_client.set(f"{username.lower()}:id", players.player_id)
             return players.player_id
-        else:
+        elif isinstance(players, list):
             with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
                 _log.debug(f"Caching {username.lower()} id as {players[0].player_id}")
                 cache_client.set(f"{username.lower()}:id", players[0].player_id)
