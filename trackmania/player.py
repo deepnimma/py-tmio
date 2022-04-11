@@ -296,7 +296,7 @@ class Player:
 
     def __str__(self):
         """String representation of the class."""
-        return f"Player: {self.name} ({self.login})"
+        return f"Player: {self.name} ({self.name})"
 
     @property
     def first_login(self):
@@ -532,6 +532,7 @@ class Player:
             if "trophies" in player_data
             and not isinstance(player_data["trophies"], NoneType)
             and "zone" in player_data["trophies"]
+            and not isinstance(player_data["trophies"]["zone"], NoneType)
             else None
         )
 
