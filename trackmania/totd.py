@@ -1,7 +1,8 @@
 import json
 import logging
 from contextlib import suppress
-from datetime import datetime
+from datetime import datetime, tzinfo
+from time import timezone
 from typing import Dict
 
 import redis
@@ -161,3 +162,20 @@ class TOTD:
             )
 
         return TOTD._from_dict(totd)
+
+    @staticmethod
+    async def latest_totd():
+        """
+        Gets the latest totd.
+
+        Returns
+        -------
+        :class:`TOTD`
+            The TOTD object.
+        """
+        today = datetime.utcnow()
+
+        if today.hour > 17 and today.minute > 0:
+            return await TOTD.get(datetime.utcnow())
+        else:
+            return await TOTD.get(datetime(today.year, today.month, today.day - 1))
