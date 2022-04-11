@@ -161,10 +161,10 @@ class PlayerZone:
         player_zone_list: List = []
         i: int = 0
 
-        while "zone" in zones:
+        while "name" in zones:
             _log.debug(f"Gone {i} Levels Deep")
             player_zone_list.append(
-                cls(zones["flag"], zones["zone"], zone_positions[i])
+                cls(zones["flag"], zones["name"], zone_positions[i])
             )
             i += 1
 
