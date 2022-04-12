@@ -353,9 +353,11 @@ class Player:
     @staticmethod
     async def search(
         username: str,
-    ) -> None | PlayerSearchResult | List[PlayerSearchResult]:
+    ) -> List[PlayerSearchResult] | None:
         """
         .. versionadded :: 0.1.0
+        .. versionchanged :: 0.3.4
+            The function no longer returns a single :class:`PlayerSearchResult`. It will now always return a `list` or `None`
 
         Searches for a player's information using their username.
 
@@ -366,8 +368,9 @@ class Player:
 
         Returns
         -------
-        :class:`NoneType` | :class:`PlayerSearchResult` | :class:`List[PlayerSearchResult]`
-            None if no players. :class:`PlayerSearchResult` if only one player. :class:`List[PlayerSearchResult]` if multiple players.
+        :class:`List[PlayerSearchResult]` | None
+            Returns a list of :class:`PlayerSearchResult` with users who have similar usernames. Returns `None`
+            if no user with that username can be found.
         """
         _log.debug(f"Searching for players with the username -> {username}")
 
@@ -383,19 +386,19 @@ class Player:
 
         if len(search_result) == 0:
             return None
-        elif len(search_result) == 1:
-            return PlayerSearchResult._from_dict(search_result[0])
-        else:
-            players = []
-            for player in search_result:
-                players.append(PlayerSearchResult._from_dict(player))
 
-            return players
+        players = []
+        for player in search_result:
+            players.append(PlayerSearchResult._from_dict(player))
+
+        return players
 
     @staticmethod
     async def get_id(username: str) -> str:
         """
         .. versionadded :: 0.1.0
+        .. versionadded :: 0.3.4
+            Updated to work with the change in `search` function
 
         Gets a player's id from the given username
 
@@ -420,16 +423,10 @@ class Player:
 
         players = await Player.search(username)
 
-        if isinstance(players, PlayerSearchResult):
-            with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-                _log.debug(f"Caching {username.lower()} id as {players.player_id}")
-                cache_client.set(f"{username.lower()}:id", players.player_id)
-            return players.player_id
-        elif isinstance(players, list):
-            with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-                _log.debug(f"Caching {username.lower()} id as {players[0].player_id}")
-                cache_client.set(f"{username.lower()}:id", players[0].player_id)
-            return players[0].player_id
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching {username.lower()} id as {players[0].player_id}")
+            cache_client.set(f"{username.lower()}:id", players[0].player_id)
+        return players[0].player_id
 
     @staticmethod
     async def get_username(player_id: str) -> str:
