@@ -15,6 +15,15 @@ from .errors import InvalidTMXCode
 
 _log = logging.getLogger(__name__)
 
+__all__ = (
+    "TMXMapTimes",
+    "GbxFileMetadata",
+    "TMXTags",
+    "ReplayWRData",
+    "TMXMetadata",
+    "TMXMap",
+)
+
 
 class TMXMapTimes:
     """
