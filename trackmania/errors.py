@@ -23,6 +23,12 @@ class TMIOException(Exception):
     pass
 
 
+class TMXException(Exception):
+    """BASE exception class for errors from trackmania.exchange"""
+
+    pass
+
+
 class InvalidPlayerException(TrackmaniaException):
     """Base Exception class for Player-Related exceptions"""
 
@@ -75,6 +81,18 @@ class InvalidTrophyNumber(TrackmaniaException):
 
 class InvalidTOTDDate(TrackmaniaException):
     """Raised when an invalid TOTD Date is given."""
+
+    def __init__(self, *args):
+        if args:
+            message = args[0]
+        else:
+            message = None
+
+        super().__init__(message)
+
+
+class InvalidTMXCode(TMXException):
+    """Raised when an invalid TMX Code is given."""
 
     def __init__(self, *args):
         if args:

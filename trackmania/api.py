@@ -111,7 +111,10 @@ class _APIClient:
                     )
             except (AttributeError, TypeError):
                 pass
-            return await resp.json()
+            try:
+                return await resp.json()
+            except:
+                return await resp.text()
 
     async def get(
         self,

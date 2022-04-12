@@ -11,6 +11,7 @@ from trackmania.api import _APIClient
 from .api import _APIClient
 from .config import Client
 from .constants import _TMX
+from .errors import InvalidTMXCode
 
 _log = logging.getLogger(__name__)
 
@@ -35,6 +36,8 @@ class TMXMapTimes:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a TMXMapTimes from given dictionary")
+
         uploaded_raw, updated_raw = raw["UploadedAt"], raw["UpdatedAt"]
 
         # 2022-03-15T18:18:50.007 to datetime
@@ -116,14 +119,17 @@ class GbxFileMetadata:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a GbxFileMetadata from given dictionary")
+
         gbx_map_name = raw["GbxMapName"]
         author_login = raw["AuthorLogin"]
         map_type = raw["MapType"]
         title_pack = raw["TitlePack"]
+        track_uid = raw["TrackUID"]
         mood = raw["Mood"]
         display_cost = raw["DisplayCost"]
         mod_name = raw["ModName"]
-        light_map = raw["LightMap"]
+        light_map = raw["Lightmap"]
         exe_version = raw["ExeVersion"]
         exe_build = datetime.strptime(raw["ExeBuild"], "%Y-%m-%d_%H_%M")
         author_time = raw["AuthorTime"]
@@ -131,19 +137,20 @@ class GbxFileMetadata:
         vehicle_name = raw["VehicleName"]
 
         return cls(
-            gbx_map_name,
-            author_login,
-            map_type,
-            title_pack,
-            mood,
-            display_cost,
-            mod_name,
-            light_map,
-            exe_version,
-            exe_build,
-            author_time,
-            environment_name,
-            vehicle_name,
+            gbx_map_name=gbx_map_name,
+            author_login=author_login,
+            map_type=map_type,
+            title_pack=title_pack,
+            track_uid=track_uid,
+            mood=mood,
+            display_cost=display_cost,
+            mod_name=mod_name,
+            light_map=light_map,
+            exe_version=exe_version,
+            exe_build=exe_build,
+            author_time=author_time,
+            environment_name=environment_name,
+            vehicle_name=vehicle_name,
         )
 
 
@@ -164,7 +171,9 @@ class TMXTags:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
-        map_tags_ss = raw["MapTags"].split(",")
+        _log.debug("Creating a TMXTags from given dictionary")
+
+        map_tags_ss = raw["Tags"].split(",")
         map_tags = []
 
         for tag in map_tags_ss:
@@ -251,6 +260,8 @@ class ReplayWRData:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a ReplayWRData from given dictionary")
+
         return cls(
             raw["ReplayWRId"] if "ReplayWRId" in raw else None,
             raw["ReplayWRTime"] if "ReplayWRTime" in raw else None,
@@ -339,6 +350,8 @@ class TMXMetadata:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a TMXMetaData from given dictionary")
+
         unlisted = raw["Unlisted"]
         unreleased = raw["Unreleased"]
         downloadable = raw["Downloadable"]
@@ -448,11 +461,13 @@ class TMXMap:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
+        _log.debug("Creating a TMXMap from given dictionary")
+
         username = raw["Username"]
         track_id = raw["TrackID"] if "TrackID" in raw else None
         map_id = raw["MapID"] if "MapID" in raw else None
         comments = raw["Comments"]
-        map_pack_id = raw["MapPackID"]
+        map_pack_id = raw["MappackID"]
         user_id = raw["UserID"]
         route_name = raw["RouteName"]
         length_name = raw["LengthName"]
@@ -479,3 +494,37 @@ class TMXMap:
             replay_wr_data,
             metadata,
         )
+
+    @staticmethod
+    async def get(tmx_id: int):
+        """
+        Gets a map's data using it's tmx id
+
+        Parameters
+        ----------
+        tmx_id : int
+            The tmx id
+        """
+        _log.info(f"Getting map data for tmx id {tmx_id}")
+
+        cache_client = Client._get_cache_client()
+        with suppress(ConnectionError, redis.exceptions.ConnectionError):
+            if cache_client.exists(f"tmxmap:{tmx_id}"):
+                _log.debug(f"Found map data for tmx id {tmx_id} in cache")
+                return TMXMap._from_dict(
+                    json.loads(cache_client.get(f"tmxmap:{tmx_id}").decode("utf-8"))
+                )
+
+        api_client = _APIClient()
+        map_data = await api_client.get(
+            _TMX.build([_TMX.TABS.MAPS, _TMX.TABS.GET_MAP_INFO, _TMX.TABS.ID, tmx_id])
+        )
+        await api_client.close()
+
+        if not isinstance(map_data, dict):
+            raise InvalidTMXCode("Invalid TMX code")
+        with suppress(ConnectionError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching map data for tmx id {tmx_id}")
+            cache_client.set(f"tmxmap:{tmx_id}", json.dumps(map_data))
+
+        return TMXMap._from_dict(map_data)
