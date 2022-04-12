@@ -82,6 +82,21 @@ class _TMIO:
         return url + endpoints[0]
 
 
+class _TMXTabs:
+    """
+    .. versionadded :: 0.3.3
+
+    _TMX Endpoints
+    """
+
+    def __init__(self):
+        self.MAPS = "maps"
+        self.GET_MAP_INFO = "get_map_info"
+        self.GET_TRACK_INFO = "get_track_info"
+        self.MULTI = "multi"
+        self.ID = "id"
+
+
 class _TMX:
     """
     .. versionadded:: 0.3.0
@@ -96,12 +111,15 @@ class _TMX:
         The BASE url for the api. Equal to "trackmania.exchange"
     api : str
         The api endpoint for `trackmania.exchange`. Equal to "api".
-
+    TABS: :class:`_TMXTabs`
+        .. versionadded :: 0.3.3
+        The TABS for TMX API
     """
 
     PROTOCOL: str = "https"
     BASE: str = "trackmania.exchange"
     API: str = "api"
+    TABS: _TMXTabs = _TMXTabs()
 
     @staticmethod
     def build(endpoints: List[str]) -> str:
