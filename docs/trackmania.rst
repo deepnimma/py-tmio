@@ -7,9 +7,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   trackmania.api
    trackmania.config
-   trackmania.constants
    trackmania.errors
    trackmania.player
    trackmania.trophy

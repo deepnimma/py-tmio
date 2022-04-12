@@ -243,7 +243,7 @@ class ReplayWRData:
 
     Represents data relating to the wr replay
 
-    Parameter
+    Parameters
     ---------
     wr_id : int | None
         replay id of mx world record
