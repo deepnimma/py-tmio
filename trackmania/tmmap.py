@@ -131,7 +131,7 @@ class Leaderboard:
         if "player" in raw:
             player_id = raw["player"]["id"]
             player_name = raw["player"]["name"]
-            player_club_tag = raw["player"]["tag"] if "tag" in raw["player"] else None
+            player_club_tag = raw.get("player").get("tag", None)
         else:
             player_id = None
             player_name = None
@@ -259,7 +259,7 @@ class TMMap:
         author_id = raw["author"]
         author_name = raw["authorplayer"]["name"]
         environment = raw["collectionName"]
-        exchange_id = raw["exchangeid"] if "exchangeid" in raw else None
+        exchange_id = raw.get("exchangeid", None)
         file_name = raw["filename"]
         map_id = raw["mapId"]
         leaderboard = None

@@ -121,6 +121,49 @@ class _TMX:
     API: str = "api"
     TABS: _TMXTabs = _TMXTabs()
 
+    MAP_TYPE_ENUMS: dict = {
+        1: "Race",
+        2: "FullSpeed",
+        3: "Tech",
+        4: "RPG",
+        5: "LOL",
+        6: "Press Forward",
+        7: "SpeedTech",
+        8: "MultiLap",
+        9: "Offroad",
+        10: "Trial",
+        11: "ZrT",
+        12: "SpeedFun",
+        13: "Competitive",
+        14: "Ice",
+        15: "Dirt",
+        16: "Stunt",
+        17: "Reactor",
+        18: "Platform",
+        19: "Slow Motion",
+        20: "Bumper",
+        21: "Fragile",
+        22: "Scenery",
+        23: "Kacky",
+        24: "Endurance",
+        25: "Mini",
+        26: "Remake",
+        27: "Mixed",
+        28: "Nascar",
+        29: "SpeedDrift",
+        30: "Minigame",
+        31: "Obstacle",
+        32: "Transitional",
+        33: "Grass",
+        34: "Backwards",
+        35: "Freewheel",
+        36: "Signature",
+        37: "Royal",
+        38: "Water",
+        39: "Plastic",
+        40: "Arena",
+    }
+
     @staticmethod
     def build(endpoints: List[str]) -> str:
         """URL Builder for _TMX API

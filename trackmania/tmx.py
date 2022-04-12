@@ -191,50 +191,7 @@ class TMXTags:
         return cls(map_tags)
 
     def __str__(self) -> str:
-        STRING_TAGS = {
-            1: "Race",
-            2: "FullSpeed",
-            3: "Tech",
-            4: "RPG",
-            5: "LOL",
-            6: "Press Forward",
-            7: "SpeedTech",
-            8: "MultiLap",
-            9: "Offroad",
-            10: "Trial",
-            11: "ZrT",
-            12: "SpeedFun",
-            13: "Competitive",
-            14: "Ice",
-            15: "Dirt",
-            16: "Stunt",
-            17: "Reactor",
-            18: "Platform",
-            19: "Slow Motion",
-            20: "Bumper",
-            21: "Fragile",
-            22: "Scenery",
-            23: "Kacky",
-            24: "Endurance",
-            25: "Mini",
-            26: "Remake",
-            27: "Mixed",
-            28: "Nascar",
-            29: "SpeedDrift",
-            30: "Minigame",
-            31: "Obstacle",
-            32: "Transitional",
-            33: "Grass",
-            34: "Backwards",
-            35: "Freewheel",
-            36: "Signature",
-            37: "Royal",
-            38: "Water",
-            39: "Plastic",
-            40: "Arena",
-        }
-
-        return ", ".join([STRING_TAGS[tag] for tag in self.map_tags])
+        return ", ".join([_TMX.MAP_TYPE_ENUMS.get(tag) for tag in self.map_tags])
 
 
 class ReplayWRData:
@@ -272,10 +229,10 @@ class ReplayWRData:
         _log.debug("Creating a ReplayWRData from given dictionary")
 
         return cls(
-            raw["ReplayWRId"] if "ReplayWRId" in raw else None,
-            raw["ReplayWRTime"] if "ReplayWRTime" in raw else None,
-            raw["ReplayWRUserID"] if "ReplayWRUserID" in raw else None,
-            raw["ReplayWRUsername"] if "ReplayWRUsername" in raw else None,
+            raw.get("ReplayWRId"),
+            raw.get("ReplayWRTime"),
+            raw.get("ReplayWRUserID"),
+            raw.get("ReplayWRUsername"),
         )
 
 
@@ -473,8 +430,8 @@ class TMXMap:
         _log.debug("Creating a TMXMap from given dictionary")
 
         username = raw["Username"]
-        track_id = raw["TrackID"] if "TrackID" in raw else None
-        map_id = raw["MapID"] if "MapID" in raw else None
+        track_id = raw.get("TrackID")
+        map_id = raw.get("MapID")
         comments = raw["Comments"]
         map_pack_id = raw["MappackID"]
         user_id = raw["UserID"]

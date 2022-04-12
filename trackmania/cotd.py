@@ -228,8 +228,11 @@ class PlayerCOTDResults:
         name = raw["name"]
         div = raw["div"]
         rank = raw["rank"]
-        div_rank = raw["divrank"] if raw["divrank"] != 0 else None
-        score = raw["score"] if raw["score"] != 0 else None
+        if raw["divrank"] != 0:
+            div_rank = raw["divrank"]
+            score = raw["score"]
+        else:
+            div_rank, score = 0
         total_players = raw["totalplayers"]
 
         return cls(
