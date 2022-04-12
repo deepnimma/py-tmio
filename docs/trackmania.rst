@@ -18,6 +18,7 @@ Submodules
    trackmania.ad
    trackmania.cotd
    trackmania.totd
+   trackmania.tmx
 
 Module contents
 ---------------
