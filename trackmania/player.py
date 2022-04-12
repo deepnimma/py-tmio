@@ -467,6 +467,8 @@ class Player:
     def _parse_player(player_data: Dict) -> Dict:
         """
         .. versionadded :: 0.1.0
+        .. versionchanged :: 0.4.0
+            Optimized everything!
 
         Parses the player data
 
@@ -480,12 +482,14 @@ class Player:
         :class:`Dict`
             The parsed player data formatted kwargs friendly for the :class:`Player` constructors
         """
+        # Parsing First Login
         first_login = (
             datetime.strptime(player_data["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
             if "timestamp" in player_data
             else None
         )
 
+        # Parsing Last Club Tag Change
         last_club_tag_change = (
             datetime.strptime(
                 player_data["clubtagtimestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
@@ -494,69 +498,52 @@ class Player:
             else None
         )
 
-        player_meta = (
-            player_data["meta"]
-            if "meta" in player_data and isinstance(player_data["meta"], PlayerMetaInfo)
-            else PlayerMetaInfo._from_dict(player_data["meta"])
-            if "meta" in player_data
-            else PlayerMetaInfo._from_dict(dict())
-        )
+        # Parsing Meta
+        if player_data.get("meta") is not None:
+            if isinstance(player_data["meta"], PlayerMetaInfo):
+                player_meta = player_data.get("meta")
+            else:
+                player_meta = PlayerMetaInfo._from_dict(player_data.get("meta"))
+        else:
+            player_meta = PlayerMetaInfo._from_dict(dict())
 
-        player_trophies = (
-            PlayerTrophies._from_dict(
-                player_data["trophies"],
-                player_data["accountid"]
-                if "accountid" in player_data
-                else player_data["player_id"]
-                if "player_id" in player_data
-                else None,
+        # Parsing Trophies
+        player_trophies = player_data.get("trophies")
+        if player_trophies is not None:
+            player_trophies = PlayerTrophies._from_dict(
+                player_trophies,
+                player_data.get("accountid", player_data.get("player_id")),
             )
-            if "trophies" in player_data
-            and not isinstance(player_data["trophies"], NoneType)
-            else None
-        )
-        player_zone = (
-            PlayerZone._parse_zones(
-                player_data["trophies"]["zone"],
-                player_data["trophies"]["zonepositions"],
+
+        # Parsing Zones
+        if (
+            player_trophies is not None
+            and player_data.get("trophies").get("zone") is not None
+        ):
+            player_zone = PlayerZone._parse_zones(
+                player_data.get("trophies").get("zone"),
+                player_data.get("trophies").get("zonepositions"),
             )
-            if "trophies" in player_data
-            and not isinstance(player_data["trophies"], NoneType)
-            and "zone" in player_data["trophies"]
-            and not isinstance(player_data["trophies"]["zone"], NoneType)
-            else None
+        else:
+            player_zone = False
+
+        # Parsing player id
+        player_id = player_data.get(
+            "accountid", player_data.get("id", player_data.get("playerid", None))
         )
 
-        player_id = (
-            player_data["accountid"]
-            if "accountid" in player_data
-            else player_data["id"]
-            if "id" in player_data
-            else player_data["playerid"]
-            if "playerid" in player_data
-            else None
-        )
-
+        # Parsing Matchmaking
         matchmaking = (
             PlayerMatchmaking._from_dict(player_data["matchmaking"], player_id)
             if "matchmaking" in player_data
             else [None, None]
         )
 
-        club_tag = (
-            player_data["clubtag"]
-            if "clubtag" in player_data
-            else player_data["tag"]
-            if "tag" in player_data
-            else None
-        )
-        name = (
-            player_data["displayname"]
-            if "displayname" in player_data
-            else player_data["name"]
-            if "name" in player_data
-            else None
-        )
+        # Parsing Club Tag
+        club_tag = player_data.get("clubtag", player_data.get("tag", None))
+
+        # Parsing Name
+        name = player_data.get("displayname", player_data.get("name", None))
 
         return {
             "club_tag": club_tag,
