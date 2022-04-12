@@ -1,4 +1,5 @@
-"""Trackmania.io API Wrapper
+"""
+Trackmania.io API Wrapper
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A wrapper for Trackmania.io api service.
