@@ -97,12 +97,13 @@ class Leaderboard:
         The player's club tag
     player_name : str
         The player's name
+    player_id : str
+        .. versionadded :: 0.3.4
+        The player's id
     position : int
         The position of the player in the leaderboard
     time : int
         The time of the player in the leaderboard
-    player : :class:`Player` | :class:`Dict` | :class:`NoneType`, optional
-        The player object of the player
     """
 
     def __init__(
@@ -111,9 +112,9 @@ class Leaderboard:
         ghost: str,
         player_club_tag: str | None,
         player_name: str | None,
+        player_id: str | None,
         position: int,
         time: int,
-        player: Player | Dict | None = None,
     ):
         self.timestamp = timestamp
         self.ghost = ghost
@@ -121,21 +122,21 @@ class Leaderboard:
         self.player_name = player_name
         self.position = position
         self.time = time
-
-        if isinstance(player, Player):
-            self._player = player
-        else:
-            self._player = Player._parse_player(player)
+        self.player_id = player_id
 
     @classmethod
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a Leaderboards class from given dictionary")
 
-        player = Player._parse_player(raw["player"]) if "player" in raw else None
-        player_name = raw["player"]["name"] if "player" in raw else None
-        player_club_tag = (
-            raw["player"]["tag"] if "player" in raw and "tag" in raw["player"] else None
-        )
+        if "player" in raw:
+            player_id = raw["player"]["id"]
+            player_name = raw["player"]["name"]
+            player_club_tag = raw["player"]["tag"] if "tag" in raw["player"] else None
+        else:
+            player_id = None
+            player_name = None
+            player_club_tag = None
+
         position = raw["position"]
         time = raw["time"]
         ghost = raw["url"]
@@ -148,12 +149,24 @@ class Leaderboard:
             player_name=player_name,
             position=position,
             time=time,
-            player=player,
+            player_id=player_id,
         )
 
-    @property
-    def player(self) -> Player:
-        return self._player
+    async def get_player(self) -> Player:
+        """
+        .. versionadded :: 0.3.4
+
+        Gets the player who achieved the leaderboard.
+
+        Returns
+        -------
+        :class:`Player`
+            The player obj, None if the player_id does not exist.
+        """
+        if self.player_id is None:
+            return None
+
+        return await Player.get(self.player_id)
 
 
 class TMMap:
