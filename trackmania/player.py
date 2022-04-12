@@ -494,12 +494,6 @@ class Player:
             else None
         )
 
-        # player_meta = (
-        #     PlayerMetaInfo._from_dict(player_data["meta"])
-        #     if "meta" in player_data
-        #     else PlayerMetaInfo._from_dict(dict())
-        # )
-
         player_meta = (
             player_data["meta"]
             if "meta" in player_data and isinstance(player_data["meta"], PlayerMetaInfo)
