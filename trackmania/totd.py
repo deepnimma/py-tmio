@@ -1,11 +1,11 @@
 import json
 import logging
 from contextlib import suppress
-from datetime import datetime, tzinfo
-from time import timezone
+from datetime import datetime
 from typing import Dict
 
 import redis
+from typing_extensions import Self
 
 from trackmania.errors import InvalidTOTDDate, TMIOException
 
@@ -99,8 +99,8 @@ class TOTD:
         """TMMap Property"""
         return self._mapobj
 
-    @staticmethod
-    async def get(date: datetime):
+    @classmethod
+    async def get_totd(cls: Self, date: datetime) -> Self:
         """
         .. versionadded :: 0.3.0
 
@@ -124,7 +124,7 @@ class TOTD:
                 _log.debug(
                     f"Found TOTD for date {date.day}:{date.month}:{date.year} in cache"
                 )
-                return TOTD._from_dict(
+                return cls._from_dict(
                     json.loads(
                         cache_client.get(
                             f"totd:{date.year}:{date.month}:{date.day}"
@@ -161,10 +161,10 @@ class TOTD:
                 f"totd:{date.year}:{date.month}:{date.day}", json.dumps(totd)
             )
 
-        return TOTD._from_dict(totd)
+        return cls._from_dict(totd)
 
-    @staticmethod
-    async def latest_totd():
+    @classmethod
+    async def latest_totd(cls: Self) -> Self:
         """
         Gets the latest totd.
 
@@ -176,6 +176,6 @@ class TOTD:
         today = datetime.utcnow()
 
         if today.hour > 17 and today.minute > 0:
-            return await TOTD.get(datetime.utcnow())
+            return await cls.get_totd(datetime.utcnow())
         else:
-            return await TOTD.get(datetime(today.year, today.month, today.day - 1))
+            return await cls.get_totd(datetime(today.year, today.month, today.day - 1))

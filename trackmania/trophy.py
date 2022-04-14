@@ -6,6 +6,7 @@ from types import NoneType
 from typing import Dict, List
 
 import redis
+from typing_extensions import Self
 
 from ._util import _add_commas
 from .api import _APIClient
@@ -54,7 +55,7 @@ class PlayerTrophies:
         self._player_id = player_id
 
     @classmethod
-    def _from_dict(cls, raw_trophy_data: Dict, player_id: str):
+    def _from_dict(cls: Self, raw_trophy_data: Dict, player_id: str) -> Self:
         """
         Creates a :class:`PlayerTrophies` object from the given dictionary.
 

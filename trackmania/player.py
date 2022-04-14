@@ -6,6 +6,7 @@ from types import NoneType
 from typing import Dict, List
 
 import redis
+from typing_extensions import Self
 
 from .api import _APIClient
 from .config import Client
@@ -136,7 +137,7 @@ class PlayerZone:
         self.rank = rank
 
     @classmethod
-    def _parse_zones(cls, zones: Dict, zone_positions: List[int]) -> List:
+    def _parse_zones(cls: Self, zones: Dict, zone_positions: List[int]) -> List[Self]:
         """
           .. versionadded :: 0.1.0
 
@@ -211,7 +212,7 @@ class PlayerSearchResult:
         self.royal = royal
 
     @classmethod
-    def _from_dict(cls, player_data: Dict):
+    def _from_dict(cls: Self, player_data: Dict) -> Self:
         _log.debug("Creating a PlayerSearchResult class from given dictionary")
 
         zone = (
@@ -288,7 +289,7 @@ class Player:
 
     def __str__(self):
         """String representation of the class."""
-        return f"Player: {self.name} ({self.name})"
+        return f"Player: {self.name} ({self.player_id})"
 
     @property
     def first_login(self):
@@ -301,7 +302,7 @@ class Player:
         return self._id
 
     @classmethod
-    async def get(cls, player_id: str):
+    async def get_player(cls: Self, player_id: str) -> Self:
         """
         .. versionadded :: 0.1.0
 
@@ -373,7 +374,6 @@ class Player:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(search_result["error"])
 
         if len(search_result) == 0:

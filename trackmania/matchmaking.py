@@ -5,7 +5,6 @@ from datetime import datetime
 from typing import Dict, List
 
 import redis
-from pyparsing import match_previous_expr
 
 from .api import _APIClient
 from .config import Client

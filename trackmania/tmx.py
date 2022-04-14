@@ -1,7 +1,6 @@
 import json
 import logging
 from contextlib import suppress
-from curses import meta
 from datetime import datetime
 from typing import Dict, List
 
@@ -70,7 +69,7 @@ class TMXMapTimes:
         self.updated = updated
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a TMXMapTimes from given dictionary")
 
         uploaded_raw, updated_raw = raw.get("UploadedAt"), raw.get("UpdatedAt")
@@ -153,7 +152,7 @@ class GbxFileMetadata:
         self.vehicle_name = vehicle_name
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a GbxFileMetadata from given dictionary")
 
         args = [
@@ -192,7 +191,7 @@ class TMXTags:
         self.map_tags = map_tags
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a TMXTags from given dictionary")
 
         map_tags_ss = raw.get("tags").split(",")
@@ -238,7 +237,7 @@ class ReplayWRData:
         self.wr_username = wr_username
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a ReplayWRData from given dictionary")
 
         args = [
@@ -330,7 +329,7 @@ class TMXMetadata:
         self.video_count = video_count
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a TMXMetaData from given dictionary")
 
         args = [

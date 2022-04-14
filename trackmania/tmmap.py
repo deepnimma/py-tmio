@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Dict, List
 
 import redis
+from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
@@ -125,7 +126,7 @@ class Leaderboard:
         self.player_id = player_id
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a Leaderboards class from given dictionary")
 
         if "player" in raw:
@@ -253,7 +254,7 @@ class TMMap:
         return self._lb_loaded
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a Map class from given dictionary")
 
         author_id = raw.get("author")
@@ -295,8 +296,8 @@ class TMMap:
             url,
         )
 
-    @staticmethod
-    async def get(map_uid: str):
+    @classmethod
+    async def get_map(cls: Self, map_uid: str) -> Self:
         """
         .. versionadded :: 0.3.0
 
@@ -314,7 +315,7 @@ class TMMap:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"map:{map_uid}"):
                 _log.debug(f"Map {map_uid} found in cache")
-                return TMMap._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
+                return cls._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
 
         api_client = _APIClient()
         map_data = await api_client.get(_TMIO.build([_TMIO.TABS.MAP, map_uid]))
@@ -327,7 +328,7 @@ class TMMap:
             _log.debug(f"Caching map {map_uid}")
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
 
-        return TMMap._from_dict(map_data)
+        return cls._from_dict(map_data)
 
     async def author(self) -> Player:
         """
