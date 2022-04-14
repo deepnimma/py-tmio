@@ -136,12 +136,12 @@ class PlayerMatchmakingResult:
     def _from_dict(cls, data: Dict, player_id: str = None):
         _log.debug("Creating a PlayerMatchmakingResult class from given dictionary")
 
-        after_score = data["afterscore"]
-        leave = data["leave"]
-        live_id = data["lid"]
-        mvp = data["mvp"]
-        start_time = datetime.strptime(data["starttime"], "%Y-%m-%dT%H:%M:%SZ")
-        win = data["win"]
+        after_score = data.get("afterscore")
+        leave = data.get("leave")
+        live_id = data.get("lid")
+        mvp = data.get("mvp")
+        start_time = datetime.strptime(data.get("startime"), "%Y-%m-%dT%H:%M:%SZ")
+        win = data.get("win")
 
         args = [after_score, leave, live_id, mvp, player_id, start_time, win]
 
@@ -213,7 +213,7 @@ class PlayerMatchmaking:
         self.score = score
         self.progression = progression
         self.division = division
-        self.division_str = MATCHMAKING_STRING[division]
+        self.division_str = MATCHMAKING_STRING.get(division)
         self._min_points = min_points
         self._max_points = 1 if max_points == 0 else max_points
         self.player_id = player_id
@@ -249,14 +249,15 @@ class PlayerMatchmaking:
         if len(mm_data) == 0:
             matchmaking_data.extend([None, None])
         elif len(mm_data) == 1:
+            mm_obj = PlayerMatchmaking.__parse_3v3(mm_data.get(0))
             matchmaking_data.extend(
-                [PlayerMatchmaking.__parse_3v3(mm_data[0], player_id), None]
+                [mm_obj, None] if mm_obj.type_id == 2 else [None, mm_obj]
             )
         else:
             matchmaking_data.extend(
                 [
-                    PlayerMatchmaking.__parse_3v3(mm_data[0], player_id),
-                    PlayerMatchmaking.__parse_3v3(mm_data[1], player_id),
+                    PlayerMatchmaking.__parse_3v3(mm_data.get(0), player_id),
+                    PlayerMatchmaking.__parse_3v3(mm_data.get(1), player_id),
                 ]
             )
 
@@ -281,23 +282,16 @@ class PlayerMatchmaking:
         )
 
         if "info" in data:
-            type_name = data["info"]["typename"]
-            type_id = data["info"]["typeid"]
-            progression = data["info"]["progression"]
-            rank = data["info"]["rank"]
-            score = data["info"]["score"]
-            division = data["info"]["division"]["position"]
-            min_points = data["info"]["division"]["minpoints"]
-            max_points = data["info"]["division"]["maxpoints"]
-        else:
-            type_name = data["typename"]
-            type_id = data["typeid"]
-            progression = data["progression"]
-            rank = data["rank"]
-            score = data["score"]
-            division = data["division"]["position"]
-            min_points = data["division"]["minpoints"]
-            max_points = data["division"]["maxpoints"]
+            data = data.get("info")
+
+        type_name = data.get("typename")
+        type_id = data.get("typeid")
+        progression = data.get("progression")
+        rank = data.get("rank")
+        score = data.get("score")
+        division = data.get("division").get("position")
+        min_points = data.get("division").get("minpoints")
+        max_points = data.get("division").get("maxpoints")
 
         args = [
             type_name,
@@ -418,4 +412,4 @@ class PlayerMatchmaking:
                 f"top_matchmaking:{page}:{royal}", json.dumps(match_history), ex=3600
             )
 
-        return match_history["ranks"]
+        return match_history.get("ranks")
