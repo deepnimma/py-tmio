@@ -20,33 +20,42 @@ __all__ = (
 )
 
 
+async def _get_top_matchmaking(page: int = 0, royal: bool = False):
+    _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
+
+    cache_client = Client._get_cache_client()
+
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        if cache_client.exists(f"top_matchmaking:{page}:{royal}"):
+            _log.debug(f"Found top matchmaking players for page {page} in cache")
+            return json.loads(
+                cache_client.get(f"top_matchmaking:{page}:{royal}").decode("utf-8")
+            ).get("ranks")
+    api_client = _APIClient()
+
+    if not royal:
+        match_history = await api_client.get(
+            _TMIO.build([_TMIO.TABS.TOP_MATCHMAKING, str(page)])
+        )
+    else:
+        match_history = await api_client.get(
+            _TMIO.build([_TMIO.TABS.TOP_ROYAL, str(page)])
+        )
+
+    await api_client.close()
+
+    with suppress(KeyError, TypeError):
+        raise TMIOException(match_history["error"])
+    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        _log.debug(f"Caching top matchmaking players for page {page}")
+        cache_client.set(
+            f"top_matchmaking:{page}:{royal}", json.dumps(match_history), ex=3600
+        )
+
+    return match_history.get("ranks")
+
+
 async def _get_history(player_id: str, type_id: int, page: int) -> List[Dict]:
-    """
-    .. versionadded :: 0.4.0
-
-    Gets a one-page history of a player's matchmaking results.
-
-    Parameters
-    ----------
-    player_id : str
-        The player's id to get the history for.
-    type_id : int
-        The matchmaking id. 2 is for 3v3 and 3 is for royal.
-    page : int
-        The page of results to get.
-
-    Returns
-    -------
-    :class:`List[Dict]`
-        A list of matchmaking results.
-
-    Raises
-    ------
-    InvalidIDError
-        If the player_id passed was `None`.
-    TMIOException
-        If the request failed.
-    """
     if player_id is None:
         raise InvalidIDError("Player ID is not set.")
 
@@ -380,36 +389,4 @@ class PlayerMatchmaking:
         :class:`List[Dict]`
             The top matchmaking players by score. Each page contains 50 players.
         """
-        _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
-
-        cache_client = Client._get_cache_client()
-
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"top_matchmaking:{page}:{royal}"):
-                _log.debug(f"Found top matchmaking players for page {page} in cache")
-                return json.loads(
-                    cache_client.get(f"top_matchmaking:{page}:{royal}").decode("utf-8")
-                )["ranks"]
-        api_client = _APIClient()
-
-        if not royal:
-            match_history = await api_client.get(
-                _TMIO.build([_TMIO.TABS.TOP_MATCHMAKING, str(page)])
-            )
-        else:
-            match_history = await api_client.get(
-                _TMIO.build([_TMIO.TABS.TOP_ROYAL, str(page)])
-            )
-
-        await api_client.close()
-
-        with suppress(KeyError, TypeError):
-
-            raise TMIOException(match_history["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching top matchmaking players for page {page}")
-            cache_client.set(
-                f"top_matchmaking:{page}:{royal}", json.dumps(match_history), ex=3600
-            )
-
-        return match_history.get("ranks")
+        return await _get_top_matchmaking(page, royal)
