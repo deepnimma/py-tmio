@@ -30,7 +30,7 @@ async def _get_ad_list() -> List[Dict]:
         if cache_client.exists("ads"):
             _log.debug("Found all ads in cache")
             ads = json.loads(cache_client.get("ads").decode("utf-8"))
-            for ad_dict in ads["ads"]:
+            for ad_dict in ads.get("ads"):
                 ad_list.append(ad_dict)
             return ad_list
 
@@ -44,7 +44,7 @@ async def _get_ad_list() -> List[Dict]:
         _log.debug("Caching all ads for 12hours")
         cache_client.set("ads", json.dumps(all_ads), ex=43200)
 
-    for ad_dict in all_ads["ads"]:
+    for ad_dict in all_ads.get("ads"):
         ad_list.append(ad_dict)
 
     return ad_list
@@ -102,15 +102,15 @@ class Ad:
 
     @classmethod
     def _from_dict(cls: Self, raw: Dict) -> Self:
-        uid = raw["uid"]
-        name = raw["name"]
-        type = raw["type"]
-        url = raw["url"]
-        img2x3 = raw["img2x3"]
-        img16x9 = raw["img16x9"]
-        img64x10 = raw["img64x10"]
-        media = raw["media"]
-        display_format = raw["displayformat"]
+        uid = raw.get("uid")
+        name = raw.get("name")
+        type = raw.get("type")
+        url = raw.get("url")
+        img2x3 = raw.get("img2x3")
+        img16x9 = raw.get("img16x9")
+        img64x10 = raw.get("img64x10")
+        media = raw.get("media")
+        display_format = raw.get("displayformat")
 
         args = [uid, name, type, url, img2x3, img16x9, img64x10, media, display_format]
         return cls(*args)
