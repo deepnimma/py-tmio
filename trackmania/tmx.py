@@ -1,10 +1,12 @@
 import json
 import logging
 from contextlib import suppress
+from curses import meta
 from datetime import datetime
 from typing import Dict, List
 
 import redis
+from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
@@ -23,6 +25,50 @@ __all__ = (
     "TMXMetadata",
     "TMXMap",
 )
+
+
+async def _get_map(tmx_id: int) -> Dict:
+    """
+    .. versionadded :: 0.4.0
+
+    Get's a map from TMX Api with it's TMX ID
+
+    Parameters
+    ----------
+    tmx_id : int
+        The id for the map
+
+    Returns
+    -------
+    `Dict`
+        The map data
+
+    Raises
+    ------
+    InvalidTMXCode
+        If the map does not exist
+    """
+    _log.info(f"Getting map data for tmx id {tmx_id}")
+
+    cache_client = Client._get_cache_client()
+    with suppress(ConnectionError, redis.exceptions.ConnectionError):
+        if cache_client.exists(f"tmxmap:{tmx_id}"):
+            _log.debug(f"Found map data for tmx id {tmx_id} in cache")
+            return json.loads(cache_client.get(f"tmxmap:{tmx_id}").decode("utf-8"))
+
+    api_client = _APIClient()
+    map_data = await api_client.get(
+        _TMX.build([_TMX.TABS.MAPS, _TMX.TABS.GET_MAP_INFO, _TMX.TABS.ID, tmx_id])
+    )
+    await api_client.close()
+
+    if not isinstance(map_data, dict):
+        raise InvalidTMXCode("Invalid TMX code")
+    with suppress(ConnectionError, redis.exceptions.ConnectionError):
+        _log.debug(f"Caching map data for tmx id {tmx_id}")
+        cache_client.set(f"tmxmap:{tmx_id}", json.dumps(map_data))
+
+    return map_data
 
 
 class TMXMapTimes:
@@ -130,37 +176,24 @@ class GbxFileMetadata:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a GbxFileMetadata from given dictionary")
 
-        gbx_map_name = raw.get("GbxMapName")
-        author_login = raw.get("AuthorLogin")
-        map_type = raw.get("MapType")
-        title_pack = raw.get("TitlePack")
-        track_uid = raw.get("TrackUID")
-        mood = raw.get("Mood")
-        display_cost = raw.get("DisplayCost")
-        mod_name = raw.get("ModName")
-        light_map = raw.get("Lightmap")
-        exe_version = raw.get("ExeVersion")
-        exe_build = datetime.strptime(raw.get("ExeBuild"), "%Y-%m-%d_%H_%M")
-        author_time = raw.get("AuthorTime")
-        environment_name = raw.get("EnvironmentName")
-        vehicle_name = raw.get("VehicleName")
+        args = [
+            raw.get("GbxMapName"),
+            raw.get("AuthorLogin"),
+            raw.get("MapType"),
+            raw.get("TitlePack"),
+            raw.get("TrackUID"),
+            raw.get("Mood"),
+            raw.get("DisplayCost"),
+            raw.get("ModName"),
+            raw.get("Lightmap"),
+            raw.get("ExeVersion"),
+            datetime.strptime(raw.get("ExeBuild"), "%Y-%m-%d_%H_%M"),
+            raw.get("AuthorTime"),
+            raw.get("EnvironmentName"),
+            raw.get("VehicleName"),
+        ]
 
-        return cls(
-            gbx_map_name=gbx_map_name,
-            author_login=author_login,
-            map_type=map_type,
-            title_pack=title_pack,
-            track_uid=track_uid,
-            mood=mood,
-            display_cost=display_cost,
-            mod_name=mod_name,
-            light_map=light_map,
-            exe_version=exe_version,
-            exe_build=exe_build,
-            author_time=author_time,
-            environment_name=environment_name,
-            vehicle_name=vehicle_name,
-        )
+        return cls(*args)
 
 
 class TMXTags:
@@ -228,12 +261,14 @@ class ReplayWRData:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a ReplayWRData from given dictionary")
 
-        return cls(
+        args = [
             raw.get("ReplayWRId"),
             raw.get("ReplayWRTime"),
             raw.get("ReplayWRUserID"),
             raw.get("ReplayWRUsername"),
-        )
+        ]
+
+        return cls(*args)
 
 
 class TMXMetadata:
@@ -318,41 +353,26 @@ class TMXMetadata:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a TMXMetaData from given dictionary")
 
-        unlisted = raw.get("Unlisted")
-        unreleased = raw.get("Unreleased")
-        downloadable = raw.get("Downloadable")
-        rating_vote_count = raw.get("RatingVoteCount")
-        rating_vote_average = raw.get("RatingVoteAverage")
-        has_screenshot = raw.get("HasScreenshot")
-        has_thumbnail = raw.get("HasThumbnail")
-        has_ghost_blocks = raw.get("HasGhostBlocks")
-        embedded_objects_count = raw.get("EmbeddedObjectsCount")
-        embedded_items_size = raw.get("EmbeddedItemsSize")
-        size_warning = raw.get("SizeWarning")
-        replay_count = raw.get("ReplayCount")
-        award_count = raw.get("AwardCount")
-        comment_count = raw.get("CommentCount")
-        image_count = raw.get("ImageCount")
-        video_count = raw.get("VideoCount")
+        args = [
+            raw.get("Unlisted"),
+            raw.get("Unreleased"),
+            raw.get("Downloadable"),
+            raw.get("RatingVoteCount"),
+            raw.get("RatingVoteAverage"),
+            raw.get("HasScreenshot"),
+            raw.get("HasThumbnail"),
+            raw.get("HasGhostBlocks"),
+            raw.get("EmbeddedObjectsCount"),
+            raw.get("EmbeddedItemsSize"),
+            raw.get("SizeWarning"),
+            raw.get("ReplayCount"),
+            raw.get("AwardCount"),
+            raw.get("CommentCount"),
+            raw.get("ImageCount"),
+            raw.get("VideoCount"),
+        ]
 
-        return cls(
-            unlisted,
-            unreleased,
-            downloadable,
-            rating_vote_count,
-            rating_vote_average,
-            has_screenshot,
-            has_thumbnail,
-            has_ghost_blocks,
-            embedded_objects_count,
-            embedded_items_size,
-            size_warning,
-            replay_count,
-            award_count,
-            comment_count,
-            image_count,
-            video_count,
-        )
+        return cls(*args)
 
 
 class TMXMap:
@@ -426,7 +446,7 @@ class TMXMap:
         self.metadata = metadata
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a TMXMap from given dictionary")
 
         username = raw.get("Username")
@@ -444,7 +464,7 @@ class TMXMap:
         replay_wr_data = ReplayWRData._from_dict(raw)
         metadata = TMXMetadata._from_dict(raw)
 
-        return cls(
+        args = [
             username,
             track_id,
             map_id,
@@ -459,10 +479,12 @@ class TMXMap:
             tags,
             replay_wr_data,
             metadata,
-        )
+        ]
 
-    @staticmethod
-    async def get(tmx_id: int):
+        return cls(*args)
+
+    @classmethod
+    async def get_map(cls: Self, tmx_id: int) -> Self:
         """
         Gets a map's data using it's tmx id
 
@@ -471,26 +493,5 @@ class TMXMap:
         tmx_id : int
             The tmx id
         """
-        _log.info(f"Getting map data for tmx id {tmx_id}")
-
-        cache_client = Client._get_cache_client()
-        with suppress(ConnectionError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"tmxmap:{tmx_id}"):
-                _log.debug(f"Found map data for tmx id {tmx_id} in cache")
-                return TMXMap._from_dict(
-                    json.loads(cache_client.get(f"tmxmap:{tmx_id}").decode("utf-8"))
-                )
-
-        api_client = _APIClient()
-        map_data = await api_client.get(
-            _TMX.build([_TMX.TABS.MAPS, _TMX.TABS.GET_MAP_INFO, _TMX.TABS.ID, tmx_id])
-        )
-        await api_client.close()
-
-        if not isinstance(map_data, dict):
-            raise InvalidTMXCode("Invalid TMX code")
-        with suppress(ConnectionError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching map data for tmx id {tmx_id}")
-            cache_client.set(f"tmxmap:{tmx_id}", json.dumps(map_data))
-
-        return TMXMap._from_dict(map_data)
+        tmx_map_data = await _get_map(tmx_id)
+        return cls._from_dict(tmx_map_data)
