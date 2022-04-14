@@ -2,7 +2,6 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from sys import api_version
 from typing import Dict, List
 
 import redis
