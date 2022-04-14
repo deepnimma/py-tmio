@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Dict, List
 
 import redis
+from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
@@ -125,22 +126,22 @@ class Leaderboard:
         self.player_id = player_id
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a Leaderboards class from given dictionary")
 
         if "player" in raw:
-            player_id = raw["player"]["id"]
-            player_name = raw["player"]["name"]
-            player_club_tag = raw["player"]["tag"] if "tag" in raw["player"] else None
+            player_id = raw.get("player").get("id")
+            player_name = raw.get("player").get("name")
+            player_club_tag = raw.get("player").get("tag", None)
         else:
             player_id = None
             player_name = None
             player_club_tag = None
 
-        position = raw["position"]
-        time = raw["time"]
-        ghost = raw["url"]
-        timestamp = datetime.strptime(raw["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
+        position = raw.get("position")
+        time = raw.get("time")
+        ghost = raw.get("url")
+        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
 
         return cls(
             timestamp=timestamp,
@@ -253,26 +254,29 @@ class TMMap:
         return self._lb_loaded
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a Map class from given dictionary")
 
-        author_id = raw["author"]
-        author_name = raw["authorplayer"]["name"]
-        environment = raw["collectionName"]
-        exchange_id = raw["exchangeid"] if "exchangeid" in raw else None
-        file_name = raw["filename"]
-        map_id = raw["mapId"]
+        author_id = raw.get("author")
+        author_name = raw.get("authorplayer").get("name")
+        environment = raw.get("collectionName")
+        exchange_id = raw.get("exchangeid", None)
+        file_name = raw.get("filename")
+        map_id = raw.get("mapId")
         leaderboard = None
         medal_time = MedalTimes(
-            raw["bronzeScore"], raw["silverScore"], raw["goldScore"], raw["authorScore"]
+            raw.get("bronzeScore"),
+            raw.get("silverScore"),
+            raw.get("goldScore"),
+            raw.get("authorScore"),
         )
-        name = raw["name"]
-        submitter_id = raw["submitter"]
-        submitter_name = raw["submitterplayer"]["name"]
-        thumbnail = raw["thumbnailUrl"]
-        uid = raw["mapUid"]
-        uploaded = datetime.strptime(raw["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
-        url = raw["fileUrl"]
+        name = raw.get("name")
+        submitter_id = raw.get("submitter")
+        submitter_name = raw.get("submitterplayer").get("name")
+        thumbnail = raw.get("thumbnailUrl")
+        uid = raw.get("mapUid")
+        uploaded = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
+        url = raw.get("fileUrl")
 
         return cls(
             author_id,
@@ -292,8 +296,8 @@ class TMMap:
             url,
         )
 
-    @staticmethod
-    async def get(map_uid: str):
+    @classmethod
+    async def get_map(cls: Self, map_uid: str) -> Self:
         """
         .. versionadded :: 0.3.0
 
@@ -311,7 +315,7 @@ class TMMap:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"map:{map_uid}"):
                 _log.debug(f"Map {map_uid} found in cache")
-                return TMMap._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
+                return cls._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
 
         api_client = _APIClient()
         map_data = await api_client.get(_TMIO.build([_TMIO.TABS.MAP, map_uid]))
@@ -324,7 +328,7 @@ class TMMap:
             _log.debug(f"Caching map {map_uid}")
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
 
-        return TMMap._from_dict(map_data)
+        return cls._from_dict(map_data)
 
     async def author(self) -> Player:
         """

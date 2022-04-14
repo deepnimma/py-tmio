@@ -6,6 +6,7 @@ from types import NoneType
 from typing import Dict, List
 
 import redis
+from typing_extensions import Self
 
 from .api import _APIClient
 from .config import Client
@@ -100,20 +101,16 @@ class PlayerMetaInfo:
         _log.debug(f"Creating a PlayerMetaInfo class from the given dictionary.")
 
         return cls(
-            display_url=meta_data["display_url"]
-            if "display_url" in meta_data
-            else None,
-            in_nadeo=meta_data["nadeo"] if "nadeo" in meta_data else False,
-            in_tmgl=meta_data["tmgl"] if "tmgl" in meta_data else False,
-            in_tmio_dev_team=meta_data["team"] if "team" in meta_data else False,
-            is_sponsor=meta_data["sponsor"] if "sponsor" in meta_data else False,
-            sponsor_level=meta_data["sponsor_level"]
-            if "sponsor_level" in meta_data
-            else 0,
-            twitch=meta_data["twitch"] if "twitch" in meta_data else None,
-            twitter=meta_data["twitter"] if "twitter" in meta_data else None,
-            youtube=meta_data["youtube"] if "youtube" in meta_data else None,
-            vanity=meta_data["vanity"] if "vanity" in meta_data else None,
+            display_url=meta_data.get("displayurl"),
+            in_nadeo=meta_data.get("nadeo", False),
+            in_tmgl=meta_data.get("tmgl", False),
+            in_tmio_dev_team=meta_data.get("team", False),
+            is_sponsor=meta_data.get("sponsor", False),
+            sponsor_level=meta_data.get("sponsor_level", 0),
+            twitch=meta_data.get("twitch"),
+            twitter=meta_data.get("twitter"),
+            youtube=meta_data.get("youtube"),
+            vanity=meta_data.get("vanity"),
         )
 
 
@@ -140,7 +137,7 @@ class PlayerZone:
         self.rank = rank
 
     @classmethod
-    def _parse_zones(cls, zones: Dict, zone_positions: List[int]) -> List:
+    def _parse_zones(cls: Self, zones: Dict, zone_positions: List[int]) -> List[Self]:
         """
           .. versionadded :: 0.1.0
 
@@ -215,7 +212,7 @@ class PlayerSearchResult:
         self.royal = royal
 
     @classmethod
-    def _from_dict(cls, player_data: Dict):
+    def _from_dict(cls: Self, player_data: Dict) -> Self:
         _log.debug("Creating a PlayerSearchResult class from given dictionary")
 
         zone = (
@@ -223,15 +220,11 @@ class PlayerSearchResult:
             if "zone" in player_data
             else None
         )
-        club_tag = (
-            player_data["player"]["club_tag"]
-            if "club_tag" in player_data["player"]
-            else None
-        )
-        name = player_data["player"]["name"]
-        player_id = player_data["player"]["id"]
+        club_tag = player_data.get("player").get("club_tag", None)
+        name = player_data.get("player").get("name")
+        player_id = player_data.get("player").get("id")
         matchmaking = PlayerMatchmaking._from_dict(
-            player_data["matchmaking"], player_id
+            player_data.get("matchmaking"), player_id
         )
 
         return cls(club_tag, name, player_id, zone, matchmaking[0], matchmaking[1])
@@ -296,7 +289,7 @@ class Player:
 
     def __str__(self):
         """String representation of the class."""
-        return f"Player: {self.name} ({self.name})"
+        return f"Player: {self.name} ({self.player_id})"
 
     @property
     def first_login(self):
@@ -309,7 +302,7 @@ class Player:
         return self._id
 
     @classmethod
-    async def get(cls, player_id: str):
+    async def get_player(cls: Self, player_id: str) -> Self:
         """
         .. versionadded :: 0.1.0
 
@@ -381,7 +374,6 @@ class Player:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(search_result["error"])
 
         if len(search_result) == 0:

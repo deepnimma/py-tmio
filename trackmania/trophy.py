@@ -6,7 +6,9 @@ from types import NoneType
 from typing import Dict, List
 
 import redis
+from typing_extensions import Self
 
+from ._util import _add_commas
 from .api import _APIClient
 from .config import Client
 from .constants import _TMIO
@@ -53,7 +55,7 @@ class PlayerTrophies:
         self._player_id = player_id
 
     @classmethod
-    def _from_dict(cls, raw_trophy_data: Dict, player_id: str):
+    def _from_dict(cls: Self, raw_trophy_data: Dict, player_id: str) -> Self:
         """
         Creates a :class:`PlayerTrophies` object from the given dictionary.
 
@@ -71,12 +73,12 @@ class PlayerTrophies:
         _log.debug("Creating a PlayerTrophies class from the given dictionary.")
 
         return cls(
-            echelon=raw_trophy_data["echelon"],
+            echelon=raw_trophy_data.get("echelon"),
             last_change=datetime.strptime(
-                raw_trophy_data["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
+                raw_trophy_data.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00"
             ),
-            points=raw_trophy_data["points"],
-            trophies=raw_trophy_data["counts"],
+            points=raw_trophy_data.get("points"),
+            trophies=raw_trophy_data.get("counts"),
             player_id=player_id,
         )
 
@@ -136,6 +138,15 @@ class PlayerTrophies:
         _log.debug(f"Score of {self.player_id} is {score}")
 
         return score
+
+    def __str__(self) -> str:
+        trophy_str = ""
+        for i, trophyd in enumerate(self.trophies):
+            trophy_str = trophy_str + f"T{i + 1} - " + _add_commas(trophyd) + "\n"
+
+        trophy_str = trophy_str + f"\nTotal Trophies: {_add_commas(self.score())}"
+
+        return trophy_str
 
     async def history(self, page: int = 0) -> Dict:
         """
