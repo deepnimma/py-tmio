@@ -28,26 +28,6 @@ __all__ = (
 
 
 async def _get_map(tmx_id: int) -> Dict:
-    """
-    .. versionadded :: 0.4.0
-
-    Get's a map from TMX Api with it's TMX ID
-
-    Parameters
-    ----------
-    tmx_id : int
-        The id for the map
-
-    Returns
-    -------
-    `Dict`
-        The map data
-
-    Raises
-    ------
-    InvalidTMXCode
-        If the map does not exist
-    """
     _log.info(f"Getting map data for tmx id {tmx_id}")
 
     cache_client = Client._get_cache_client()

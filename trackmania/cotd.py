@@ -27,30 +27,6 @@ __all__ = (
 
 
 async def _get_trophy_page(player_id: str, page: int) -> Dict:
-    """
-    .. versionadded :: 0.4.0
-
-    Gets the trophy page of a certain player.
-
-    Parameters
-    ----------
-    player_id : str
-        The player's id
-    page : int
-        The page of trophy history
-
-    Returns
-    -------
-    `Dict`
-        The trophy page
-
-    Raises
-    ------
-    TMIOException
-        If the request failed
-    InvalidIDError
-        If the player id is invalid
-    """
     _log.debug(f"Getting COTD Stats for Player {player_id} and page {page}")
 
     cache_client = Client._get_cache_client()

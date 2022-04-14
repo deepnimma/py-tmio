@@ -19,9 +19,6 @@ __all__ = ("Ad",)
 
 
 async def _get_ad_list() -> List[Dict]:
-    """
-    Gets all ads currently in trackmania.
-    """
     ad_list = []
 
     _log.debug("Getting all ads")
