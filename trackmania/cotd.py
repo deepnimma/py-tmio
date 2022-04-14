@@ -73,18 +73,20 @@ class BestCOTDStats:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a BestCOTDStats class from given dictionary")
 
-        best_rank = raw["bestrank"]
+        best_rank = raw.get("bestrank")
         best_rank_time = datetime.strptime(
-            raw["bestranktime"], "%Y-%m-%dT%H:%M:%S+00:00"
+            raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%S+00:00"
         )
-        best_rank_div_rank = raw["bestrankdivrank"]
-        best_div = raw["bestdiv"]
-        best_div_time = datetime.strptime(raw["bestdivtime"], "%Y-%m-%dT%H:%M:%S+00:00")
-        best_rank_in_div = raw["bestrankindiv"]
+        best_rank_div_rank = raw.get("bestrankdivrank")
+        best_div = raw.get("bestdiv")
+        best_div_time = datetime.strptime(
+            raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%S+00:00"
+        )
+        best_rank_in_div = raw.get("bestrankindiv")
         best_rank_in_div_time = datetime.strptime(
-            raw["bestrankindivtime"], "%Y-%m-%dT%H:%M:%S+00:00"
+            raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%S+00:00"
         )
-        best_rank_in_div_div = raw["bestrankindivdiv"]
+        best_rank_in_div_div = raw.get("bestrankindivdiv")
 
         return cls(
             best_rank,
@@ -150,15 +152,15 @@ class PlayerCOTDStats:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a PlayerCOTDStats class from given dictionary")
 
-        average_div = raw["avgdiv"]
-        average_div_rank = raw["avgdivrank"]
-        average_rank = raw["avgrank"]
-        best_overall = BestCOTDStats._from_dict(raw["bestoverall"])
-        best_primary = BestCOTDStats._from_dict(raw["bestprimary"])
-        div_win_streak = raw["divwinstreak"]
-        total_div_wins = raw["totaldivwins"]
-        total_wins = raw["totalwins"]
-        win_streak = raw["winstreak"]
+        average_div = raw.get("avgdiv")
+        average_div_rank = raw.get("avgdivrank")
+        average_rank = raw.get("avgrank")
+        best_overall = BestCOTDStats._from_dict(raw.get("bestoverall"))
+        best_primary = BestCOTDStats._from_dict(raw.get("bestprimary"))
+        div_win_streak = raw.get("divwinstreak")
+        total_div_wins = raw.get("totaldivwins")
+        total_wins = raw.get("totalwins")
+        win_streak = raw.get("winstreak")
 
         return cls(
             average_div,
@@ -223,17 +225,17 @@ class PlayerCOTDResults:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a PlayerCOTDResults class from given dictionary")
 
-        id = raw["id"]
-        timestamp = datetime.strptime(raw["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
-        name = raw["name"]
-        div = raw["div"]
-        rank = raw["rank"]
-        if raw["divrank"] != 0:
-            div_rank = raw["divrank"]
-            score = raw["score"]
+        id = raw.get("id")
+        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
+        name = raw.get("name")
+        div = raw.get("div")
+        rank = raw.get("rank")
+        if raw.get("divrank") != 0:
+            div_rank = raw.get("divrank")
+            score = raw.get("score")
         else:
             div_rank, score = 0
-        total_players = raw["totalplayers"]
+        total_players = raw.get("totalplayers")
 
         return cls(
             id,
@@ -281,12 +283,12 @@ class PlayerCOTD:
     def _from_dict(cls, page_data: Dict, player_id: str):
         _log.debug("Creating a PlayerCOTD class from given dictionary")
 
-        total = page_data["total"]
-        stats = PlayerCOTDStats._from_dict(page_data["stats"])
+        total = page_data.get("total")
+        stats = PlayerCOTDStats._from_dict(page_data.get("stats"))
         player_id = player_id
 
         recent_results = []
-        for cotd in page_data["cotds"]:
+        for cotd in page_data.get("cotds"):
             recent_results.append(PlayerCOTDResults._from_dict(cotd))
 
         return cls(
@@ -383,11 +385,11 @@ class COTD:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a COTD class from given dictionary")
 
-        cotd_id = raw["id"]
-        name = raw["name"]
-        player_count = raw["players"]
-        start_date = datetime.utcfromtimestamp(raw["starttime"])
-        end_date = datetime.utcfromtimestamp(raw["endtime"])
+        cotd_id = raw.get("id")
+        name = raw.get("name")
+        player_count = raw.get("players")
+        start_date = datetime.utcfromtimestamp(raw.get("starttime"))
+        end_date = datetime.utcfromtimestamp(raw.get("endtime"))
 
         return cls(
             cotd_id,
