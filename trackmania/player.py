@@ -220,10 +220,10 @@ class PlayerSearchResult:
             else None
         )
         club_tag = player_data.get("player").get("club_tag", None)
-        name = player_data["player"]["name"]
-        player_id = player_data["player"]["id"]
+        name = player_data.get("player").get("name")
+        player_id = player_data.get("player").get("id")
         matchmaking = PlayerMatchmaking._from_dict(
-            player_data["matchmaking"], player_id
+            player_data.get("matchmaking"), player_id
         )
 
         return cls(club_tag, name, player_id, zone, matchmaking[0], matchmaking[1])
