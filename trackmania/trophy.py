@@ -7,6 +7,7 @@ from typing import Dict, List
 
 import redis
 
+from ._util import _add_commas
 from .api import _APIClient
 from .config import Client
 from .constants import _TMIO
@@ -136,6 +137,15 @@ class PlayerTrophies:
         _log.debug(f"Score of {self.player_id} is {score}")
 
         return score
+
+    def __str__(self) -> str:
+        trophy_str = ""
+        for i, trophyd in enumerate(self.trophies):
+            trophy_str = trophy_str + f"T{i + 1} - " + _add_commas(trophyd) + "\n"
+
+        trophy_str = trophy_str + f"\nTotal Trophies: {_add_commas(self.score())}"
+
+        return trophy_str
 
     async def history(self, page: int = 0) -> Dict:
         """
