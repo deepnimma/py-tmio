@@ -56,11 +56,11 @@ class TOTD:
 
     @classmethod
     def _from_dict(cls, raw: Dict):
-        campaign_id = raw["campaignid"]
-        mapobj = TMMap._from_dict(raw["map"])
-        week_day = raw["weekday"]
-        month_day = raw["monthday"]
-        leaderboard_uid = raw["leaderboarduid"]
+        campaign_id = raw.get("campaignid")
+        mapobj = TMMap._from_dict(raw.get("map"))
+        week_day = raw.get("weekday")
+        month_day = raw.get("monthday")
+        leaderboard_uid = raw.get("leaderboarduid")
 
         return cls(
             campaign_id,

@@ -129,18 +129,18 @@ class Leaderboard:
         _log.debug("Creating a Leaderboards class from given dictionary")
 
         if "player" in raw:
-            player_id = raw["player"]["id"]
-            player_name = raw["player"]["name"]
+            player_id = raw.get("player").get("id")
+            player_name = raw.get("player").get("name")
             player_club_tag = raw.get("player").get("tag", None)
         else:
             player_id = None
             player_name = None
             player_club_tag = None
 
-        position = raw["position"]
-        time = raw["time"]
-        ghost = raw["url"]
-        timestamp = datetime.strptime(raw["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
+        position = raw.get("position")
+        time = raw.get("time")
+        ghost = raw.get("url")
+        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
 
         return cls(
             timestamp=timestamp,
@@ -256,23 +256,26 @@ class TMMap:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a Map class from given dictionary")
 
-        author_id = raw["author"]
-        author_name = raw["authorplayer"]["name"]
-        environment = raw["collectionName"]
+        author_id = raw.get("author")
+        author_name = raw.get("authorplayer").get("name")
+        environment = raw.get("collectionName")
         exchange_id = raw.get("exchangeid", None)
-        file_name = raw["filename"]
-        map_id = raw["mapId"]
+        file_name = raw.get("filename")
+        map_id = raw.get("mapId")
         leaderboard = None
         medal_time = MedalTimes(
-            raw["bronzeScore"], raw["silverScore"], raw["goldScore"], raw["authorScore"]
+            raw.get("bronzeScore"),
+            raw.get("silverScore"),
+            raw.get("goldScore"),
+            raw.get("authorScore"),
         )
-        name = raw["name"]
-        submitter_id = raw["submitter"]
-        submitter_name = raw["submitterplayer"]["name"]
-        thumbnail = raw["thumbnailUrl"]
-        uid = raw["mapUid"]
-        uploaded = datetime.strptime(raw["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
-        url = raw["fileUrl"]
+        name = raw.get("name")
+        submitter_id = raw.get("submitter")
+        submitter_name = raw.get("submitterplayer").get("name")
+        thumbnail = raw.get("thumbnailUrl")
+        uid = raw.get("mapUid")
+        uploaded = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
+        url = raw.get("fileUrl")
 
         return cls(
             author_id,

@@ -47,7 +47,7 @@ class TMXMapTimes:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a TMXMapTimes from given dictionary")
 
-        uploaded_raw, updated_raw = raw["UploadedAt"], raw["UpdatedAt"]
+        uploaded_raw, updated_raw = raw.get("UploadedAt"), raw.get("UpdatedAt")
 
         # 2022-03-15T18:18:50.007 to datetime
         uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S.%f")
@@ -130,20 +130,20 @@ class GbxFileMetadata:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a GbxFileMetadata from given dictionary")
 
-        gbx_map_name = raw["GbxMapName"]
-        author_login = raw["AuthorLogin"]
-        map_type = raw["MapType"]
-        title_pack = raw["TitlePack"]
-        track_uid = raw["TrackUID"]
-        mood = raw["Mood"]
-        display_cost = raw["DisplayCost"]
-        mod_name = raw["ModName"]
-        light_map = raw["Lightmap"]
-        exe_version = raw["ExeVersion"]
-        exe_build = datetime.strptime(raw["ExeBuild"], "%Y-%m-%d_%H_%M")
-        author_time = raw["AuthorTime"]
-        environment_name = raw["EnvironmentName"]
-        vehicle_name = raw["VehicleName"]
+        gbx_map_name = raw.get("GbxMapName")
+        author_login = raw.get("AuthorLogin")
+        map_type = raw.get("MapType")
+        title_pack = raw.get("TitlePack")
+        track_uid = raw.get("TrackUID")
+        mood = raw.get("Mood")
+        display_cost = raw.get("DisplayCost")
+        mod_name = raw.get("ModName")
+        light_map = raw.get("Lightmap")
+        exe_version = raw.get("ExeVersion")
+        exe_build = datetime.strptime(raw.get("ExeBuild"), "%Y-%m-%d_%H_%M")
+        author_time = raw.get("AuthorTime")
+        environment_name = raw.get("EnvironmentName")
+        vehicle_name = raw.get("VehicleName")
 
         return cls(
             gbx_map_name=gbx_map_name,
@@ -182,7 +182,7 @@ class TMXTags:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a TMXTags from given dictionary")
 
-        map_tags_ss = raw["Tags"].split(",")
+        map_tags_ss = raw.get("tags").split(",")
         map_tags = []
 
         for tag in map_tags_ss:
@@ -318,22 +318,22 @@ class TMXMetadata:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a TMXMetaData from given dictionary")
 
-        unlisted = raw["Unlisted"]
-        unreleased = raw["Unreleased"]
-        downloadable = raw["Downloadable"]
-        rating_vote_count = raw["RatingVoteCount"]
-        rating_vote_average = raw["RatingVoteAverage"]
-        has_screenshot = raw["HasScreenshot"]
-        has_thumbnail = raw["HasThumbnail"]
-        has_ghost_blocks = raw["HasGhostBlocks"]
-        embedded_objects_count = raw["EmbeddedObjectsCount"]
-        embedded_items_size = raw["EmbeddedItemsSize"]
-        size_warning = raw["SizeWarning"]
-        replay_count = raw["ReplayCount"]
-        award_count = raw["AwardCount"]
-        comment_count = raw["CommentCount"]
-        image_count = raw["ImageCount"]
-        video_count = raw["VideoCount"]
+        unlisted = raw.get("Unlisted")
+        unreleased = raw.get("Unreleased")
+        downloadable = raw.get("Downloadable")
+        rating_vote_count = raw.get("RatingVoteCount")
+        rating_vote_average = raw.get("RatingVoteAverage")
+        has_screenshot = raw.get("HasScreenshot")
+        has_thumbnail = raw.get("HasThumbnail")
+        has_ghost_blocks = raw.get("HasGhostBlocks")
+        embedded_objects_count = raw.get("EmbeddedObjectsCount")
+        embedded_items_size = raw.get("EmbeddedItemsSize")
+        size_warning = raw.get("SizeWarning")
+        replay_count = raw.get("ReplayCount")
+        award_count = raw.get("AwardCount")
+        comment_count = raw.get("CommentCount")
+        image_count = raw.get("ImageCount")
+        video_count = raw.get("VideoCount")
 
         return cls(
             unlisted,
@@ -429,16 +429,16 @@ class TMXMap:
     def _from_dict(cls, raw: Dict):
         _log.debug("Creating a TMXMap from given dictionary")
 
-        username = raw["Username"]
+        username = raw.get("Username")
         track_id = raw.get("TrackID")
         map_id = raw.get("MapID")
-        comments = raw["Comments"]
-        map_pack_id = raw["MappackID"]
-        user_id = raw["UserID"]
-        route_name = raw["RouteName"]
-        length_name = raw["LengthName"]
-        difficulty_name = raw["DifficultyName"]
-        laps = raw["Laps"]
+        comments = raw.get("Comments")
+        map_pack_id = raw.get("MappackID")
+        user_id = raw.get("UserID")
+        route_name = raw.get("RouteName")
+        length_name = raw.get("LengthName")
+        difficulty_name = raw.get("DifficultyName")
+        laps = raw.get("Laps")
         gbx_data = GbxFileMetadata._from_dict(raw)
         tags = TMXTags._from_dict(raw)
         replay_wr_data = ReplayWRData._from_dict(raw)

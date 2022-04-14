@@ -71,12 +71,12 @@ class PlayerTrophies:
         _log.debug("Creating a PlayerTrophies class from the given dictionary.")
 
         return cls(
-            echelon=raw_trophy_data["echelon"],
+            echelon=raw_trophy_data.get("echelon"),
             last_change=datetime.strptime(
-                raw_trophy_data["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
+                raw_trophy_data.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00"
             ),
-            points=raw_trophy_data["points"],
-            trophies=raw_trophy_data["counts"],
+            points=raw_trophy_data.get("points"),
+            trophies=raw_trophy_data.get("counts"),
             player_id=player_id,
         )
 
