@@ -6,7 +6,7 @@ from trackmania import Player
 
 # 1st Way
 async def run():
-    player_data = Player.get("player id")
+    player_data = Player.get_player("player id")
 
 
 # 2nd Way

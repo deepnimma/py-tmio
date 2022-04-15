@@ -3,7 +3,7 @@ import asyncio
 
 from trackmania import Player
 
-data = asyncio.run(Player.get("Some ID"))
+data = asyncio.run(Player.get_player("Some ID"))
 
 # All examples assume the functions are being called from within other async functions
 # If you are not running it in an async function, see above on how to run it.
