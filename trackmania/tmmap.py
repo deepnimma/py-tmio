@@ -455,6 +455,25 @@ class TMMap:
         :class:`List[Leaderboard]`
             The leaderboard positions.
         """
+        cache_client = Client._get_cache_client()
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(
+                f"leaderboard:{self.uid}:{self.offset}:{self.length}"
+            ):
+                _log.debug(
+                    f"Leaderboard {self.uid}:{self.offset}:{self.length} found in cache"
+                )
+                leaderboards = []
+                for lb in json.loads(
+                    cache_client.get(
+                        f"leaderboard:{self.uid}:{self.offset}:{self.length}"
+                    ).decode("utf-8")
+                )["tops"]:
+                    leaderboards.append(Leaderboard._from_dict(lb))
+
+                return leaderboards
+
         if not self._lb_loaded:
             _log.warn("Leaderboard is not loaded yet, loading from start")
             return await self.get_leaderboard(length=length)
@@ -468,6 +487,12 @@ class TMMap:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(leaderboards["error"])
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
+            cache_client.set(
+                f"leaderboard:{self.uid}:{self.offset}:{self.length}",
+                json.dumps(leaderboards),
+            )
 
         self._offset += length
         self._lb_loaded = True
