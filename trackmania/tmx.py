@@ -194,7 +194,7 @@ class TMXTags:
     def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a TMXTags from given dictionary")
 
-        map_tags_ss = raw.get("tags").split(",")
+        map_tags_ss = raw.get("Tags", None).split(",")
         map_tags = []
 
         for tag in map_tags_ss:
