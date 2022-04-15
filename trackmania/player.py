@@ -172,6 +172,30 @@ class PlayerZone:
 
         return player_zone_list
 
+    @staticmethod
+    def to_string(player_zones: List[Self]) -> str:
+        """
+        .. versionadded :: 0.4.0
+
+        Prints a list of zones in a readable format.
+
+        Parameters
+        ----------
+        player_zones : :class:`List[Self]`
+            The list of :class:`PlayerZone` objects.
+
+        Returns
+        -------
+        str
+            The list of zones in a readable format.
+        """
+        zone_str = ""
+
+        for zone in player_zones:
+            zone_str = zone_str + zone.zone + " - " + zone.rank + "\n"
+
+        return zone_str
+
 
 class PlayerSearchResult:
     """
