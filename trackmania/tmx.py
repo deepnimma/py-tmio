@@ -298,7 +298,7 @@ class TMXMetadata:
         unreleased: bool,
         downloadable: bool,
         rating_vote_count: int,
-        rate_vote_average: float,
+        rating_vote_average: float,
         has_screenshot: bool,
         has_thumbnail: bool,
         has_ghost_blocks: bool,
@@ -315,7 +315,7 @@ class TMXMetadata:
         self.unreleased = unreleased
         self.downloadable = downloadable
         self.rating_vote_count = rating_vote_count
-        self.rate_vote_average = rate_vote_average
+        self.rating_vote_average = rating_vote_average
         self.has_screenshot = has_screenshot
         self.has_thumbnail = has_thumbnail
         self.has_ghost_blocks = has_ghost_blocks
