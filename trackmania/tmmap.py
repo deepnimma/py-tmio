@@ -467,14 +467,13 @@ class TMMap:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(leaderboards["error"])
 
         self._offset += length
         self._lb_loaded = True
 
         lbs = []
-        for lb in lbs["tops"]:
+        for lb in leaderboards["tops"]:
             lbs.append(Leaderboard._from_dict(lb))
 
         return lbs
