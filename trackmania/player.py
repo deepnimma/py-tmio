@@ -173,7 +173,7 @@ class PlayerZone:
         return player_zone_list
 
     @staticmethod
-    def to_string(player_zones: List[Self]) -> str:
+    def to_string(player_zones: List[Self] | None) -> str | None:
         """
         .. versionadded :: 0.4.0
 
@@ -189,10 +189,13 @@ class PlayerZone:
         str
             The list of zones in a readable format.
         """
+        if player_zones is None:
+            return None
+
         zone_str = ""
 
         for zone in player_zones:
-            zone_str = zone_str + zone.zone + " - " + zone.rank + "\n"
+            zone_str = zone_str + zone.zone + " - " + str(zone.rank) + "\n"
 
         return zone_str
 
@@ -241,7 +244,7 @@ class PlayerSearchResult:
 
         zone = (
             PlayerZone._parse_zones(player_data["player"]["zone"], [0, 0, 0, 0, 0])
-            if "zone" in player_data
+            if "zone" in player_data["player"]
             else None
         )
         club_tag = player_data.get("player").get("club_tag", None)
