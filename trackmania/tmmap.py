@@ -167,7 +167,7 @@ class Leaderboard:
         if self.player_id is None:
             return None
 
-        return await Player.get(self.player_id)
+        return await Player.get_player(self.player_id)
 
 
 class TMMap:
@@ -342,7 +342,7 @@ class TMMap:
             The author as a :class:`Player` object
         """
         _log.debug(f"Getting the author of the map {self.uid}")
-        return await Player.get(self.author_id)
+        return await Player.get_player(self.author_id)
 
     async def submitter(self) -> Player:
         """
@@ -356,7 +356,7 @@ class TMMap:
             The submitter as a :class:`Player` object
         """
         _log.debug(f"Getting the submitter of the map {self.uid}")
-        return await Player.get(self.submitter_id)
+        return await Player.get_player(self.submitter_id)
 
     async def get_leaderboard(
         self, offset: int = 0, length: int = 100

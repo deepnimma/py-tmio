@@ -474,7 +474,7 @@ class Player:
                     cache_client.get(f"{player_id}:username").decode("utf-8")
                 )
 
-        player: Player = await Player.get(player_id)
+        player: Player = await Player.get_player(player_id)
 
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching {player_id}:username as {player.name}")
