@@ -303,7 +303,7 @@ class TMXMetadata:
         has_thumbnail: bool,
         has_ghost_blocks: bool,
         embedded_objects_count: int,
-        embedded_items_size: int,
+        embedded_objects_size: int,
         size_warning: bool,
         replay_count: int,
         award_count: int,
@@ -320,7 +320,7 @@ class TMXMetadata:
         self.has_thumbnail = has_thumbnail
         self.has_ghost_blocks = has_ghost_blocks
         self.embedded_objects_count = embedded_objects_count
-        self.embedded_items_size = embedded_items_size
+        self.embedded_objects_size = embedded_objects_size
         self.size_warning = size_warning
         self.replay_count = replay_count
         self.award_count = award_count
