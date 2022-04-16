@@ -74,6 +74,8 @@ class TrophyLeaderboardPlayer:
 
     async def get_player(self: Self):
         """
+        .. versionadded :: 0.4.0
+
         Gets the player object using the player ID.
 
         Returns

@@ -465,6 +465,8 @@ class TMXMap:
     @classmethod
     async def get_map(cls: Self, tmx_id: int) -> Self:
         """
+        .. versionadded :: 0.3.3
+
         Gets a map's data using it's tmx id
 
         Parameters
