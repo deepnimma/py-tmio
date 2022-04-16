@@ -16,7 +16,7 @@ from .errors import InvalidIDError, InvalidTrophyNumber, TMIOException
 
 _log = logging.getLogger(__name__)
 
-__all__ = ("PlayerTrophies",)
+__all__ = ("PlayerTrophies", "TrophyLeaderboardPlayer")
 
 
 class TrophyLeaderboardPlayer:
