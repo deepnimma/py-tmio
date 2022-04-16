@@ -190,7 +190,16 @@ class PlayerTrophies:
         return self.trophies[number - 1]
 
     def score(self) -> int:
-        """Returns the trophy score of the player."""
+        """
+        .. versionadded :: 0.3.0
+
+        Returns the total trophy score of the player.
+
+        Returns
+        -------
+        int
+            The total score.
+        """
 
         score = (
             0
