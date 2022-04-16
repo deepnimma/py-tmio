@@ -87,17 +87,17 @@ class BestCOTDStats:
     ----------
     best_rank : int
         The best rank achieved by the player.
-    best_rank_time : datetime
+    best_rank_time : :class:`datetime`
         The time when `best_rank` was achieved.
     best_rank_div_rank : int
         The rank achieved in the division of the `best_rank`.
     best_div : int
         The best division of the player.
-    best_div_time : datetime
+    best_div_time : :class:`datetime`
         The time when `best_div` was achieved.
     best_rank_in_div : int
         The best rank the player achieved in any division.
-    best_rank_in_div_time : datetime
+    best_rank_in_div_time : :class:`datetime`
         The time when `best_rank_in_div` was achieved.
     best_rank_in_div_div : int
         The division of the `best_rank_in_div`.
@@ -147,15 +147,15 @@ class PlayerCOTDStats:
 
     Parameters
     ----------
-    average_div : int
+    average_div : float
         The average div of the player
-    average_div_rank : int
+    average_div_rank : float
         The average div rank of the player
-    average_rank : :class:`BestCOTDStats`
+    average_rank : float
         The average rank of the player
     best_overall : :class:`BestCOTDStats`
         The best overall rank of the player
-    best_primary : int
+    best_primary : :class:`BestCOTDStats`
         The best primary rank of the player
     div_win_streak : int
         The div win streak of the player

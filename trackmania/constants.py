@@ -7,7 +7,7 @@ class _TMIOTabs:
     """
     .. versionadded:: 0.3.0
 
-    _TMIO Endpoints
+    TMIO Endpoints
     """
 
     def __init__(self):
@@ -34,7 +34,7 @@ class _TMIO:
     """
     .. versionadded:: 0.3.0
 
-    Basic _TMIO Api Details
+    Basic TMIO Api Details
 
     Parameters
     ----------
@@ -88,7 +88,7 @@ class _TMXTabs:
     """
     .. versionadded :: 0.3.3
 
-    _TMX Endpoints
+    TMX Endpoints
     """
 
     def __init__(self):
@@ -103,7 +103,7 @@ class _TMX:
     """
     .. versionadded:: 0.3.0
 
-    Basic _TMX Api Details
+    Basic TMX Api Details
 
     Parameters
     ----------
