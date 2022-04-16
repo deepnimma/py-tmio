@@ -1,0 +1,1 @@
+from trackmania import PlayerTrophies
