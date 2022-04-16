@@ -19,6 +19,75 @@ _log = logging.getLogger(__name__)
 __all__ = ("PlayerTrophies",)
 
 
+class TrophyLeaderboardPlayer:
+    """
+    .. versionadded :: 0.4.0
+
+    Represents a player on the trophy leaderboards
+
+    Parameters
+    ----------
+    player_name : str
+        The player's name
+    club_tag : str | None
+        The player's club tag
+    player_id : str
+        The player's ID
+    rank : int
+        The player's rank
+    score : str
+        The player's score
+    zones : `List[PlayerZone]`
+        The player's zones
+    """
+
+    def __init__(
+        self,
+        player_name: str,
+        club_tag: str | None,
+        player_id: str,
+        rank: int,
+        score: str,
+        zones: List,
+    ):
+        self.player_name = player_name
+        self.club_tag = club_tag
+        self.player_id = player_id
+        self.rank = rank
+        self.score = score
+        self.zones = zones
+
+    @classmethod
+    def _from_dict(cls: Self, raw: Dict) -> Self:
+        from .player import PlayerZone
+
+        args = []
+        player = raw.get("player")
+        args.append(player.get("name"))
+        args.append(player.get("tag", None))
+        args.append(player.get("id"))
+        args.append(raw.get("rank"))
+        args.append(_add_commas(int(raw.get("score"))))
+        args.append(PlayerZone._parse_zones(player.get("zone"), [0, 0, 0, 0, 0]))
+
+        return cls(*args)
+
+    async def get_player(self: Self):
+        """
+        .. versionadded :: 0.4.0
+
+        Gets the player object using the player ID.
+
+        Returns
+        -------
+        :class:`Player`
+            The player object
+        """
+        from .player import Player
+
+        return await Player.get_player(self.player_id)
+
+
 class PlayerTrophies:
     """
     .. versionadded :: 0.1.0
@@ -204,7 +273,7 @@ class PlayerTrophies:
         return history["gains"]
 
     @staticmethod
-    async def top(page: int = 0) -> Dict:
+    async def top(page: int = 0) -> List[TrophyLeaderboardPlayer]:
         """
         .. versionadded :: 0.3.0
 
@@ -217,8 +286,8 @@ class PlayerTrophies:
 
         Returns
         -------
-        Dict
-            The players
+        :class:`List[TrophyLeaderboardPlayer]`
+            The players as a list of :class:`TrophyLeaderboardPlayer` objects.
         """
         _log.debug(f"Getting Page {page} of Trophy Leaderboards")
 
@@ -227,9 +296,13 @@ class PlayerTrophies:
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             if cache_client.exists(f"trophies:{page}"):
                 _log.debug(f"Found trophy leaderboard for page {page} in cache")
-                return json.loads(cache_client.get(f"trophies:{page}").decode("utf-8"))[
-                    "ranks"
-                ]
+                all_players = json.loads(
+                    cache_client.get(f"trophies:{page}").decode("utf-8")
+                )
+
+                lb_players = []
+                for top_player in all_players["ranks"]:
+                    lb_players.append(TrophyLeaderboardPlayer._from_dict(top_player))
 
         api_client = _APIClient()
 
@@ -245,4 +318,8 @@ class PlayerTrophies:
             _log.debug(f"Caching trophy leaderboard for page: {page}")
             cache_client.set(f"trophies:{page}", json.dumps(top_trophies), ex=3600)
 
-        return top_trophies["ranks"]
+        lb_players = []
+        for top_player in top_trophies["ranks"]:
+            lb_players.append(TrophyLeaderboardPlayer._from_dict(top_player))
+
+        return lb_players

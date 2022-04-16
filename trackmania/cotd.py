@@ -64,7 +64,7 @@ async def _get_cotd_page(page: int) -> Dict:
         if cache_client.exists(f"cotd:{page}"):
             _log.debug(f"COTD Page {page} found in cache")
             all_cotds = json.loads(cache_client.get(f"cotd:{page}").decode("utf-8"))
-            return all_cotds
+            return all_cotds["competitions"]
 
     api_client = _APIClient()
     all_cotds = await api_client.get(_TMIO.build([_TMIO.TABS.COTD, page]))
@@ -76,7 +76,7 @@ async def _get_cotd_page(page: int) -> Dict:
         _log.debug(f"Caching COTD Page {page}")
         cache_client.set(f"cotd:{page}", json.dumps(all_cotds), ex=7200)
 
-    return all_cotds
+    return all_cotds["competitions"]
 
 
 class BestCOTDStats:
@@ -151,9 +151,9 @@ class PlayerCOTDStats:
         The average div of the player
     average_div_rank : int
         The average div rank of the player
-    average_rank : int
+    average_rank : :class:`BestCOTDStats`
         The average rank of the player
-    best_overall : int
+    best_overall : :class:`BestCOTDStats`
         The best overall rank of the player
     best_primary : int
         The best primary rank of the player
@@ -267,7 +267,7 @@ class PlayerCOTDResults:
             div_rank = raw.get("divrank")
             score = raw.get("score")
         else:
-            div_rank, score = 0
+            div_rank = score = 0
         total_players = raw.get("totalplayers")
 
         return cls(
@@ -345,7 +345,7 @@ class PlayerCOTD:
         page : int, optional
             The page of the ID, by default 0
         """
-        return cls._from_dict(await _get_trophy_page(player_id, page))
+        return cls._from_dict(await _get_trophy_page(player_id, page), player_id)
 
 
 class COTD:

@@ -2,7 +2,6 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from types import NoneType
 from typing import Dict, List
 
 import redis
@@ -172,6 +171,53 @@ class PlayerZone:
 
         return player_zone_list
 
+    @staticmethod
+    def to_string(
+        player_zones: List[Self] | None, add_pos: bool = True, inline: bool = False
+    ) -> str | None:
+        """
+        .. versionadded :: 0.4.0
+
+        Prints a list of zones in a readable format.
+
+        Parameters
+        ----------
+        player_zones : :class:`List[Self]`
+            The list of :class:`PlayerZone` objects.
+        add_pos : bool
+            .. versionadded:: 0.4.0
+            Whether to add the position of the zone.
+        inline : bool
+            .. versionadded :: 0.4.0
+            Whether to print the zones in a single line.
+
+        Returns
+        -------
+        str
+            The list of zones in a readable format.
+        """
+        if player_zones is None:
+            return None
+
+        zone_str = ""
+
+        if not inline:
+            if add_pos:
+                for zone in player_zones:
+                    zone_str = zone_str + zone.zone + " - " + str(zone.rank) + "\n"
+            else:
+                for zone in player_zones:
+                    zone_str = zone_str + zone.zone + "\n"
+        else:
+            if add_pos:
+                zone_str = ", ".join(
+                    f"{zone.zone} - {zone.rank}" for zone in player_zones
+                )
+            else:
+                zone_str = ", ".join(zone.zone for zone in player_zones)
+
+        return zone_str
+
 
 class PlayerSearchResult:
     """
@@ -217,7 +263,7 @@ class PlayerSearchResult:
 
         zone = (
             PlayerZone._parse_zones(player_data["player"]["zone"], [0, 0, 0, 0, 0])
-            if "zone" in player_data
+            if "zone" in player_data["player"]
             else None
         )
         club_tag = player_data.get("player").get("club_tag", None)
@@ -447,7 +493,7 @@ class Player:
                     cache_client.get(f"{player_id}:username").decode("utf-8")
                 )
 
-        player: Player = await Player.get(player_id)
+        player: Player = await Player.get_player(player_id)
 
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching {player_id}:username as {player.name}")

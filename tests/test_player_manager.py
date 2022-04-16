@@ -1,7 +1,7 @@
 import asyncio
+import datetime
 import json
 import unittest
-import datetime
 
 from aioresponses import aioresponses
 
@@ -21,7 +21,7 @@ class TestPlayerManager(unittest.TestCase):
 
             loop = asyncio.get_event_loop()
             resp = loop.run_until_complete(
-                Player.get("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
+                Player.get_player("b73fe3d7-a92a-4a6d-ab9d-49005caec499")
             )
 
             self.assertEqual(resp.club_tag, "$F63W$F971$FCBS$FFFP")

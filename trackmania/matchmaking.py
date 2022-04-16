@@ -257,15 +257,15 @@ class PlayerMatchmaking:
         if len(mm_data) == 0:
             matchmaking_data.extend([None, None])
         elif len(mm_data) == 1:
-            mm_obj = PlayerMatchmaking.__parse_3v3(mm_data.get(0))
+            mm_obj = PlayerMatchmaking.__parse_3v3(mm_data[0])
             matchmaking_data.extend(
                 [mm_obj, None] if mm_obj.type_id == 2 else [None, mm_obj]
             )
         else:
             matchmaking_data.extend(
                 [
-                    PlayerMatchmaking.__parse_3v3(mm_data.get(0), player_id),
-                    PlayerMatchmaking.__parse_3v3(mm_data.get(1), player_id),
+                    PlayerMatchmaking.__parse_3v3(mm_data[0], player_id),
+                    PlayerMatchmaking.__parse_3v3(mm_data[1], player_id),
                 ]
             )
 

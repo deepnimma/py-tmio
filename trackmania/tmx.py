@@ -194,7 +194,7 @@ class TMXTags:
     def _from_dict(cls: Self, raw: Dict) -> Self:
         _log.debug("Creating a TMXTags from given dictionary")
 
-        map_tags_ss = raw.get("tags").split(",")
+        map_tags_ss = raw.get("Tags", None).split(",")
         map_tags = []
 
         for tag in map_tags_ss:
@@ -298,12 +298,12 @@ class TMXMetadata:
         unreleased: bool,
         downloadable: bool,
         rating_vote_count: int,
-        rate_vote_average: float,
+        rating_vote_average: float,
         has_screenshot: bool,
         has_thumbnail: bool,
         has_ghost_blocks: bool,
         embedded_objects_count: int,
-        embedded_items_size: int,
+        embedded_objects_size: int,
         size_warning: bool,
         replay_count: int,
         award_count: int,
@@ -315,12 +315,12 @@ class TMXMetadata:
         self.unreleased = unreleased
         self.downloadable = downloadable
         self.rating_vote_count = rating_vote_count
-        self.rate_vote_average = rate_vote_average
+        self.rating_vote_average = rating_vote_average
         self.has_screenshot = has_screenshot
         self.has_thumbnail = has_thumbnail
         self.has_ghost_blocks = has_ghost_blocks
         self.embedded_objects_count = embedded_objects_count
-        self.embedded_items_size = embedded_items_size
+        self.embedded_objects_size = embedded_objects_size
         self.size_warning = size_warning
         self.replay_count = replay_count
         self.award_count = award_count
@@ -465,6 +465,8 @@ class TMXMap:
     @classmethod
     async def get_map(cls: Self, tmx_id: int) -> Self:
         """
+        .. versionadded :: 0.3.3
+
         Gets a map's data using it's tmx id
 
         Parameters

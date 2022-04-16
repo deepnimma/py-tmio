@@ -167,7 +167,7 @@ class Leaderboard:
         if self.player_id is None:
             return None
 
-        return await Player.get(self.player_id)
+        return await Player.get_player(self.player_id)
 
 
 class TMMap:
@@ -342,7 +342,7 @@ class TMMap:
             The author as a :class:`Player` object
         """
         _log.debug(f"Getting the author of the map {self.uid}")
-        return await Player.get(self.author_id)
+        return await Player.get_player(self.author_id)
 
     async def submitter(self) -> Player:
         """
@@ -356,7 +356,7 @@ class TMMap:
             The submitter as a :class:`Player` object
         """
         _log.debug(f"Getting the submitter of the map {self.uid}")
-        return await Player.get(self.submitter_id)
+        return await Player.get_player(self.submitter_id)
 
     async def get_leaderboard(
         self, offset: int = 0, length: int = 100
@@ -455,6 +455,25 @@ class TMMap:
         :class:`List[Leaderboard]`
             The leaderboard positions.
         """
+        cache_client = Client._get_cache_client()
+
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            if cache_client.exists(
+                f"leaderboard:{self.uid}:{self.offset}:{self.length}"
+            ):
+                _log.debug(
+                    f"Leaderboard {self.uid}:{self.offset}:{self.length} found in cache"
+                )
+                leaderboards = []
+                for lb in json.loads(
+                    cache_client.get(
+                        f"leaderboard:{self.uid}:{self.offset}:{self.length}"
+                    ).decode("utf-8")
+                )["tops"]:
+                    leaderboards.append(Leaderboard._from_dict(lb))
+
+                return leaderboards
+
         if not self._lb_loaded:
             _log.warn("Leaderboard is not loaded yet, loading from start")
             return await self.get_leaderboard(length=length)
@@ -467,14 +486,19 @@ class TMMap:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(leaderboards["error"])
+        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+            _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
+            cache_client.set(
+                f"leaderboard:{self.uid}:{self.offset}:{self.length}",
+                json.dumps(leaderboards),
+            )
 
         self._offset += length
         self._lb_loaded = True
 
         lbs = []
-        for lb in lbs["tops"]:
+        for lb in leaderboards["tops"]:
             lbs.append(Leaderboard._from_dict(lb))
 
         return lbs

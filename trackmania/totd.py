@@ -166,6 +166,8 @@ class TOTD:
     @classmethod
     async def latest_totd(cls: Self) -> Self:
         """
+        .. versionadded :: 0.3.3
+
         Gets the latest totd.
 
         Returns
