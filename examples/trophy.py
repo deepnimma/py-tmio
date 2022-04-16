@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from trackmania import Player, PlayerTrophies, trophy
+from trackmania import Player, PlayerTrophies, TrophyLeaderboardPlayer
 
 # There are no functions from `PlayerTrophies` that will give you an object of this class.
 # The ONLY way you can get a `PlayerTrophies` object is by calling `Player.get_player()`.
@@ -18,5 +18,5 @@ async def run():
 
 
 # Getting Top Players based on trophies
-async def top_trophies() -> List[trophy.TrophyLeaderboardPlayer]:
-    return NotImplemented
+async def top_trophies() -> List[TrophyLeaderboardPlayer]:
+    return await PlayerTrophies.top()
