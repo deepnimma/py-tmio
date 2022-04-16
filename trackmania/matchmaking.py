@@ -114,7 +114,7 @@ class PlayerMatchmakingResult:
         The live id of the match
     mvp : bool
         Whether the player was the mvp of the match
-    player_id : str
+    player_id : str | None
         The player's ID
     start_time : :class:`datetime`
         The date the match started
@@ -164,7 +164,7 @@ class PlayerMatchmaking:
 
     Parameters
     ----------
-    type : str
+    matchmaking_type : str
         The type of matchmaking, either "3v3" or "Royal"
     type_id : int
         The type of matchmaking as 0 or 1, 0 for "3v3" and 1 for "Royal"
