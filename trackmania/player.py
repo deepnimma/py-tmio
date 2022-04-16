@@ -211,11 +211,11 @@ class PlayerZone:
                     zone_str = zone_str + zone.zone + "\n"
         else:
             if add_pos:
-                for zone in player_zones:
-                    zone_str = zone_str + zone.zone + " - " + str(zone.rank) + ", "
+                zone_str = ", ".join(
+                    f"{zone.zone} - {zone.rank}" for zone in player_zones
+                )
             else:
-                for zone in player_zones:
-                    zone_str = zone_str + zone.zone + ", "
+                zone_str = ", ".join(zone.zone for zone in player_zones)
 
         return zone_str
 
