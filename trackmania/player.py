@@ -173,7 +173,9 @@ class PlayerZone:
         return player_zone_list
 
     @staticmethod
-    def to_string(player_zones: List[Self] | None) -> str | None:
+    def to_string(
+        player_zones: List[Self] | None, add_pos: bool = True, inline: bool = False
+    ) -> str | None:
         """
         .. versionadded :: 0.4.0
 
@@ -183,6 +185,12 @@ class PlayerZone:
         ----------
         player_zones : :class:`List[Self]`
             The list of :class:`PlayerZone` objects.
+        add_pos : bool
+            .. versionadded:: 0.4.0
+            Whether to add the position of the zone.
+        inline : bool
+            .. versionadded :: 0.4.0
+            Whether to print the zones in a single line.
 
         Returns
         -------
@@ -194,8 +202,20 @@ class PlayerZone:
 
         zone_str = ""
 
-        for zone in player_zones:
-            zone_str = zone_str + zone.zone + " - " + str(zone.rank) + "\n"
+        if not inline:
+            if add_pos:
+                for zone in player_zones:
+                    zone_str = zone_str + zone.zone + " - " + str(zone.rank) + "\n"
+            else:
+                for zone in player_zones:
+                    zone_str = zone_str + zone.zone + "\n"
+        else:
+            if add_pos:
+                for zone in player_zones:
+                    zone_str = zone_str + zone.zone + " - " + str(zone.rank) + ", "
+            else:
+                for zone in player_zones:
+                    zone_str = zone_str + zone.zone + ", "
 
         return zone_str
 
