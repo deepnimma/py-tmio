@@ -28,7 +28,7 @@ class PlayerMetaInfo:
     """
     .. versionadded :: 0.1.0
 
-    Represents Player Meta Data, which inclues YT, Twitch, Twitter or _TMIO Vanity Link
+    Represents Player Meta Data, which inclues YT, Twitch, Twitter or TMIO Vanity Link
 
     Parameters
     ----------
@@ -39,7 +39,7 @@ class PlayerMetaInfo:
     in_tmgl : bool
         Whether the player is in TMGL
     in_tmio_dev_team : bool
-        Whether the player is in _TMIO Dev Team
+        Whether the player is in TMIO Dev Team
     is_sponsor : bool
         Whether the player is a sponsor
     sponsor_level : int | None
@@ -51,7 +51,7 @@ class PlayerMetaInfo:
     youtube : str | None
         The YouTube URL of the player, `NoneType` if the player has no YouTube
     vanity : str | None
-        The _TMIO Vanity URL of the player, `NoneType` if the player has no _TMIO Vanity URL
+        The TMIO Vanity URL of the player, `NoneType` if the player has no TMIO Vanity URL
     """
 
     def __init__(

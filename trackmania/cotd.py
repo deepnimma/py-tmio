@@ -83,6 +83,8 @@ class BestCOTDStats:
     """
     .. versionadded :: 0.3.0
 
+    Represents the Best COTD Stats of player as shows in the COTD Stats Page.
+
     Parameters
     ----------
     best_rank : int
@@ -144,6 +146,8 @@ class BestCOTDStats:
 class PlayerCOTDStats:
     """
     .. versionadded :: 0.3.0
+
+    Represents the COTD Stats of a player as shows in the COTD Stats Page.
 
     Parameters
     ----------

@@ -14,7 +14,6 @@ from .constants import _TMIO
 
 _log = logging.getLogger(__name__)
 
-# __all__ = ("Ad", "list_ads", "get_ad")
 __all__ = ("Ad",)
 
 
@@ -60,19 +59,23 @@ class Ad:
     name : str
         The name of the ad
     type : str
-        The type of the ad
+        The type of the ad.
+        Can be "nadeo" or "ugc". "Nadeo" is for official advertisements while "UGC" is for user generated content.
     url : str
-        URL set for the ad
+        URL set for the ad by the uploaders of the ad.
     img2x3 : str
-        Link to get the 2x3 image of the ad
+        Link to where the 2x3 image of the ad is stored.
+        Can be empty if it does not exist.
     img16x9 : str
-        Link to get the 16x9 image of the ad
+        Link to where the 16x9 image of the ad is stored.
+        Can be empty if it does not exist.
     img64x10 : str
-        Link to get the 64x10 image of the ad
+        Link to where the 64x10 image of the ad is stored.
+        Can be empty if it does not exist.
     media : str
-        Link to get the media of the ad
+        Link to get the media of the ad.
     display_format : str
-        The display format of the ad
+        The display format of the ad.
     """
 
     def __init__(
@@ -87,6 +90,7 @@ class Ad:
         media: str,
         display_format: str,
     ):
+        """Constructor Function."""
         self.uid = uid
         self.name = name
         self.type = type
@@ -116,7 +120,7 @@ class Ad:
     async def list_ads(cls) -> List[Self]:
         """
         .. versionadded :: 0.3.0
-        .. versionupdated :: 0.4.0
+        .. versionchanged :: 0.4.0
             Changed to classmethod
 
         Lists all ads currently in trackmania.
@@ -146,7 +150,7 @@ class Ad:
     async def get_ad(cls, ad_uid: str) -> Self | None:
         """
         .. versionadded :: 0.3.0
-        .. versionupdated :: 0.4.0
+        .. versionchanged :: 0.4.0
             Changed to classmethod
 
         Gets an ad by its unique ID.
