@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from typing import Optional
 
 import aiohttp
@@ -107,14 +108,14 @@ class _APIClient:
             _log.info(f"Sending {method.upper()} to {endpoint}")
             try:
                 if "trackmania.io" in endpoint:
-                    Client.RATELIMIT_LIMIT = int(
-                        resp.headers.get("x-ratelimit-limit")[0]
-                    )
+                    Client.RATELIMIT_LIMIT = int(resp.headers.get("X-Ratelimit-Limit"))
                     Client.RATELIMIT_REMAINING = int(
-                        resp.headers.get("x-ratelimit-remaining")[0]
+                        resp.headers.get("X-Ratelimit-Remaining")
+                    )
+                    Client.RATELIMIT_RESET = datetime.utcfromtimestamp(
+                        float(resp.headers.get("X-Ratelimit-Reset"))
                     )
 
-                    _log.warn(Client.RATELIMIT_LIMIT, Client.RATELIMIT_REMAINING)
             except (AttributeError, TypeError):
                 pass
             try:

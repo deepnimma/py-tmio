@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import redis
 
 __all__ = ("Client",)
@@ -29,6 +31,9 @@ class Client:
     RATELIMIT_REMAINING : int
         The amount of remaining requests with `trackmania.io` api.
         .. versionadded:: 0.2.1
+    RATELIMIT_RESET : datetime
+        When the `trackmania.io` ratelimit will be reset. Date and Time in UTC
+        .. versionadded :: 0.4.0
     """
 
     USER_AGENT: str = None
@@ -39,6 +44,7 @@ class Client:
 
     RATELIMIT_LIMIT: int = 40
     RATELIMIT_REMAINING: int = None
+    RATELIMIT_RESET: datetime = None
 
     @staticmethod
     def _get_cache_client() -> redis.Redis:
