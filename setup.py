@@ -2,7 +2,7 @@ from setuptools import setup
 
 requirements = ["aiohttp", "redis"]
 
-version = "v0.4.0b1"
+version = "v0.4.0"
 
 readme = ""
 with open("README.md") as f:
