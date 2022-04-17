@@ -57,7 +57,11 @@ class _APIClient:
             raise NoUserAgentSetError()
 
         self.session = aiohttp.ClientSession(
-            headers={"User-Agent": Client.USER_AGENT + " | via py-tmio"},
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "User-Agent": Client.USER_AGENT + " | via py-tmio",
+            },
             **session_kwargs,
         )
 
@@ -109,6 +113,8 @@ class _APIClient:
                     Client.RATELIMIT_REMAINING = int(
                         resp.headers.get("x-ratelimit-remaining")[0]
                     )
+
+                    _log.warn(Client.RATELIMIT_LIMIT, Client.RATELIMIT_REMAINING)
             except (AttributeError, TypeError):
                 pass
             try:
