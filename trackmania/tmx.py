@@ -382,6 +382,8 @@ class TMXMap:
         The difficulty name of the map
     laps : int
         The number of laps of the map
+    times: :class:`TMXMapTimes`
+        The uploaded and updated at times of the map.
     gbx_data : :class:`GbxFileMetadata`
         The gbx file metadata of the map
     tags : :class:`TMXTags`
@@ -404,6 +406,7 @@ class TMXMap:
         length_name: str,
         difficulty_name: str,
         laps: int,
+        times: TMXMapTimes,
         gbx_data: GbxFileMetadata,
         tags: TMXTags,
         replay_wr_data: ReplayWRData,
@@ -419,6 +422,7 @@ class TMXMap:
         self.length_name = length_name
         self.difficulty_name = difficulty_name
         self.laps = laps
+        self.times = times
         self.gbx_data = gbx_data
         self.tags = tags
         self.replay_wr_data = replay_wr_data
@@ -438,6 +442,7 @@ class TMXMap:
         length_name = raw.get("LengthName")
         difficulty_name = raw.get("DifficultyName")
         laps = raw.get("Laps")
+        times = TMXMapTimes._from_dict(raw)
         gbx_data = GbxFileMetadata._from_dict(raw)
         tags = TMXTags._from_dict(raw)
         replay_wr_data = ReplayWRData._from_dict(raw)
@@ -454,6 +459,7 @@ class TMXMap:
             length_name,
             difficulty_name,
             laps,
+            times,
             gbx_data,
             tags,
             replay_wr_data,
