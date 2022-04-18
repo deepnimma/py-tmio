@@ -384,7 +384,8 @@ class Player:
 
             raise TMIOException(player_data["error"])
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            cache_client.set(f"player:{player_id}", json.dumps(player_data))
+            # Cache player_data for 6 hours
+            cache_client.set(f"player:{player_id}", json.dumps(player_data), ex=21600)
             cache_client.set(f"{player_data['displayname'].lower()}:id", player_id)
 
         return cls(**Player._parse_player(player_data))
