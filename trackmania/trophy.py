@@ -211,6 +211,7 @@ class PlayerTrophies:
             + self.trophy(6) * 100_000
             + self.trophy(7) * 1_000_000
             + self.trophy(8) * 10_000_000
+            + self.trophy(9) * 100_000_000
         )
 
         _log.debug(f"Score of {self.player_id} is {score}")
