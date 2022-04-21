@@ -9,6 +9,7 @@ from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
+from ._util import _regex_it
 from .api import _APIClient
 from .config import Client
 from .constants import _TMIO
@@ -132,7 +133,7 @@ class Leaderboard:
         if "player" in raw:
             player_id = raw.get("player").get("id")
             player_name = raw.get("player").get("name")
-            player_club_tag = raw.get("player").get("tag", None)
+            player_club_tag = _regex_it(raw.get("player").get("tag", None))
         else:
             player_id = None
             player_name = None
@@ -258,7 +259,7 @@ class TMMap:
         _log.debug("Creating a Map class from given dictionary")
 
         author_id = raw.get("author")
-        author_name = raw.get("authorplayer").get("name")
+        author_name = _regex_it(raw.get("authorplayer").get("name"))
         environment = raw.get("collectionName")
         exchange_id = raw.get("exchangeid", None)
         file_name = raw.get("filename")
@@ -270,7 +271,7 @@ class TMMap:
             raw.get("goldScore"),
             raw.get("authorScore"),
         )
-        name = raw.get("name")
+        name = _regex_it(raw.get("name"))
         submitter_id = raw.get("submitter")
         submitter_name = raw.get("submitterplayer").get("name")
         thumbnail = raw.get("thumbnailUrl")

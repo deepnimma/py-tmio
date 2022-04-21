@@ -8,7 +8,7 @@ from typing import Dict, List
 import redis
 from typing_extensions import Self
 
-from ._util import _add_commas
+from ._util import _add_commas, _regex_it
 from .api import _APIClient
 from .config import Client
 from .constants import _TMIO
@@ -64,7 +64,7 @@ class TrophyLeaderboardPlayer:
         args = []
         player = raw.get("player")
         args.append(player.get("name"))
-        args.append(player.get("tag", None))
+        args.append(_regex_it(player.get("tag", None)))
         args.append(player.get("id"))
         args.append(raw.get("rank"))
         args.append(_add_commas(int(raw.get("score"))))

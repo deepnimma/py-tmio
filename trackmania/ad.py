@@ -8,6 +8,7 @@ from typing_extensions import Self
 
 from trackmania.errors import TMIOException
 
+from ._util import _regex_it
 from .api import _APIClient
 from .config import Client
 from .constants import _TMIO
@@ -104,7 +105,7 @@ class Ad:
     @classmethod
     def _from_dict(cls: Self, raw: Dict) -> Self:
         uid = raw.get("uid")
-        name = raw.get("name")
+        name = _regex_it(raw.get("name"))
         type = raw.get("type")
         url = raw.get("url")
         img2x3 = raw.get("img2x3")

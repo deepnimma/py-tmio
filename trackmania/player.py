@@ -7,6 +7,7 @@ from typing import Dict, List
 import redis
 from typing_extensions import Self
 
+from ._util import _regex_it
 from .api import _APIClient
 from .config import Client
 from .constants import _TMIO
@@ -266,8 +267,8 @@ class PlayerSearchResult:
             if "zone" in player_data["player"]
             else None
         )
-        club_tag = player_data.get("player").get("club_tag", None)
-        name = player_data.get("player").get("name")
+        club_tag = _regex_it(player_data.get("player").get("club_tag", None))
+        name = _regex_it(player_data.get("player").get("name"))
         player_id = player_data.get("player").get("id")
         matchmaking = PlayerMatchmaking._from_dict(
             player_data.get("matchmaking"), player_id
@@ -580,9 +581,11 @@ class Player:
 
         # Parsing Club Tag
         club_tag = player_data.get("clubtag", player_data.get("tag", None))
+        club_tag = _regex_it(club_tag)
 
         # Parsing Name
         name = player_data.get("displayname", player_data.get("name", None))
+        name = _regex_it(name)
 
         return {
             "club_tag": club_tag,
