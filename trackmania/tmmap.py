@@ -78,9 +78,9 @@ class MedalTimes:
         _log.debug(f"Parsing {time} to string")
 
         sec, ms = divmod(time, 1000)
-        min, sec = divmod(time, 60)
+        min, sec = divmod(sec, 60)
 
-        return f"{min:02d}:{sec:02d}.{ms:03d}"
+        return "%01d:%02d.%03d" % (min, sec, ms)
 
 
 class Leaderboard:
