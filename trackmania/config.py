@@ -62,3 +62,45 @@ class Client:
             db=Client.REDIS_DB,
             password=Client.REDIS_PASSWORD,
         )
+
+
+def cache_flushdb() -> None:
+    """
+    Flushes the entire db.
+    DB is set in `Client` class.
+
+    Returns
+    -------
+    bool
+        True if successful, False if an error.
+    """
+    redis_client = Client._get_cache_client()
+
+    try:
+        return redis_client.flushdb(True)
+    except (ConnectionRefusedError, redis.exceptions.ConnectionError):
+        return False
+
+
+def cache_flush_key(key: str) -> bool:
+    """
+    Flushes a specific key.
+
+    Parameters
+    ----------
+    key : str
+        The key to flush
+
+    Returns
+    -------
+    bool
+        Successful or Failure.
+    """
+    redis_client = Client._get_cache_client()
+
+    try:
+        redis_client.delete(key)
+    except (ConnectionRefusedError, redis.exceptions.ConnectionError):
+        return False
+
+    return True
