@@ -4,6 +4,7 @@ from contextlib import suppress
 from datetime import datetime
 
 import redis
+from aiohttp import TraceRequestRedirectParams
 from typing_extensions import Self
 
 from trackmania.errors import InvalidTOTDDate, TMIOException
@@ -99,7 +100,7 @@ class TOTD:
         return self._mapobj
 
     @classmethod
-    async def get_totd(cls: Self, date: datetime) -> Self:
+    async def get_totd(cls: Self, date: datetime, __get_latest: bool = False) -> Self:
         """
         .. versionadded :: 0.3.0
 
@@ -123,13 +124,19 @@ class TOTD:
                 _log.debug(
                     f"Found TOTD for date {date.day}:{date.month}:{date.year} in cache"
                 )
-                return cls._from_dict(
-                    json.loads(
-                        cache_client.get(
-                            f"totd:{date.year}:{date.month}:{date.day}"
-                        ).decode("utf-8")
+
+                if not __get_latest:
+                    return cls._from_dict(
+                        json.loads(
+                            cache_client.get(
+                                f"totd:{date.year}:{date.month}:{date.day}"
+                            ).decode("utf-8")
+                        )
                     )
-                )
+                else:
+                    return cls._from_dict(
+                        json.loads(cache_client.get("totd:latest").decode("utf-8"))
+                    )
 
         api_client = _APIClient()
         all_totds = await api_client.get(
@@ -156,9 +163,13 @@ class TOTD:
 
         with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
             _log.debug(f"Caching TOTD for date {date.day}:{date.month}:{date.year}")
-            cache_client.set(
-                f"totd:{date.year}:{date.month}:{date.day}", json.dumps(totd)
-            )
+
+            if not __get_latest:
+                cache_client.set(
+                    f"totd:{date.year}:{date.month}:{date.day}", json.dumps(totd)
+                )
+            else:
+                cache_client.set("totd:latest", json.dumps(totd))
 
         return cls._from_dict(totd)
 
@@ -177,6 +188,8 @@ class TOTD:
         today = datetime.utcnow()
 
         if today.hour > 17 and today.minute > 0:
-            return await cls.get_totd(datetime.utcnow())
+            return await cls.get_totd(datetime.utcnow(), True)
         else:
-            return await cls.get_totd(datetime(today.year, today.month, today.day - 1))
+            return await cls.get_totd(
+                datetime(today.year, today.month, today.day - 1), __get_latest=True
+            )
