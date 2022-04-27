@@ -2,7 +2,6 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict, List
 
 import redis
 from typing_extensions import Self
@@ -127,7 +126,7 @@ class Leaderboard:
         self.player_id = player_id
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a Leaderboards class from given dictionary")
 
         if "player" in raw:
@@ -189,7 +188,7 @@ class TMMap:
         The file name of the map
     map_id : str
         The map id of the map
-    leaderboard : :class:`List[Leaderboard]` | None
+    leaderboard : :class:`list[Leaderboard]` | None
         The leaderboard of the map
     medal_times : :class:`MedalTimes`
         The medal times of the map
@@ -217,7 +216,7 @@ class TMMap:
         exchange_id: str | None,
         file_name: str,
         map_id: str,
-        leaderboard: List[Leaderboard] | None,
+        leaderboard: list[Leaderboard] | None,
         medal_time: MedalTimes,
         name: str,
         submitter_id: str,
@@ -255,7 +254,7 @@ class TMMap:
         return self._lb_loaded
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a Map class from given dictionary")
 
         author_id = raw.get("author")
@@ -361,7 +360,7 @@ class TMMap:
 
     async def get_leaderboard(
         self, offset: int = 0, length: int = 100
-    ) -> List[Leaderboard]:
+    ) -> list[Leaderboard]:
         """
         .. versionadded :: 0.3.0
 
@@ -376,7 +375,7 @@ class TMMap:
 
         Returns
         -------
-        :class:`List[Leaderboard]`
+        :class:`list[Leaderboard]`
             The leaderboard as a list of positions.
 
         Raises
@@ -440,7 +439,7 @@ class TMMap:
 
         return leaderboards
 
-    async def load_more_leaderboard(self, length: int = 100) -> List[Leaderboard]:
+    async def load_more_leaderboard(self, length: int = 100) -> list[Leaderboard]:
         """
         .. versionadded :: 0.3.0
 
@@ -453,7 +452,7 @@ class TMMap:
 
         Returns
         -------
-        :class:`List[Leaderboard]`
+        :class:`list[Leaderboard]`
             The leaderboard positions.
         """
         cache_client = Client._get_cache_client()

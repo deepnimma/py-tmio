@@ -3,7 +3,6 @@ import logging
 from contextlib import suppress
 from datetime import datetime
 from types import NoneType
-from typing import Dict, List
 
 import redis
 from typing_extensions import Self
@@ -26,7 +25,7 @@ __all__ = (
 )
 
 
-async def _get_trophy_page(player_id: str, page: int) -> Dict:
+async def _get_trophy_page(player_id: str, page: int) -> dict:
     _log.debug(f"Getting COTD Stats for Player {player_id} and page {page}")
 
     cache_client = Client._get_cache_client()
@@ -55,7 +54,7 @@ async def _get_trophy_page(player_id: str, page: int) -> Dict:
     return page_data
 
 
-async def _get_cotd_page(page: int) -> Dict:
+async def _get_cotd_page(page: int) -> dict:
     _log.debug(f"Getting COTD Page {page}")
 
     cache_client = Client._get_cache_client()
@@ -126,7 +125,7 @@ class BestCOTDStats:
         self.best_rank_in_div_div = best_rank_in_div_div
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a BestCOTDStats class from given dictionary")
 
         args = [
@@ -194,7 +193,7 @@ class PlayerCOTDStats:
         self.win_streak = win_streak
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: dict) -> Self:
         _log.debug("Creating a PlayerCOTDStats class from given dictionary")
 
         args = [
@@ -259,7 +258,7 @@ class PlayerCOTDResults:
         self.total_players = total_players
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: dict) -> Self:
         _log.debug("Creating a PlayerCOTDResults class from given dictionary")
 
         id = raw.get("id")
@@ -296,7 +295,7 @@ class PlayerCOTD:
     ----------
     total : int
         Total COTD's Played
-    recent_results : :class:`List[PlayerCOTDResults]`
+    recent_results : :class:`list[PlayerCOTDResults]`
         Represents the recent COTD results the player has gotten
     stats : :class:`PlayerCOTDStats`
         Represents the Statistics of the Player's COTD career
@@ -307,7 +306,7 @@ class PlayerCOTD:
     def __init__(
         self,
         total: int,
-        recent_results: List[PlayerCOTDResults],
+        recent_results: list[PlayerCOTDResults],
         stats: PlayerCOTDStats,
         player_id: str,
     ):
@@ -317,7 +316,7 @@ class PlayerCOTD:
         self.player_id = player_id
 
     @classmethod
-    def _from_dict(cls, page_data: Dict, player_id: str):
+    def _from_dict(cls, page_data: dict, player_id: str) -> Self:
         _log.debug("Creating a PlayerCOTD class from given dictionary")
 
         total = page_data.get("total")
@@ -387,7 +386,7 @@ class COTD:
         self.end_date = end_date
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: dict) -> Self:
         _log.debug("Creating a COTD class from given dictionary")
 
         cotd_id = raw.get("id")
@@ -405,7 +404,7 @@ class COTD:
         )
 
     @classmethod
-    async def get_cotd(cls: Self, page: int = 0) -> List[Self]:
+    async def get_cotd(cls: Self, page: int = 0) -> list[Self]:
         """
         .. versionadded :: 0.3.0
 
@@ -418,7 +417,7 @@ class COTD:
 
         Returns
         -------
-        :class:`List[COTD]`
+        :class:`list[COTD]`
             The COTDs
         """
         all_cotds = await _get_cotd_page(page)

@@ -1,5 +1,3 @@
-from typing import List
-
 from typing_extensions import Self
 
 
@@ -55,12 +53,12 @@ class _TMIO:
     TABS: _TMIOTabs = _TMIOTabs()
 
     @classmethod
-    def build(cls: Self, endpoints: List[str]) -> str:
+    def build(cls: Self, endpoints: list[str]) -> str:
         """Builds a _TMIO endpoint url.
 
         Parameters
         ----------
-        endpoints : List[str]
+        endpoints : list[str]
             The endpoints to build the url with.
 
         Returns
@@ -167,12 +165,12 @@ class _TMX:
     }
 
     @classmethod
-    def build(cls: Self, endpoints: List[str]) -> str:
+    def build(cls: Self, endpoints: list[str]) -> str:
         """URL Builder for _TMX API
 
         Parameters
         ----------
-        endpoints : class:`List`[str]
+        endpoints : class:`list`[str]
             The endpoints as a list.
 
         Returns

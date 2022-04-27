@@ -3,7 +3,6 @@ import logging
 from contextlib import suppress
 from datetime import datetime
 from types import NoneType
-from typing import Dict, List
 
 import redis
 from typing_extensions import Self
@@ -37,7 +36,7 @@ class TrophyLeaderboardPlayer:
         The player's rank
     score : str
         The player's score
-    zones : `List[PlayerZone]`
+    zones : `list[PlayerZone]`
         The player's zones
     """
 
@@ -48,7 +47,7 @@ class TrophyLeaderboardPlayer:
         player_id: str,
         rank: int,
         score: str,
-        zones: List,
+        zones: list,
     ):
         self.player_name = player_name
         self.club_tag = club_tag
@@ -58,7 +57,7 @@ class TrophyLeaderboardPlayer:
         self.zones = zones
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         from .player import PlayerZone
 
         args = []
@@ -102,7 +101,7 @@ class PlayerTrophies:
         The date of the last change of the player's self.
     points : ints: int
         The number of points of the player.
-    trophies : :class:`List[int]`
+    trophies : :class:`list[int]`
         The number of trophies of the player.
     player_id : str | :class:`NoneType`, optional
         The Trackmania ID of the player
@@ -113,8 +112,8 @@ class PlayerTrophies:
         echelon: int,
         last_change: datetime,
         points: int,
-        trophies: List[int],
-        player_id: str | NoneType = None,
+        trophies: list[int],
+        player_id: str | None = None,
     ):
         """Constructor for the class."""
         self.echelon = echelon
@@ -124,13 +123,13 @@ class PlayerTrophies:
         self._player_id = player_id
 
     @classmethod
-    def _from_dict(cls: Self, raw_trophy_data: Dict, player_id: str) -> Self:
+    def _from_dict(cls: Self, raw_trophy_data: dict, player_id: str) -> Self:
         """
         Creates a :class:`PlayerTrophies` object from the given dictionary.
 
         Parameters
         ----------
-        raw_trophy_data : :class:`Dict`
+        raw_trophy_data : :class:`dict`
             The raw trophy data to parse.
         player_id : str
             The player ID to set.
@@ -227,7 +226,7 @@ class PlayerTrophies:
 
         return trophy_str
 
-    async def history(self, page: int = 0) -> Dict:
+    async def history(self, page: int = 0) -> dict:
         """
         .. versionadded :: 0.3.0
 
@@ -239,7 +238,7 @@ class PlayerTrophies:
             page number of trophy history, by default 0
         Returns
         -------
-        :class:`Dict`
+        :class:`dict`
             Trophy history data.
         Raises
         ------
@@ -283,7 +282,7 @@ class PlayerTrophies:
         return history["gains"]
 
     @staticmethod
-    async def top(page: int = 0) -> List[TrophyLeaderboardPlayer]:
+    async def top(page: int = 0) -> list[TrophyLeaderboardPlayer]:
         """
         .. versionadded :: 0.3.0
 
@@ -296,7 +295,7 @@ class PlayerTrophies:
 
         Returns
         -------
-        :class:`List[TrophyLeaderboardPlayer]`
+        :class:`list[TrophyLeaderboardPlayer]`
             The players as a list of :class:`TrophyLeaderboardPlayer` objects.
         """
         _log.debug(f"Getting Page {page} of Trophy Leaderboards")

@@ -2,7 +2,6 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict
 
 import redis
 from typing_extensions import Self
@@ -55,7 +54,7 @@ class TOTD:
         self._mapobj = mapobj
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: dict) -> Self:
         campaign_id = raw.get("campaignid")
         mapobj = TMMap._from_dict(raw.get("map"))
         week_day = raw.get("weekday")

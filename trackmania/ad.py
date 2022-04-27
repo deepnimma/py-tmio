@@ -1,7 +1,6 @@
 import json
 import logging
 from contextlib import suppress
-from typing import Dict, List
 
 import redis
 from typing_extensions import Self
@@ -18,7 +17,7 @@ _log = logging.getLogger(__name__)
 __all__ = ("Ad",)
 
 
-async def _get_ad_list() -> List[Dict]:
+async def _get_ad_list() -> list[dict]:
     ad_list = []
 
     _log.debug("Getting all ads")
@@ -103,7 +102,7 @@ class Ad:
         self.display_format = display_format
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         uid = raw.get("uid")
         name = _regex_it(raw.get("name"))
         type = raw.get("type")
@@ -118,7 +117,7 @@ class Ad:
         return cls(*args)
 
     @classmethod
-    async def list_ads(cls) -> List[Self]:
+    async def list_ads(cls) -> list[Self]:
         """
         .. versionadded :: 0.3.0
         .. versionchanged :: 0.4.0
@@ -128,7 +127,7 @@ class Ad:
 
         Returns
         -------
-        :class:`List[Self]`
+        :class:`list[Self]`
             All the Ads
 
         Raises

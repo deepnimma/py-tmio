@@ -2,9 +2,9 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict, List
 
 import redis
+from typing_extensions import Self
 
 from .api import _APIClient
 from .config import Client
@@ -19,7 +19,7 @@ __all__ = (
 )
 
 
-async def _get_top_matchmaking(page: int = 0, royal: bool = False):
+async def _get_top_matchmaking(page: int = 0, royal: bool = False) -> dict:
     _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
 
     cache_client = Client._get_cache_client()
@@ -54,7 +54,7 @@ async def _get_top_matchmaking(page: int = 0, royal: bool = False):
     return match_history.get("ranks")
 
 
-async def _get_history(player_id: str, type_id: int, page: int) -> List[Dict]:
+async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
     if player_id is None:
         raise InvalidIDError("Player ID is not set.")
 
@@ -141,7 +141,7 @@ class PlayerMatchmakingResult:
         self.win = win
 
     @classmethod
-    def _from_dict(cls, data: Dict, player_id: str = None):
+    def _from_dict(cls, data: dict, player_id: str = None) -> Self:
         _log.debug("Creating a PlayerMatchmakingResult class from given dictionary")
 
         after_score = data.get("afterscore")
@@ -234,20 +234,20 @@ class PlayerMatchmaking:
             self.progress = 0
 
     @staticmethod
-    def _from_dict(mm_data: Dict, player_id: str = None):
+    def _from_dict(mm_data: dict, player_id: str = None) -> Self:
         """
         Parses the matchmaking data of the player and returns 2 :class:`PlayerMatchmaking` objects.
             One for 3v3 Matchmaking and the other for Royal matchmaking.
 
         Parameters
         ----------
-        mm_data : :class:`List[Dict]`
+        mm_data : :class:`list[dict]`
             The matchmaking data.
         player_id : str, optional
             The player's ID. Defaults to None
         Returns
         -------
-        :class:`List[PlayerMatchmaking]`
+        :class:`list[PlayerMatchmaking]`
             The list of matchmaking data, one for 3v3 and other other one for royal.
         """
         _log.debug("Creating a PlayerMatchmaking class from given dictionary")
@@ -272,13 +272,13 @@ class PlayerMatchmaking:
         return matchmaking_data
 
     @classmethod
-    def __parse_3v3(cls, data: Dict, player_id: str = None):
+    def __parse_3v3(cls, data: dict, player_id: str = None) -> Self:
         """
         Parses matchmaking data for 3v3 and royal type matchmaking.
 
         Parameters
         ----------
-        data : :class:`Dict`
+        data : :class:`dict`
             The matchmaking data only.
         Returns
         -------
@@ -286,7 +286,7 @@ class PlayerMatchmaking:
             The parsed data.
         """
         _log.debug(
-            f"Parsing Data from Dictionary for PlayerMatchmaking class. ID supplied: {player_id}"
+            f"Parsing Data from dictionary for PlayerMatchmaking class. ID supplied: {player_id}"
         )
 
         if "info" in data:
@@ -325,7 +325,7 @@ class PlayerMatchmaking:
         """max points"""
         return self._max_points
 
-    def __str__(self):
+    def __str__(self) -> str:
         progression = self.progression
         progress = self.progress
         rank = self.rank
@@ -336,7 +336,7 @@ class PlayerMatchmaking:
 
         return f"Progression: {progression}\nProgress: {progress}\nRank: {rank}\nScore: {score}\nDivision: {division_str} - {division}\n\nPoints to Next Division: {max_points + 1}"
 
-    async def history(self, page: int = 0) -> List[PlayerMatchmakingResult]:
+    async def history(self, page: int = 0) -> list[PlayerMatchmakingResult]:
         """
         .. versionadded :: 0.3.0
         .. versionchanged :: 0.4.0
@@ -351,7 +351,7 @@ class PlayerMatchmaking:
 
         Returns
         -------
-        :class:`List[PlayerMatchmakingResult]`
+        :class:`list[PlayerMatchmakingResult]`
             The list of matchmaking results
 
         Raises
@@ -370,7 +370,7 @@ class PlayerMatchmaking:
         return match_results
 
     @staticmethod
-    async def top_matchmaking(page: int = 0, royal: bool = False) -> List[Dict]:
+    async def top_matchmaking(page: int = 0, royal: bool = False) -> list[dict]:
         """
         .. versionadded :: 0.3.0
 
@@ -385,7 +385,7 @@ class PlayerMatchmaking:
 
         Returns
         -------
-        :class:`List[Dict]`
+        :class:`list[dict]`
             The top matchmaking players by score. Each page contains 50 players.
         """
         return await _get_top_matchmaking(page, royal)

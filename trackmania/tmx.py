@@ -2,7 +2,6 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict, List
 
 import redis
 from typing_extensions import Self
@@ -26,7 +25,7 @@ __all__ = (
 )
 
 
-async def _get_map(tmx_id: int) -> Dict:
+async def _get_map(tmx_id: int) -> dict:
     _log.info(f"Getting map data for tmx id {tmx_id}")
 
     cache_client = Client._get_cache_client()
@@ -69,7 +68,7 @@ class TMXMapTimes:
         self.updated = updated
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a TMXMapTimes from given dictionary")
 
         uploaded_raw, updated_raw = raw.get("UploadedAt"), raw.get("UpdatedAt")
@@ -152,7 +151,7 @@ class GbxFileMetadata:
         self.vehicle_name = vehicle_name
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a GbxFileMetadata from given dictionary")
 
         args = [
@@ -183,15 +182,15 @@ class TMXTags:
 
     Parameters
     ----------
-    map_tags : :class:`List[int]`
+    map_tags : :class:`list[int]`
         The map tags as a list of integers
     """
 
-    def __init__(self, map_tags: List[int]):
+    def __init__(self, map_tags: list[int]):
         self.map_tags = map_tags
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a TMXTags from given dictionary")
 
         map_tags_ss = raw.get("Tags", None).split(",")
@@ -237,7 +236,7 @@ class ReplayWRData:
         self.wr_username = wr_username
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a ReplayWRData from given dictionary")
 
         args = [
@@ -329,7 +328,7 @@ class TMXMetadata:
         self.video_count = video_count
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a TMXMetaData from given dictionary")
 
         args = [
@@ -429,7 +428,7 @@ class TMXMap:
         self.metadata = metadata
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a TMXMap from given dictionary")
 
         username = raw.get("Username")
