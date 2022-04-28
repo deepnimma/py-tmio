@@ -191,5 +191,5 @@ class TOTD:
             return await cls.get_totd(datetime.utcnow(), True)
         else:
             return await cls.get_totd(
-                datetime(today.year, today.month, today.day - 1), __get_latest=True
+                datetime(today.year, today.month, today.day - 1), True
             )

@@ -73,9 +73,13 @@ class TMXMapTimes:
 
         uploaded_raw, updated_raw = raw.get("UploadedAt"), raw.get("UpdatedAt")
 
-        # 2022-03-15T18:18:50.007 to datetime
-        uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S.%f")
-        updated = datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%S.%f")
+        try:
+            # 2022-03-15T18:18:50.007 to datetime
+            uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S.%f")
+            updated = datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%S.%f")
+        except ValueError:
+            uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S")
+            updated = datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%S")
 
         return cls(uploaded, updated)
 
