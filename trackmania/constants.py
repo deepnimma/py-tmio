@@ -27,6 +27,10 @@ class _TMIOTabs:
         self.COTD: str = "cotd"
         self.ADS: str = "ads"
 
+        self.OFFICIAL_CAMPAIGN: str = "officialcampaign"
+        self.CAMPAIGNS: str = "campaigns"
+        self.CAMPAIGN: str = "campaign"
+
 
 class _TMIO:
     """
