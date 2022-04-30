@@ -20,7 +20,8 @@ async def run():
     # Using the get_totd command
     totd_data: TOTD = await TOTD.get_totd(datetime.utcnow())
 
-    # Both the above commands do the exact same thing, the exact same way
+    # Both the above commands do the exact same thing, but cache under different keys
+    # .latest_totd caches under `totd:latest`
     # Use based on your needs.
 
     # All Parameters
