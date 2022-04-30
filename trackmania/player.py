@@ -364,7 +364,7 @@ class Player:
 
         cache_client = Client._get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             if cache_client.exists(f"player:{player_id}"):
                 _log.debug(f"{player_id}'s data found in cache")
                 player_data = cache_client.get(f"player:{player_id}").decode("utf-8")
@@ -384,7 +384,7 @@ class Player:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(player_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             # Cache player_data for 6 hours
             cache_client.set(f"player:{player_id}", json.dumps(player_data), ex=21600)
             cache_client.set(f"{player_data['displayname'].lower()}:id", player_id)
@@ -456,14 +456,14 @@ class Player:
 
         cache_client = Client._get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             if cache_client.exists(f"{username.lower()}:id"):
                 _log.debug(f"{username}'s id found in cache")
                 return cache_client.get(f"{username.lower()}:id").decode("utf-8")
 
         players = await Player.search(username)
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             _log.debug(f"Caching {username.lower()} id as {players[0].player_id}")
             cache_client.set(f"{username.lower()}:id", players[0].player_id)
         return players[0].player_id
@@ -488,7 +488,7 @@ class Player:
         _log.debug(f"Getting the username for {player_id}")
         cache_client = Client._get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             if cache_client.exists(f"{player_id}:username"):
                 _log.debug(f"{player_id}'s username found in cache")
                 return json.loads(
@@ -497,7 +497,7 @@ class Player:
 
         player: Player = await Player.get_player(player_id)
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             _log.debug(f"Caching {player_id}:username as {player.name}")
             cache_client.set(f"{player_id}:username", player.name)
 

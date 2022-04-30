@@ -22,7 +22,7 @@ async def _get_ad_list() -> list[dict]:
 
     _log.debug("Getting all ads")
     cache_client = Client._get_cache_client()
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         if cache_client.exists("ads"):
             _log.debug("Found all ads in cache")
             ads = json.loads(cache_client.get("ads").decode("utf-8"))
@@ -36,7 +36,7 @@ async def _get_ad_list() -> list[dict]:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(all_ads["error"])
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         _log.debug("Caching all ads for 12hours")
         cache_client.set("ads", json.dumps(all_ads), ex=43200)
 

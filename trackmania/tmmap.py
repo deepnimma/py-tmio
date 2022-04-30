@@ -312,7 +312,7 @@ class TMMap:
 
         cache_client = Client._get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             if cache_client.exists(f"map:{map_uid}"):
                 _log.debug(f"Map {map_uid} found in cache")
                 return cls._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
@@ -324,7 +324,7 @@ class TMMap:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(map_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             _log.debug(f"Caching map {map_uid}")
             cache_client.set(f"map:{map_uid}", json.dumps(map_data))
 
@@ -396,7 +396,7 @@ class TMMap:
         self._offset = offset
         self.length = length
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             if cache_client.exists(
                 f"leaderboard:{self.uid}:{self.offset}:{self.length}"
             ):
@@ -423,7 +423,7 @@ class TMMap:
         with suppress(KeyError, TypeError):
 
             raise TMIOException(lb_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
             cache_client.set(
                 f"leaderboard:{self.uid}:{self.offset}:{self.length}",
@@ -457,7 +457,7 @@ class TMMap:
         """
         cache_client = Client._get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             if cache_client.exists(
                 f"leaderboard:{self.uid}:{self.offset}:{self.length}"
             ):
@@ -487,7 +487,7 @@ class TMMap:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(leaderboards["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
             cache_client.set(
                 f"leaderboard:{self.uid}:{self.offset}:{self.length}",

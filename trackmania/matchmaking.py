@@ -24,7 +24,7 @@ async def _get_top_matchmaking(page: int = 0, royal: bool = False) -> dict:
 
     cache_client = Client._get_cache_client()
 
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         if cache_client.exists(f"top_matchmaking:{page}:{royal}"):
             _log.debug(f"Found top matchmaking players for page {page} in cache")
             return json.loads(
@@ -45,7 +45,7 @@ async def _get_top_matchmaking(page: int = 0, royal: bool = False) -> dict:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(match_history["error"])
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         _log.debug(f"Caching top matchmaking players for page {page}")
         cache_client.set(
             f"top_matchmaking:{page}:{royal}", json.dumps(match_history), ex=3600
@@ -62,7 +62,7 @@ async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
 
     cache_client = Client._get_cache_client()
 
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         if cache_client.exists(f"mm_hist:{page}:{type_id}:{player_id}"):
             _log.debug("Found matchmaking history for page %s in cache", page)
             return json.loads(
@@ -87,7 +87,7 @@ async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(match_history["error"])
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         _log.debug(f"Saving matchmaking history for page {page} to cache")
         cache_client.set(
             f"mm_history:{page}:{type_id}:{player_id}",

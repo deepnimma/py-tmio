@@ -30,7 +30,7 @@ async def _get_trophy_page(player_id: str, page: int) -> dict:
 
     cache_client = Client._get_cache_client()
 
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         if cache_client.exists(f"playercotd:{player_id}:{page}"):
             _log.debug(f"Player {player_id}'s page {page} cotd results found in cache")
             return json.loads(
@@ -47,7 +47,7 @@ async def _get_trophy_page(player_id: str, page: int) -> dict:
         raise TMIOException(page_data["error"])
     if isinstance(page_data, NoneType):
         raise InvalidIDError("Invalid PlayerID Given")
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         _log.debug(f"Caching Player {player_id} Page {page}")
         cache_client.set(f"playercotd:{player_id}:{page}", json.dumps(page_data))
 
@@ -59,7 +59,7 @@ async def _get_cotd_page(page: int) -> dict:
 
     cache_client = Client._get_cache_client()
 
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         if cache_client.exists(f"cotd:{page}"):
             _log.debug(f"COTD Page {page} found in cache")
             all_cotds = json.loads(cache_client.get(f"cotd:{page}").decode("utf-8"))
@@ -71,7 +71,7 @@ async def _get_cotd_page(page: int) -> dict:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(all_cotds["error"])
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+    with suppress(*Client.redis_exceptions):
         _log.debug(f"Caching COTD Page {page}")
         cache_client.set(f"cotd:{page}", json.dumps(all_cotds), ex=7200)
 

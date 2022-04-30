@@ -46,6 +46,8 @@ class Client:
     RATELIMIT_REMAINING: int = None
     RATELIMIT_RESET: datetime = None
 
+    redis_exceptions: tuple = (ConnectionRefusedError, redis.exceptions.ConnectionError)
+
     @staticmethod
     def _get_cache_client() -> redis.Redis:
         """
@@ -78,7 +80,7 @@ def cache_flushdb() -> None:
 
     try:
         return redis_client.flushdb(True)
-    except (ConnectionRefusedError, redis.exceptions.ConnectionError):
+    except Client.redis_exceptions:
         return False
 
 
@@ -100,7 +102,7 @@ def cache_flush_key(key: str) -> bool:
 
     try:
         redis_client.delete(key)
-    except (ConnectionRefusedError, redis.exceptions.ConnectionError):
+    except Client.redis_exceptions:
         return False
 
     return True

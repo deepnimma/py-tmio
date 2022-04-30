@@ -119,7 +119,7 @@ class TOTD:
         _log.debug("Getting TOTD for date: %s", date)
 
         cache_client = Client._get_cache_client()
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             if cache_client.exists(f"totd:{date.year}:{date.month}:{date.day}"):
                 _log.debug(
                     f"Found TOTD for date {date.day}:{date.month}:{date.year} in cache"
@@ -161,7 +161,7 @@ class TOTD:
                 f"Something Unexpected has occured. Please contact the developer of the Package.\nMessage: {excp}"
             ) from excp
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
+        with suppress(*Client.redis_exceptions):
             _log.debug(f"Caching TOTD for date {date.day}:{date.month}:{date.year}")
 
             if not __get_latest:
