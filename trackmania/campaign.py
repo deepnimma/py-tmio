@@ -3,6 +3,7 @@ import logging
 from contextlib import suppress
 from datetime import datetime
 from types import ClassMethodDescriptorType, NoneType
+from typing import Type
 from venv import create
 
 import redis
@@ -12,7 +13,7 @@ from yarl import cache_clear
 from trackmania.errors import TMIOException
 
 from .api import _APIClient
-from .config import Client, get_from_cache
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMIO
 from .player import Player
 from .tmmap import TMMap
@@ -167,7 +168,10 @@ class Campaign:
         leaderboard_uid = raw_data.get("leaderboarduid")
         maps = [TMMap._from_dict(map_data) for map_data in raw_data.get("playlist", [])]
         map_count = len(raw_data.get("playlist", []))
-        media = OfficialCampaignMedia._from_dict(raw_data.get("mediae"))
+        if raw_data.get("mediae") is not None:
+            media = OfficialCampaignMedia._from_dict(raw_data.get("mediae"))
+        else:
+            media = None
         name = raw_data.get("name")
 
         args = [
@@ -200,14 +204,28 @@ class Campaign:
         :class:`Campaign` | None
             The campaign object, None if it does not exist
         """
+        official = True if club_id == 0 else False
         campaign_data = get_from_cache(f"campaign:{campaign_id}:{club_id}")
         if campaign_data is not None:
-            return cls._from_dict(campaign_data)
+            return cls._from_dict(campaign_data, official=official)
 
         api_client = _APIClient()
+        if club_id != 0:
+            campaign_data = await api_client.get(
+                _TMIO.build([_TMIO.TABS.CAMPAIGN, club_id, campaign_id])
+            )
+        else:
+            campaign_data = await api_client.get(
+                _TMIO.build([_TMIO.TABS.OFFICIAL_CAMPAIGN, campaign_id])
+            )
+        await api_client.close()
+
+        set_in_cache(f"campaign:{campaign_id}:{club_id}", campaign_data, ex=432000)
+
+        return cls._from_dict(campaign_data, official=official)
 
     @classmethod
-    async def current_seasonal(cls: Self) -> Self:
+    async def current_season(cls: Self) -> Self:
         """
         Gets the current seasonal campaign.
 
@@ -216,9 +234,13 @@ class Campaign:
         :class:`Campaign`
             The campaign.
         """
-        seasonal_campaign_data = get_from_cache("seasonal:current")
-        if seasonal_campaign_data is not None:
-            return cls._from_dict(seasonal_campaign_data)
-
         api_client = _APIClient()
         campaign_data = await api_client.get(_TMIO.build([_TMIO.TABS.CAMPAIGNS, 0]))
+        await api_client.close()
+
+        with suppress(KeyError, TypeError):
+            raise TMIOException(campaign_data["error"])
+
+        campaign_id = campaign_data.get("campaigns", [])[0].get("id")
+
+        return await cls.get_campaign(campaign_id, 0)
