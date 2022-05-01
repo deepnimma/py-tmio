@@ -2,9 +2,12 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
+from subprocess import ABOVE_NORMAL_PRIORITY_CLASS
 from types import ClassMethodDescriptorType, NoneType
 from typing import Type
 from venv import create
+from wsgiref.util import application_uri
+from xmlrpc.client import _DateTimeComparable
 
 import redis
 from typing_extensions import Self
@@ -109,6 +112,60 @@ class CampaignLeaderboard:
             The player who achieved this position on the leaderboard.
         """
         return await Player.get_player(self.player_id)
+
+
+class CampaignSearchResult:
+    """
+    Represents a CampaignSearchResult.
+
+    Parameters
+    ----------
+    club_id : int
+        The ID of the club that created the campaign.
+    date : datetime
+        The date the campaign was created.
+    campaign_id : int
+        The ID of the campaign.
+    map_count : int
+        The number of maps in the campaign.
+    name : str
+        The name of the campaign.
+    """
+
+    def __init__(
+        self,
+        club_id: int,
+        date: datetime,
+        campaign_id: int,
+        map_count: int,
+        name: int,
+    ):
+        self.club_id = club_id
+        self.date = date
+        self.campaign_id = campaign_id
+        self.map_count = map_count
+        self.name = name
+
+    @classmethod
+    def _from_dict(cls: Self, raw_data: dict) -> Self:
+        club_id = raw_data.get("clubid", 0)
+        date = datetime.utcfromtimestamp(raw_data.get("timestamp", 0))
+        campaign_id = raw_data.get("id", 0)
+        map_count = raw_data.get("mapcount", 1)
+        name = raw_data.get("name")
+
+        args = [
+            club_id,
+            date,
+            campaign_id,
+            map_count,
+            name,
+        ]
+
+        return cls(*args)
+
+    def get_campaign(self):
+        return Campaign.get_campaign(self.campaign_id, self.club_id)
 
 
 class Campaign:
@@ -244,3 +301,74 @@ class Campaign:
         campaign_id = campaign_data.get("campaigns", [])[0].get("id")
 
         return await cls.get_campaign(campaign_id, 0)
+
+    @staticmethod
+    async def official_campaigns() -> list[CampaignSearchResult]:
+        """
+        Gets all official nadeo campaigns.
+
+        Returns
+        -------
+        :class:`list[CampaignSearchResult]`
+            The list of campaigns.
+        """
+        official_campaigns = []
+        all_campaigns = get_from_cache("campaigns:all:0")
+
+        if all_campaigns is not None:
+            for campaign in all_campaigns:
+                if campaign.get("id", -1) == 0:
+                    official_campaigns.append(CampaignSearchResult._from_dict(campaign))
+            return official_campaigns
+
+        api_client = _APIClient()
+        all_campaigns = await api_client.get(_TMIO.build([_TMIO.TABS.CAMPAIGNS, 0]))
+        await api_client.close()
+
+        with suppress(KeyError, TypeError):
+            raise TMIOException(all_campaigns["error"])
+
+        set_in_cache("campaigns:all:0", all_campaigns, ex=432000)
+
+        for campaign in all_campaigns:
+            if campaign.get("id", -1) == 0:
+                official_campaigns.append(CampaignSearchResult._from_dict(campaign))
+
+        return official_campaigns
+
+    @staticmethod
+    async def popular_campaigns(page: int = 0) -> list[CampaignSearchResult]:
+        """
+        Gets all popular campaigns, official campaigns excluded.
+        50 Results / Page (except Page 1 because of the official campaigns)
+
+        Parameters
+        ----------
+        page : int, optional
+            The page number, by default 0
+
+        Returns
+        -------
+        :class:`list[CampaignSearchResult]`
+            The list of campaigns.
+        """
+        campaigns_list = []
+        all_campaigns = get_from_cache(f"campaigns:all:{page}")
+
+        if all_campaigns is not None:
+            for campaign in all_campaigns:
+                if campaign.get("clubid", -1) != 0:
+                    campaigns_list.append(CampaignSearchResult._from_dict(campaign))
+
+        api_client = _APIClient()
+        all_campaigns = await api_client.get(_TMIO.build([_TMIO.TABS.CAMPAIGNS, page]))
+        await api_client.close()
+
+        with suppress(KeyError, TypeError):
+            raise TMIOException(all_campaigns["error"])
+
+        for campaign in all_campaigns:
+            if campaign.get("clubid", -1) != 0:
+                campaigns_list.append(CampaignSearchResult._from_dict(campaign))
+
+        return campaigns_list
