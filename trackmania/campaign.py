@@ -1,3 +1,4 @@
+import json
 import logging
 from contextlib import suppress
 from datetime import datetime
@@ -6,6 +7,7 @@ from venv import create
 
 import redis
 from typing_extensions import Self
+from yarl import cache_clear
 
 from trackmania.errors import TMIOException
 
@@ -180,3 +182,59 @@ class Campaign:
         ]
 
         return cls(*args)
+
+    @classmethod
+    async def get_campaign(cls: Self, campaign_id: int, club_id: int) -> Self | None:
+        """
+        Gets a campaign with the given campaign and club ids.
+
+        Parameters
+        ----------
+        campaign_id : int
+            The campaign's id.
+        club_id : int
+            The club the campaign belongs to.
+
+        Returns
+        -------
+        :class:`Campaign` | None
+            The campaign object, None if it does not exist
+        """
+        cache_client = Client._get_cache_client()
+
+        with suppress(*Client.redis_exceptions):
+            if cache_client.exists(f"campaign:{campaign_id}:{club_id}"):
+                _log.debug(
+                    "Found campaign %s with club id %s in cache", campaign_id, club_id
+                )
+                return cls._from_dict(
+                    json.loads(
+                        cache_client.get(f"campaign:{campaign_id}:{club_id}").decode(
+                            "utf-8"
+                        )
+                    )
+                )
+
+        api_client = _APIClient()
+
+    @classmethod
+    async def current_seasonal(cls: Self) -> Self:
+        """
+        Gets the current seasonal campaign.
+
+        Returns
+        -------
+        :class:`Campaign`
+            The campaign.
+        """
+        cache_client = Client._get_cache_client()
+
+        with suppress(*Client.redis_exceptions):
+            if cache_client.exists("seasonal:current"):
+                _log.debug("Getting current seasonal campaign from cache")
+                return cls._from_dict(
+                    json.loads(cache_client.get("seasonal:current").decode("UTF-8"))
+                )
+
+        api_client = _APIClient()
+        campaign_data = await api_client.get(_TMIO.build([_TMIO.TABS.CAMPAIGNS, 0]))
