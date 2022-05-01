@@ -10,7 +10,7 @@ from trackmania.api import _APIClient
 
 from ._util import _regex_it
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException
 from .player import Player
@@ -310,23 +310,18 @@ class TMMap:
         """
         _log.debug(f"Getting the map with the UID {map_uid}")
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(f"map:{map_uid}"):
-                _log.debug(f"Map {map_uid} found in cache")
-                return cls._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
+        map_data = get_from_cache(f"map:{map_uid}")
+        if map_data is not None:
+            return cls._from_dict(map_data)
 
         api_client = _APIClient()
         map_data = await api_client.get(_TMIO.build([_TMIO.TABS.MAP, map_uid]))
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(map_data["error"])
-        with suppress(*Client.redis_exceptions):
-            _log.debug(f"Caching map {map_uid}")
-            cache_client.set(f"map:{map_uid}", json.dumps(map_data))
+
+        set_in_cache(f"map:{map_uid}", json.dumps(map_data))
 
         return cls._from_dict(map_data)
 
@@ -391,27 +386,18 @@ class TMMap:
             f"Getting Leaderboard of the Map with Length {length} and offset {offset}"
         )
 
-        cache_client = Client._get_cache_client()
-
         self._offset = offset
         self.length = length
 
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(
-                f"leaderboard:{self.uid}:{self.offset}:{self.length}"
-            ):
-                _log.debug(
-                    f"Leaderboard {self.uid}:{self.offset}:{self.length} found in cache"
-                )
-                leaderboards = []
-                for lb in json.loads(
-                    cache_client.get(
-                        f"leaderboard:{self.uid}:{self.offset}:{self.length}"
-                    ).decode("utf-8")
-                )["tops"]:
-                    leaderboards.append(Leaderboard._from_dict(lb))
+        leaderboards_data = get_from_cache(
+            f"leaderboard:{self.uid}:{self.offset}:{self.length}"
+        )
+        if leaderboards_data is not None:
+            leaderboards = []
+            for lb in leaderboards_data.get("tops", []):
+                leaderboards.append(Leaderboard._from_dict(lb))
 
-                return leaderboards
+            return leaderboards
 
         api_client = _APIClient()
         lb_data = await api_client.get(
@@ -421,14 +407,11 @@ class TMMap:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(lb_data["error"])
-        with suppress(*Client.redis_exceptions):
-            _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
-            cache_client.set(
-                f"leaderboard:{self.uid}:{self.offset}:{self.length}",
-                json.dumps(lb_data),
-            )
+
+        set_in_cache(
+            f"leaderboard:{self.uid}:{self.offset}:{self.length}", json.dumps(lb_data)
+        )
 
         self._offset += self.length
         self._lb_loaded = True
@@ -455,24 +438,15 @@ class TMMap:
         :class:`list[Leaderboard]`
             The leaderboard positions.
         """
-        cache_client = Client._get_cache_client()
+        leaderboard_data = get_from_cache(
+            f"leaderboard:{self.uid}:{self.offset}:{self.length}"
+        )
+        if leaderboard_data is not None:
+            leaderboards = []
+            for lb in leaderboard_data.get("tops", []):
+                leaderboards.append(Leaderboard._from_dict(lb))
 
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(
-                f"leaderboard:{self.uid}:{self.offset}:{self.length}"
-            ):
-                _log.debug(
-                    f"Leaderboard {self.uid}:{self.offset}:{self.length} found in cache"
-                )
-                leaderboards = []
-                for lb in json.loads(
-                    cache_client.get(
-                        f"leaderboard:{self.uid}:{self.offset}:{self.length}"
-                    ).decode("utf-8")
-                )["tops"]:
-                    leaderboards.append(Leaderboard._from_dict(lb))
-
-                return leaderboards
+            return leaderboards
 
         if not self._lb_loaded:
             _log.warn("Leaderboard is not loaded yet, loading from start")
@@ -487,12 +461,11 @@ class TMMap:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(leaderboards["error"])
-        with suppress(*Client.redis_exceptions):
-            _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
-            cache_client.set(
-                f"leaderboard:{self.uid}:{self.offset}:{self.length}",
-                json.dumps(leaderboards),
-            )
+
+        set_in_cache(
+            f"leaderboard:{self.uid}:{self.offset}:{self.length}",
+            json.dumps(leaderboards),
+        )
 
         self._offset += length
         self._lb_loaded = True

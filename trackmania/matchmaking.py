@@ -7,7 +7,7 @@ import redis
 from typing_extensions import Self
 
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
 
@@ -22,14 +22,10 @@ __all__ = (
 async def _get_top_matchmaking(page: int = 0, royal: bool = False) -> dict:
     _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
 
-    cache_client = Client._get_cache_client()
+    top_matchmaking = get_from_cache(f"top_matchmaking:{page}:{royal}")
+    if top_matchmaking is not None:
+        return top_matchmaking.get("ranks")
 
-    with suppress(*Client.redis_exceptions):
-        if cache_client.exists(f"top_matchmaking:{page}:{royal}"):
-            _log.debug(f"Found top matchmaking players for page {page} in cache")
-            return json.loads(
-                cache_client.get(f"top_matchmaking:{page}:{royal}").decode("utf-8")
-            ).get("ranks")
     api_client = _APIClient()
 
     if not royal:
@@ -45,11 +41,8 @@ async def _get_top_matchmaking(page: int = 0, royal: bool = False) -> dict:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(match_history["error"])
-    with suppress(*Client.redis_exceptions):
-        _log.debug(f"Caching top matchmaking players for page {page}")
-        cache_client.set(
-            f"top_matchmaking:{page}:{royal}", json.dumps(match_history), ex=3600
-        )
+
+    set_in_cache(f"top_matchmaking:{page}:{royal}", match_history, ex=3600)
 
     return match_history.get("ranks")
 
@@ -60,16 +53,11 @@ async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
 
     _log.debug("Getting matchmaking history for player %s and page %d", player_id, page)
 
-    cache_client = Client._get_cache_client()
-
-    with suppress(*Client.redis_exceptions):
-        if cache_client.exists(f"mm_hist:{page}:{type_id}:{player_id}"):
-            _log.debug("Found matchmaking history for page %s in cache", page)
-            return json.loads(
-                cache_client.get(f"mm_hist:{page}:{type_id}:{player_id}").decode(
-                    "utf-8"
-                )
-            )["history"]
+    matchmaking_history = get_from_cache(
+        f"matchmaking_history:{page}:{type_id}:{player_id}"
+    )
+    if matchmaking_history is not None:
+        return matchmaking_history.get("history")
 
     api_client = _APIClient()
     match_history = await api_client.get(
@@ -87,13 +75,10 @@ async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(match_history["error"])
-    with suppress(*Client.redis_exceptions):
-        _log.debug(f"Saving matchmaking history for page {page} to cache")
-        cache_client.set(
-            f"mm_history:{page}:{type_id}:{player_id}",
-            json.dumps(match_history),
-            ex=3600,
-        )
+
+    set_in_cache(
+        f"matchmaking_history:{page}:{type_id}:{player_id}", match_history, ex=3600
+    )
 
     return match_history.get("history", [])
 

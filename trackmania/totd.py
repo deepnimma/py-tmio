@@ -10,7 +10,7 @@ from typing_extensions import Self
 from trackmania.errors import InvalidTOTDDate, TMIOException
 
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException, TrackmaniaException
 from .tmmap import TMMap
@@ -118,25 +118,15 @@ class TOTD:
         """
         _log.debug("Getting TOTD for date: %s", date)
 
-        cache_client = Client._get_cache_client()
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(f"totd:{date.year}:{date.month}:{date.day}"):
-                _log.debug(
-                    f"Found TOTD for date {date.day}:{date.month}:{date.year} in cache"
-                )
+        if __get_latest:
+            latest_totd_data = get_from_cache("totd:latest")
+        else:
+            latest_totd_data = get_from_cache(
+                f"totd:{date.year}:{date.month}:{date.day}"
+            )
 
-                if not __get_latest:
-                    return cls._from_dict(
-                        json.loads(
-                            cache_client.get(
-                                f"totd:{date.year}:{date.month}:{date.day}"
-                            ).decode("utf-8")
-                        )
-                    )
-                else:
-                    return cls._from_dict(
-                        json.loads(cache_client.get("totd:latest").decode("utf-8"))
-                    )
+        if latest_totd_data is not None:
+            return cls._from_dict(latest_totd_data)
 
         api_client = _APIClient()
         all_totds = await api_client.get(
@@ -161,15 +151,10 @@ class TOTD:
                 f"Something Unexpected has occured. Please contact the developer of the Package.\nMessage: {excp}"
             ) from excp
 
-        with suppress(*Client.redis_exceptions):
-            _log.debug(f"Caching TOTD for date {date.day}:{date.month}:{date.year}")
-
-            if not __get_latest:
-                cache_client.set(
-                    f"totd:{date.year}:{date.month}:{date.day}", json.dumps(totd)
-                )
-            else:
-                cache_client.set("totd:latest", json.dumps(totd))
+        if __get_latest:
+            set_in_cache("totd:latest", json.dumps(totd))
+        else:
+            set_in_cache(f"totd:{date.year}:{date.month}:{date.day}", json.dumps(totd))
 
         return cls._from_dict(totd)
 

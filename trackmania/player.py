@@ -8,7 +8,7 @@ from typing_extensions import Self
 
 from ._util import _regex_it
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException
 from .matchmaking import PlayerMatchmaking
@@ -362,32 +362,19 @@ class Player:
         """
         _log.debug(f"Getting {player_id}'s data")
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(f"player:{player_id}"):
-                _log.debug(f"{player_id}'s data found in cache")
-                player_data = cache_client.get(f"player:{player_id}").decode("utf-8")
-                player_data = json.loads(player_data)
-                return cls(
-                    **Player._parse_player(
-                        json.loads(
-                            cache_client.get(f"player:{player_id}").decode("utf-8")
-                        )
-                    )
-                )
+        player_data = get_from_cache(f"player:{player_id}")
+        if player_id is not None:
+            return cls(**Player._parse_player(player_data))
 
         api_client = _APIClient()
         player_data = await api_client.get(_TMIO.build([_TMIO.TABS.PLAYER, player_id]))
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(player_data["error"])
-        with suppress(*Client.redis_exceptions):
-            # Cache player_data for 6 hours
-            cache_client.set(f"player:{player_id}", json.dumps(player_data), ex=21600)
-            cache_client.set(f"{player_data['displayname'].lower()}:id", player_id)
+
+        set_in_cache(f"player:{player_id}", player_data, ex=21600)
+        set_in_cache(f"{player_data['displayname'].lower()}:id", player_id)
 
         return cls(**Player._parse_player(player_data))
 
@@ -454,18 +441,14 @@ class Player:
         """
         _log.debug(f"Getting {username}'s id")
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(f"{username.lower()}:id"):
-                _log.debug(f"{username}'s id found in cache")
-                return cache_client.get(f"{username.lower()}:id").decode("utf-8")
+        player_id = get_from_cache(f"{username.lower()}:id")
+        if player_id is not None:
+            return player_id
 
         players = await Player.search(username)
 
-        with suppress(*Client.redis_exceptions):
-            _log.debug(f"Caching {username.lower()} id as {players[0].player_id}")
-            cache_client.set(f"{username.lower()}:id", players[0].player_id)
+        set_in_cache(f"{username.lower()}:id", players[0].player_id)
+
         return players[0].player_id
 
     @staticmethod
@@ -486,20 +469,14 @@ class Player:
             The player's username
         """
         _log.debug(f"Getting the username for {player_id}")
-        cache_client = Client._get_cache_client()
 
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(f"{player_id}:username"):
-                _log.debug(f"{player_id}'s username found in cache")
-                return json.loads(
-                    cache_client.get(f"{player_id}:username").decode("utf-8")
-                )
+        player_username = get_from_cache(f"{player_id}:username")
+        if player_username is not None:
+            return player_username
 
         player: Player = await Player.get_player(player_id)
 
-        with suppress(*Client.redis_exceptions):
-            _log.debug(f"Caching {player_id}:username as {player.name}")
-            cache_client.set(f"{player_id}:username", player.name)
+        set_in_cache(f"{player_id}:username", player.name)
 
         return player.name
 

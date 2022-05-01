@@ -9,7 +9,7 @@ from typing_extensions import Self
 from trackmania.api import _APIClient
 
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMX
 from .errors import InvalidTMXCode
 
@@ -28,11 +28,9 @@ __all__ = (
 async def _get_map(tmx_id: int) -> dict:
     _log.info(f"Getting map data for tmx id {tmx_id}")
 
-    cache_client = Client._get_cache_client()
-    with suppress(ConnectionError, redis.exceptions.ConnectionError):
-        if cache_client.exists(f"tmxmap:{tmx_id}"):
-            _log.debug(f"Found map data for tmx id {tmx_id} in cache")
-            return json.loads(cache_client.get(f"tmxmap:{tmx_id}").decode("utf-8"))
+    tmx_map = get_from_cache(f"tmxmap:{tmx_id}")
+    if tmx_map is not None:
+        return tmx_map
 
     api_client = _APIClient()
     map_data = await api_client.get(
@@ -42,9 +40,8 @@ async def _get_map(tmx_id: int) -> dict:
 
     if not isinstance(map_data, dict):
         raise InvalidTMXCode("Invalid TMX code")
-    with suppress(ConnectionError, redis.exceptions.ConnectionError):
-        _log.debug(f"Caching map data for tmx id {tmx_id}")
-        cache_client.set(f"tmxmap:{tmx_id}", json.dumps(map_data))
+
+    set_in_cache(f"tmxmap:{tmx_id}", map_data)
 
     return map_data
 

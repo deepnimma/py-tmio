@@ -9,7 +9,7 @@ from typing_extensions import Self
 
 from ._util import _add_commas, _regex_it
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, InvalidTrophyNumber, TMIOException
 
@@ -251,14 +251,9 @@ class PlayerTrophies:
             f"Getting Trophy Leaderboard for Page: {page} and Player Id: {self.player_id}"
         )
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(f"trophy:{page}"):
-                _log.debug(f"Found trophy leaderboard for page {page} in cache")
-                return json.loads(cache_client.get(f"trophy:{page}").decode("utf-8"))[
-                    "gains"
-                ]
+        trophy_leaderboard_data = get_from_cache(f"trophy:{page}")
+        if trophy_leaderboard_data is not None:
+            return trophy_leaderboard_data.get("gains")
 
         api_client = _APIClient()
 
@@ -275,9 +270,8 @@ class PlayerTrophies:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(history["error"])
-        with suppress(*Client.redis_exceptions):
-            _log.debug(f"Caching trophy history for page: {page}")
-            cache_client.set(f"trophy:{page}", json.dumps(history), ex=3600)
+
+        set_in_cache(f"trophy:{page}", json.dumps(history), ex=3600)
 
         return history["gains"]
 
@@ -300,18 +294,11 @@ class PlayerTrophies:
         """
         _log.debug(f"Getting Page {page} of Trophy Leaderboards")
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(f"trophies:{page}"):
-                _log.debug(f"Found trophy leaderboard for page {page} in cache")
-                all_players = json.loads(
-                    cache_client.get(f"trophies:{page}").decode("utf-8")
-                )
-
-                lb_players = []
-                for top_player in all_players["ranks"]:
-                    lb_players.append(TrophyLeaderboardPlayer._from_dict(top_player))
+        trophy_leaderboard_data = get_from_cache(f"trophies:{page}")
+        if trophy_leaderboard_data is not None:
+            lb_players = []
+            for top_player in trophy_leaderboard_data.get("ranks", []):
+                lb_players.append(TrophyLeaderboardPlayer._from_dict(top_player))
 
         api_client = _APIClient()
 
@@ -323,9 +310,8 @@ class PlayerTrophies:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(top_trophies["error"])
-        with suppress(*Client.redis_exceptions):
-            _log.debug(f"Caching trophy leaderboard for page: {page}")
-            cache_client.set(f"trophies:{page}", json.dumps(top_trophies), ex=3600)
+
+        set_in_cache(f"trophies:{page}", json.dumps(top_trophies), ex=3600)
 
         lb_players = []
         for top_player in top_trophies["ranks"]:

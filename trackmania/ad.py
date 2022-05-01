@@ -9,7 +9,7 @@ from trackmania.errors import TMIOException
 
 from ._util import _regex_it
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMIO
 
 _log = logging.getLogger(__name__)
@@ -21,14 +21,11 @@ async def _get_ad_list() -> list[dict]:
     ad_list = []
 
     _log.debug("Getting all ads")
-    cache_client = Client._get_cache_client()
-    with suppress(*Client.redis_exceptions):
-        if cache_client.exists("ads"):
-            _log.debug("Found all ads in cache")
-            ads = json.loads(cache_client.get("ads").decode("utf-8"))
-            for ad_dict in ads.get("ads"):
-                ad_list.append(ad_dict)
-            return ad_list
+    ads = get_from_cache("ads")
+    if ads is not None:
+        for ad_dict in ads.get("ads"):
+            ad_list.append(ad_dict)
+        return ad_list
 
     api_client = _APIClient()
     all_ads = await api_client.get(_TMIO.build([_TMIO.TABS.ADS]))
@@ -36,9 +33,8 @@ async def _get_ad_list() -> list[dict]:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(all_ads["error"])
-    with suppress(*Client.redis_exceptions):
-        _log.debug("Caching all ads for 12hours")
-        cache_client.set("ads", json.dumps(all_ads), ex=43200)
+
+    set_in_cache("ads", all_ads, ex=43200)
 
     for ad_dict in all_ads.get("ads"):
         ad_list.append(ad_dict)
