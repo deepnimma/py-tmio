@@ -4,11 +4,10 @@ from datetime import datetime
 
 from typing_extensions import Self
 
-from trackmania.errors import TMIOException
-
 from .api import _APIClient
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
+from .errors import TMIOException
 from .player import Player
 from .tmmap import TMMap
 
