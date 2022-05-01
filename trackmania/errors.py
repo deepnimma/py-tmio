@@ -14,25 +14,17 @@ __all__ = (
 class TrackmaniaException(Exception):
     """BASE exception class for py-tmio"""
 
-    pass
-
 
 class TMIOException(Exception):
     """BASE exception class for errors from trackmania.io"""
-
-    pass
 
 
 class TMXException(Exception):
     """BASE exception class for errors from trackmania.exchange"""
 
-    pass
-
 
 class InvalidPlayerException(TrackmaniaException):
     """Base Exception class for Player-Related exceptions"""
-
-    pass
 
 
 class NoUserAgentSetError(Exception):

@@ -1,6 +1,4 @@
-import json
 import logging
-from contextlib import suppress
 from datetime import datetime
 
 import redis

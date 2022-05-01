@@ -4,7 +4,6 @@ from contextlib import suppress
 from datetime import datetime
 
 import redis
-from yarl import cache_clear
 
 __all__ = ("Client",)
 

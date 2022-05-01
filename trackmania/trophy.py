@@ -2,7 +2,6 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from types import NoneType
 
 import redis
 from typing_extensions import Self
