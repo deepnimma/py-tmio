@@ -10,7 +10,7 @@ from typing_extensions import Self
 from trackmania.errors import TMIOException
 
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
 
@@ -28,14 +28,9 @@ __all__ = (
 async def _get_trophy_page(player_id: str, page: int) -> dict:
     _log.debug(f"Getting COTD Stats for Player {player_id} and page {page}")
 
-    cache_client = Client._get_cache_client()
-
-    with suppress(*Client.redis_exceptions):
-        if cache_client.exists(f"playercotd:{player_id}:{page}"):
-            _log.debug(f"Player {player_id}'s page {page} cotd results found in cache")
-            return json.loads(
-                cache_client.get(f"playercotd:{player_id}:{page}").decode("utf-8")
-            )
+    player_cotd = get_from_cache(f"playercotd:{player_id}:{page}")
+    if player_cotd is not None:
+        return player_cotd
 
     api_client = _APIClient()
     page_data = await api_client.get(
@@ -47,9 +42,8 @@ async def _get_trophy_page(player_id: str, page: int) -> dict:
         raise TMIOException(page_data["error"])
     if isinstance(page_data, NoneType):
         raise InvalidIDError("Invalid PlayerID Given")
-    with suppress(*Client.redis_exceptions):
-        _log.debug(f"Caching Player {player_id} Page {page}")
-        cache_client.set(f"playercotd:{player_id}:{page}", json.dumps(page_data))
+
+    set_in_cache(f"playercotd:{player_id}:{page}", page_data)
 
     return page_data
 
@@ -57,13 +51,9 @@ async def _get_trophy_page(player_id: str, page: int) -> dict:
 async def _get_cotd_page(page: int) -> dict:
     _log.debug(f"Getting COTD Page {page}")
 
-    cache_client = Client._get_cache_client()
-
-    with suppress(*Client.redis_exceptions):
-        if cache_client.exists(f"cotd:{page}"):
-            _log.debug(f"COTD Page {page} found in cache")
-            all_cotds = json.loads(cache_client.get(f"cotd:{page}").decode("utf-8"))
-            return all_cotds["competitions"]
+    cotd_page = await get_from_cache(f"cotd:{page}")
+    if not cotd_page:
+        return cotd_page.get("competitions", [])
 
     api_client = _APIClient()
     all_cotds = await api_client.get(_TMIO.build([_TMIO.TABS.COTD, page]))
@@ -71,9 +61,8 @@ async def _get_cotd_page(page: int) -> dict:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(all_cotds["error"])
-    with suppress(*Client.redis_exceptions):
-        _log.debug(f"Caching COTD Page {page}")
-        cache_client.set(f"cotd:{page}", json.dumps(all_cotds), ex=7200)
+
+    set_in_cache(f"cotd:{page}", all_cotds, ex=7200)
 
     return all_cotds["competitions"]
 
