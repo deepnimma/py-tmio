@@ -1,8 +1,14 @@
+import json
+import logging
+from contextlib import suppress
 from datetime import datetime
 
 import redis
+from yarl import cache_clear
 
 __all__ = ("Client",)
+
+_log = logging.getLogger(__name__)
 
 
 class Client:
@@ -64,6 +70,61 @@ class Client:
             db=Client.REDIS_DB,
             password=Client.REDIS_PASSWORD,
         )
+
+
+def get_from_cache(key: str) -> dict | None:
+    """
+    Gets a specific key from cache if it exists.
+    Returns None if any value of that key does not exist.
+
+    Parameters
+    ----------
+    key : str
+        The key to check for.
+
+    Returns
+    -------
+    dict
+        The parsed data.
+    """
+    cache_client = Client._get_cache_client()
+
+    with suppress(*Client.redis_exceptions):
+        if cache_client.exists(key):
+            _log.debug(f"Getting {key} from cache")
+            return json.loads(cache_client.get(key).decode("utf-8"))
+
+    return None
+
+
+def set_in_cache(key: str, value: dict | str, ex: int = None) -> bool:
+    """
+    Set a key-value pair in cache with an expiration time of `ex`.
+
+    Parameters
+    ----------
+    key : str
+        The key for the cache.
+    value : dict | str
+        The value for the specific key.
+    ex : int, optional
+        The expiration time for the key-value pair. If None there is no expiration time, by default None
+
+    Returns
+    -------
+    bool
+        _description_
+    """
+    cache_client = Client._get_cache_client()
+
+    with suppress(*Client.redis_exceptions):
+        _log.debug(f"Setting {key} in cache with expiration time {ex}")
+        if isinstance(value, str):
+            return cache_client.set(name=key, value=value, ex=ex)
+        elif isinstance(value, dict):
+            return cache_client.set(name=key, value=json.dumps(value), ex=ex)
+
+    return False
 
 
 def cache_flushdb() -> None:
