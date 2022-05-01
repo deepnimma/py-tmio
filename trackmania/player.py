@@ -363,7 +363,7 @@ class Player:
         _log.debug(f"Getting {player_id}'s data")
 
         player_data = get_from_cache(f"player:{player_id}")
-        if player_id is not None:
+        if player_data is not None:
             return cls(**Player._parse_player(player_data))
 
         api_client = _APIClient()

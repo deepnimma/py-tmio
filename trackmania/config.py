@@ -92,8 +92,10 @@ def get_from_cache(key: str) -> dict | None:
     with suppress(*Client.redis_exceptions):
         if cache_client.exists(key):
             _log.debug(f"Getting {key} from cache")
-            return json.loads(cache_client.get(key).decode("utf-8"))
-
+            try:
+                return json.loads(cache_client.get(key).decode("utf-8"))
+            except json.decoder.JSONDecodeError:
+                return cache_client.get(key).decode("utf-8")
     return None
 
 

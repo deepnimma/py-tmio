@@ -12,7 +12,7 @@ from yarl import cache_clear
 from trackmania.errors import TMIOException
 
 from .api import _APIClient
-from .config import Client
+from .config import Client, get_from_cache
 from .constants import _TMIO
 from .player import Player
 from .tmmap import TMMap
@@ -200,20 +200,9 @@ class Campaign:
         :class:`Campaign` | None
             The campaign object, None if it does not exist
         """
-        cache_client = Client._get_cache_client()
-
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists(f"campaign:{campaign_id}:{club_id}"):
-                _log.debug(
-                    "Found campaign %s with club id %s in cache", campaign_id, club_id
-                )
-                return cls._from_dict(
-                    json.loads(
-                        cache_client.get(f"campaign:{campaign_id}:{club_id}").decode(
-                            "utf-8"
-                        )
-                    )
-                )
+        campaign_data = get_from_cache(f"campaign:{campaign_id}:{club_id}")
+        if campaign_data is not None:
+            return cls._from_dict(campaign_data)
 
         api_client = _APIClient()
 
@@ -227,14 +216,9 @@ class Campaign:
         :class:`Campaign`
             The campaign.
         """
-        cache_client = Client._get_cache_client()
-
-        with suppress(*Client.redis_exceptions):
-            if cache_client.exists("seasonal:current"):
-                _log.debug("Getting current seasonal campaign from cache")
-                return cls._from_dict(
-                    json.loads(cache_client.get("seasonal:current").decode("UTF-8"))
-                )
+        seasonal_campaign_data = get_from_cache("seasonal:current")
+        if seasonal_campaign_data is not None:
+            return cls._from_dict(seasonal_campaign_data)
 
         api_client = _APIClient()
         campaign_data = await api_client.get(_TMIO.build([_TMIO.TABS.CAMPAIGNS, 0]))
