@@ -51,8 +51,8 @@ async def _get_trophy_page(player_id: str, page: int) -> dict:
 async def _get_cotd_page(page: int) -> dict:
     _log.debug(f"Getting COTD Page {page}")
 
-    cotd_page = await get_from_cache(f"cotd:{page}")
-    if not cotd_page:
+    cotd_page = get_from_cache(f"cotd:{page}")
+    if cotd_page is not None:
         return cotd_page.get("competitions", [])
 
     api_client = _APIClient()
@@ -117,14 +117,35 @@ class BestCOTDStats:
     def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a BestCOTDStats class from given dictionary")
 
+        try:
+            best_rank_time = datetime.strptime(
+                raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%S+00:00"
+            )
+            best_div_time = datetime.strptime(
+                raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%S+00:00"
+            )
+            best_rank_div_time = datetime.strptime(
+                raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%S+00:00"
+            )
+        except ValueError:
+            best_rank_time = datetime.strptime(
+                raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%SZ"
+            )
+            best_div_time = datetime.strptime(
+                raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%SZ"
+            )
+            best_rank_div_time = datetime.strptime(
+                raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%SZ"
+            )
+
         args = [
             raw.get("bestrank"),
-            datetime.strptime(raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%S+00:00"),
+            best_rank_time,
             raw.get("bestrankdivrank"),
             raw.get("bestdiv"),
-            datetime.strptime(raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%S+00:00"),
+            best_div_time,
             raw.get("bestrankindiv"),
-            datetime.strptime(raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%S+00:00"),
+            best_rank_div_time,
             raw.get("bestrankindivdiv"),
         ]
 
@@ -251,7 +272,12 @@ class PlayerCOTDResults:
         _log.debug("Creating a PlayerCOTDResults class from given dictionary")
 
         id = raw.get("id")
-        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
+        try:
+            timestamp = datetime.strptime(
+                raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00"
+            )
+        except ValueError:
+            timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ")
         name = raw.get("name")
         div = raw.get("div")
         rank = raw.get("rank")
