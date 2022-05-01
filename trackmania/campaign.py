@@ -2,13 +2,12 @@ import logging
 from contextlib import suppress
 from datetime import datetime
 
-import redis
 from typing_extensions import Self
 
 from trackmania.errors import TMIOException
 
 from .api import _APIClient
-from .config import Client, get_from_cache, set_in_cache
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .player import Player
 from .tmmap import TMMap
@@ -60,6 +59,7 @@ class OfficialCampaignMedia:
 
     @classmethod
     def _from_dict(cls: Self, raw_data: dict) -> Self:
+        _log.debug("Creating an OfficialCampaignsMedia class from given dictionary")
         button_background = raw_data.get("buttonbackground")
         button_foreground = raw_data.get("buttonforeground")
         decal = raw_data.get("decal")
@@ -96,6 +96,8 @@ class CampaignLeaderboard:
 
     async def player(self) -> Player:
         """
+        .. versionadded :: 0.5
+
         Returns the player object of this campaign leaderboard position
 
         Returns
@@ -108,6 +110,8 @@ class CampaignLeaderboard:
 
 class CampaignSearchResult:
     """
+    .. versionadded :: 0.5
+
     Represents a CampaignSearchResult.
 
     Parameters
@@ -140,6 +144,7 @@ class CampaignSearchResult:
 
     @classmethod
     def _from_dict(cls: Self, raw_data: dict) -> Self:
+        _log.debug("Creating a CampaignSearchResult class from given dictionary")
         club_id = raw_data.get("clubid", 0)
         date = datetime.utcfromtimestamp(raw_data.get("timestamp", 0))
         campaign_id = raw_data.get("id", 0)
@@ -211,6 +216,7 @@ class Campaign:
 
     @classmethod
     def _from_dict(cls: Self, raw_data: dict, official: bool = False) -> Self:
+        _log.debug("Creating a Campaign class from given dictionary")
         campaign_id = raw_data.get("id")
         image = raw_data.get("media")
         is_official = official
@@ -239,6 +245,8 @@ class Campaign:
     @classmethod
     async def get_campaign(cls: Self, campaign_id: int, club_id: int) -> Self | None:
         """
+        .. versionadded :: 0.5
+
         Gets a campaign with the given campaign and club ids.
 
         Parameters
@@ -276,6 +284,8 @@ class Campaign:
     @classmethod
     async def current_season(cls: Self) -> Self:
         """
+        .. versionadded :: 0.5
+
         Gets the current seasonal campaign.
 
         Returns
@@ -297,6 +307,8 @@ class Campaign:
     @staticmethod
     async def official_campaigns() -> list[CampaignSearchResult]:
         """
+        .. versionadded :: 0.5
+
         Gets all official nadeo campaigns.
 
         Returns
@@ -331,6 +343,8 @@ class Campaign:
     @staticmethod
     async def popular_campaigns(page: int = 0) -> list[CampaignSearchResult]:
         """
+        .. versionadded :: 0.5
+
         Gets all popular campaigns, official campaigns excluded.
         50 Results / Page (except Page 1 because of the official campaigns)
 

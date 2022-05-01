@@ -8,7 +8,7 @@ from trackmania.errors import TMIOException
 
 from ._util import _regex_it
 from .api import _APIClient
-from .config import Client, get_from_cache, set_in_cache
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 
 _log = logging.getLogger(__name__)

@@ -7,7 +7,7 @@ from typing_extensions import Self
 from trackmania.api import _APIClient
 
 from .api import _APIClient
-from .config import Client, get_from_cache, set_in_cache
+from .config import get_from_cache, set_in_cache
 from .constants import _TMX
 from .errors import InvalidTMXCode
 

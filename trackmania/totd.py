@@ -10,7 +10,7 @@ from typing_extensions import Self
 from trackmania.errors import InvalidTOTDDate, TMIOException
 
 from .api import _APIClient
-from .config import Client, get_from_cache, set_in_cache
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException, TrackmaniaException
 from .tmmap import TMMap
