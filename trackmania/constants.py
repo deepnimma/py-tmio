@@ -32,6 +32,9 @@ class _TMIOTabs:
         self.CAMPAIGN: str = "campaign"
 
         self.CLUB: str = "club"
+        self.CLUBS: str = "clubs"
+        self.ACTIVITIES: str = "activities"
+        self.MEMBERS: str = "members"
 
 
 class _TMIO:
