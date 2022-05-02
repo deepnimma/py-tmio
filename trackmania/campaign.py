@@ -1,7 +1,6 @@
 import logging
 from contextlib import suppress
 from datetime import datetime
-from subprocess import ABOVE_NORMAL_PRIORITY_CLASS
 
 from typing_extensions import Self
 
@@ -15,6 +14,13 @@ from .player import Player
 from .tmmap import TMMap
 
 _log = logging.getLogger(__name__)
+
+__all__ = (
+    "OfficialCampaignMedia",
+    "CampaignSearchResult",
+    "CampaignLeaderboard",
+    "Campaign",
+)
 
 
 class OfficialCampaignMedia:
@@ -83,33 +89,6 @@ class OfficialCampaignMedia:
         return cls(*args)
 
 
-class CampaignLeaderboard:
-    def __init__(
-        self,
-        player_name: str,
-        player_id: str,
-        points: int,
-        position: int,
-    ):
-        self.player_name = player_name
-        self.player_id = player_id
-        self.points = points
-        self.position = position
-
-    async def player(self) -> Player:
-        """
-        .. versionadded :: 0.5
-
-        Returns the player object of this campaign leaderboard position
-
-        Returns
-        -------
-        :class:`Player`
-            The player who achieved this position on the leaderboard.
-        """
-        return await Player.get_player(self.player_id)
-
-
 class CampaignSearchResult:
     """
     .. versionadded :: 0.5
@@ -164,10 +143,39 @@ class CampaignSearchResult:
         return cls(*args)
 
     def get_campaign(self):
+        """
+        .. versionadded :: 0.5
+
+        Gets the campaign object.
+
+        Returns
+        -------
+        :class:`Campaign`
+            The campaign object.
+        """
         return Campaign.get_campaign(self.campaign_id, self.club_id)
 
 
 class CampaignLeaderboard:
+    """
+    .. versionadded :: 0.5
+
+    Represents a player on the Campaign's point leaderboards
+
+    Parameters
+    ----------
+    player_name : str
+        The name of the player who got the position.
+    player_id : str
+        The ID of the player who got the position.
+    player_tag : str | None
+        The tag of the player who got the position.
+    position : int
+        The position the player achieved.
+    points : int
+        The points the player has
+    """
+
     def __init__(
         self,
         player_name: str,
@@ -202,6 +210,8 @@ class CampaignLeaderboard:
 
     async def player(self) -> Player:
         """
+        .. versionadded :: 0.5
+
         Gets the player this position belongs to.
 
         Returns
@@ -432,6 +442,8 @@ class Campaign:
 
     async def club(self) -> Club:
         """
+        .. versionadded :: 0.5
+
         The club the Campaign belongs to.
 
         Returns
@@ -448,6 +460,8 @@ class Campaign:
         self, offset: int = 0, length: int = 100
     ) -> list[CampaignLeaderboard]:
         """
+        .. versionadded :: 0.5
+
         Gets the points leaderboards for the campaign.
 
         Parameters
@@ -496,6 +510,8 @@ class Campaign:
 
     def get_map(self: Self, index: int = 0) -> TMMap:
         """
+        .. versionadded :: 0.5
+
         Gets a map at a specific index.
 
         Parameters
