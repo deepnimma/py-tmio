@@ -7,7 +7,7 @@ from trackmania.errors import TMIOException
 from ._util import _regex_it
 from .api import _APIClient
 from .club import Club
-from .config import get_from_cache, set_to_cache
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .tmmap import TMMap
 
@@ -214,7 +214,48 @@ class Room:
         with suppress(KeyError, TypeError):
             raise TMIOException(club_data["error"])
 
+        set_in_cache(f"room:{club_id}:{room_id}", club_data)
+
         return cls._from_dict(club_data)
+
+    @staticmethod
+    async def popular_rooms(page: int = 0) -> list[RoomSearchResult]:
+        """
+        Gets the popular club rooms.
+        Popular club rooms are based on the number of players currently playing on the server.
+
+        Parameters
+        ----------
+        page : int, optional
+            The page of the popular rooms data, by default 0
+
+        Returns
+        -------
+        :class:`list[RoomSearchResult]`
+            The popular rooms.
+        """
+        popular_rooms = []
+        popular_rooms_data = get_from_cache(f"popular_rooms:{page}")
+
+        if popular_rooms_data is not None:
+            for room in popular_rooms_data.get("rooms", []):
+                popular_rooms.append(RoomSearchResult._from_dict(room))
+
+            return popular_rooms
+
+        api_client = _APIClient()
+        popular_rooms_data = await api_client.get(_TMIO.build([_TMIO.TABS.ROOMS, page]))
+        await api_client.close()
+
+        with suppress(KeyError, TypeError):
+            raise TMIOException(popular_rooms_data["error"])
+
+        set_in_cache(f"popular_rooms:{page}", popular_rooms_data)
+
+        for room in popular_rooms_data.get("rooms", []):
+            popular_rooms.append(RoomSearchResult._from_dict(room))
+
+        return popular_rooms
 
     async def club(self: Self) -> Club:
         """

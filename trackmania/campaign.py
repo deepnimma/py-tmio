@@ -1,10 +1,13 @@
 import logging
 from contextlib import suppress
 from datetime import datetime
+from subprocess import ABOVE_NORMAL_PRIORITY_CLASS
 
 from typing_extensions import Self
 
+from ._util import _regex_it
 from .api import _APIClient
+from .club import Club
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException
@@ -148,7 +151,7 @@ class CampaignSearchResult:
         date = datetime.utcfromtimestamp(raw_data.get("timestamp", 0))
         campaign_id = raw_data.get("id", 0)
         map_count = raw_data.get("mapcount", 1)
-        name = raw_data.get("name")
+        name = _regex_it(raw_data.get("name"))
 
         args = [
             club_id,
@@ -164,6 +167,51 @@ class CampaignSearchResult:
         return Campaign.get_campaign(self.campaign_id, self.club_id)
 
 
+class CampaignLeaderboard:
+    def __init__(
+        self,
+        player_name: str,
+        player_id: str,
+        player_tag: str | None,
+        position: int,
+        points: int,
+    ):
+        self.player_name = player_name
+        self.player_id = player_id
+        self.player_tag = player_tag
+        self.position = position
+        self.points = points
+
+    @classmethod
+    def _from_dict(cls: Self, raw_data: dict) -> Self:
+        player_name = raw_data["player"]["name"]
+        player_id = raw_data["player"]["id"]
+        player_tag = _regex_it(raw_data["player"].get("tag", None))
+        position = raw_data["position"]
+        points = raw_data["points"]
+
+        args = [
+            player_name,
+            player_id,
+            player_tag,
+            position,
+            points,
+        ]
+
+        return cls(*args)
+
+    async def player(self) -> Player:
+        """
+        Gets the player this position belongs to.
+
+        Returns
+        -------
+        :class:`Player`
+            The player that holds this position.
+        """
+        return await Player.get_player(self.player_id)
+
+
 class Campaign:
     """
     .. versionadded :: 0.5
@@ -172,10 +220,10 @@ class Campaign:
 
     Parameters
     ----------
-    created_at : datetime
-        The date the campaign was created
     campaign_id : int
         The campaign's ID
+    club_id : int
+        The club's id.
     image : str
         The image URL of the campaign.
         Returns the decal image if this is an official campaign
@@ -196,6 +244,7 @@ class Campaign:
     def __init__(
         self,
         campaign_id: int,
+        club_id: int,
         image: str,
         is_official: bool,
         leaderboard_uid: str,
@@ -205,6 +254,7 @@ class Campaign:
         name: str,
     ):
         self.campaign_id = campaign_id
+        self.club_id = club_id
         self.image = image
         self.is_official = is_official
         self.leaderboard_uid = leaderboard_uid
@@ -217,6 +267,7 @@ class Campaign:
     def _from_dict(cls: Self, raw_data: dict, official: bool = False) -> Self:
         _log.debug("Creating a Campaign class from given dictionary")
         campaign_id = raw_data.get("id")
+        club_id = raw_data.get("clubid", 0)
         image = raw_data.get("media")
         is_official = official
         leaderboard_uid = raw_data.get("leaderboarduid")
@@ -226,10 +277,11 @@ class Campaign:
             media = OfficialCampaignMedia._from_dict(raw_data.get("mediae"))
         else:
             media = None
-        name = raw_data.get("name")
+        name = _regex_it(raw_data.get("name"))
 
         args = [
             campaign_id,
+            club_id,
             image,
             is_official,
             leaderboard_uid,
@@ -377,3 +429,83 @@ class Campaign:
                 campaigns_list.append(CampaignSearchResult._from_dict(campaign))
 
         return campaigns_list
+
+    async def club(self) -> Club:
+        """
+        The club the Campaign belongs to.
+
+        Returns
+        -------
+        :class:`Club` | None
+            The Club the campaign belongs to. If it does not belong to a campaign returns None.
+        """
+        if self.club_id == 0:
+            return None
+        else:
+            return await Club.get_club(self.club_id)
+
+    async def leaderboards(
+        self, offset: int = 0, length: int = 100
+    ) -> list[CampaignLeaderboard]:
+        """
+        Gets the points leaderboards for the campaign.
+
+        Parameters
+        ----------
+        offset : int, optional
+            The leaderboard offset to start at, by default 0
+        length : int, optional
+            The length of the leaderboard to get. Can only be between 0 and 100, by default 100
+
+        Returns
+        -------
+        :class:`list[CampaignLeaderboard]`
+            The leaderboard of the campaign based on points.
+        """
+        leaderboards = []
+        leaderboard_data = get_from_cache(
+            f"campaign:{self.campaign_id}:{offset}:{length}"
+        )
+
+        if leaderboard_data is not None:
+            for lb_place in leaderboard_data.get("tops", []):
+                leaderboards.append(CampaignLeaderboard._from_dict(lb_place))
+
+            return leaderboards
+
+        api_client = _APIClient()
+        leaderboard_data = await api_client.get(
+            _TMIO.build([_TMIO.TABS.LEADERBOARD, self.leaderboard_uid])
+            + f"?offset={offset}&length={length}"
+        )
+        await api_client.close()
+
+        with suppress(KeyError, TypeError):
+            raise TMIOException(leaderboard_data["error"])
+
+        set_in_cache(
+            f"campaign:{self.campaign_id}:{offset}:{length}",
+            leaderboard_data,
+            ex=432000,
+        )
+
+        for lb_place in leaderboard_data.get("tops", []):
+            leaderboards.append(CampaignLeaderboard._from_dict(lb_place))
+
+        return leaderboards
+
+    def get_map(self: Self, index: int = 0) -> TMMap:
+        """
+        Gets a map at a specific index.
+
+        Parameters
+        ----------
+        index : int, optional
+            The index of the map requested, by default 0
+
+        Returns
+        -------
+        :class:`TMMap`
+            The map at the index.
+        """
+        return self.maps[index]

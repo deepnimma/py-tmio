@@ -19,6 +19,7 @@ from .cotd import *
 from .errors import *
 from .matchmaking import *
 from .player import *
+from .room import *
 from .tmmap import *
 from .tmx import *
 from .totd import *

@@ -36,7 +36,7 @@ class ClubMember:
     @classmethod
     def _from_dict(cls: Self, raw_data: dict) -> Self:
         _log.debug("Creating a ClubMember class from the given dictionary")
-        name = raw_data.get("name")
+        name = _regex_it(raw_data.get("name"))
         tag = _regex_it(raw_data.get("tag", None))
         player_id = raw_data.get("id")
         join_time = datetime.utcfromtimestamp(raw_data.get("jointime"))
@@ -96,7 +96,7 @@ class ClubActivity:
     @classmethod
     def _from_dict(cls: Self, raw_data: dict) -> Self:
         _log.debug("Creating a ClubActivity class from the given dictionary")
-        name = raw_data.get("name")
+        name = _regex_it(raw_data.get("name"))
         type = raw_data.get("type")
         activity_id = raw_data.get("activityid")
         target_activity_id = raw_data.get("targetactivityid", 0)
@@ -195,10 +195,10 @@ class Club:
         club_id = raw_data.get("id", 0)
         logo = raw_data.get("logoUrl")
         member_count = raw_data.get("membercount", 0)
-        name = raw_data.get("name")
+        name = _regex_it(raw_data.get("name"))
         popularity = raw_data.get("popularityLevel")
         state = raw_data.get("state")
-        tag = _regex_it(raw_data.get("tag"), None)
+        tag = _regex_it(raw_data.get("tag", None))
         creator_id = raw_data["creatorplayer"]["id"]
 
         args = [
@@ -287,42 +287,6 @@ class Club:
             clubs.append(cls._from_dict(club))
 
         return clubs
-
-    @classmethod
-    async def search_club(cls: Self, query: str, page: int = 0) -> list[Self]:
-        """
-        Searches for a Club with the specific query.
-
-        Parameters
-        ----------
-        query : str
-            The query to search for.
-        page : int, optional
-            The page to search on, by default 0
-
-        Returns
-        -------
-        :class:`list[Self]`
-            The list of clubs that match the query.
-        """
-        club_list = []
-        club_data = get_from_cache(f"clubs:{query}:{page}")
-        if club_data is not None:
-            for club in club_data.get("clubs", []):
-                club_list.append(cls._from_dict(club))
-
-            return club_list
-
-        api_client = _APIClient()
-        club_data = await api_client.get(
-            _TMIO.build([_TMIO.TABS.CLUBS, page]) + f"?search={query}"
-        )
-        await api_client.close()
-
-        for club in club_data.get("clubs", []):
-            club_list.append(cls._from_dict(club))
-
-        return club_list
 
     async def get_activities(self: Self, page: int = 0) -> list[ClubActivity]:
         """
