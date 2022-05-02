@@ -13,6 +13,7 @@ import os
 
 from .ad import *
 from .campaign import *
+from .club import *
 from .config import *
 from .cotd import *
 from .errors import *
