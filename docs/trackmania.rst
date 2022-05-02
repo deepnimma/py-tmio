@@ -18,6 +18,7 @@ Submodules
    trackmania.totd
    trackmania.tmx
    trackmania.campaign
+   trackmania.club
 
 Module contents
 ---------------
