@@ -19,6 +19,7 @@ Submodules
    trackmania.tmx
    trackmania.campaign
    trackmania.club
+   trackmania.room
 
 Module contents
 ---------------

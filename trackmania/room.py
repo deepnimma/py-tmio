@@ -1,3 +1,4 @@
+import logging
 from contextlib import suppress
 
 from typing_extensions import Self
@@ -11,9 +12,18 @@ from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .tmmap import TMMap
 
+_log = logging.getLogger(__name__)
+
+__all__ = (
+    "RoomSearchResult",
+    "Room",
+)
+
 
 class RoomSearchResult:
     """
+    .. versionadded :: 0.5
+
     Represents a SearchResult from the `Room.search()` and `Room.popular_rooms()` command
 
     Parameters
@@ -63,6 +73,8 @@ class RoomSearchResult:
 
     async def club(self: Self) -> Club:
         """
+        .. versionadded :: 0.5
+
         Returns the club the room belongs to.
 
         Returns
@@ -74,6 +86,8 @@ class RoomSearchResult:
 
     async def room(self: Self):
         """
+        .. versionadded :: 0.5
+
         Returns the Room itself with its full data from the api.
 
         Returns
@@ -86,6 +100,8 @@ class RoomSearchResult:
 
 class Room:
     """
+    .. versionadded :: 0.5
+
     Represents a Club Room in trackmania 2020.
 
     Parameters
@@ -142,6 +158,8 @@ class Room:
     @property
     def maps(self) -> list[TMMap]:
         """
+        .. versionadded :: 0.5
+
         The maps of the room.
 
         Returns
@@ -187,6 +205,8 @@ class Room:
     @classmethod
     async def get_room(cls: Self, club_id: int, room_id: int) -> Self:
         """
+        .. versionadded :: 0.5
+
         Gets a room using it's club and room id.
 
         Parameters
@@ -221,6 +241,8 @@ class Room:
     @staticmethod
     async def popular_rooms(page: int = 0) -> list[RoomSearchResult]:
         """
+        .. versionadded :: 0.5
+
         Gets the popular club rooms.
         Popular club rooms are based on the number of players currently playing on the server.
 
@@ -259,6 +281,8 @@ class Room:
 
     async def club(self: Self) -> Club:
         """
+        .. versionadded :: 0.5
+
         Gets the club the room belongs to.
 
         Returns
