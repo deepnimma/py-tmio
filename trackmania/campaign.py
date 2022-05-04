@@ -31,31 +31,31 @@ class OfficialCampaignMedia:
 
     Parameters
     ----------
-    button_background : str
+    button_background : str | None
         The button background image URL of the campaign.
-    button_foreground : str
+    button_foreground : str | None
         The button foreground image URL of the campaign.
-    decal : str
+    decal : str | None
         The decal image URL of the campaign
-    live_button_background : str
+    live_button_background : str | None
         The live button background image URL of the campaign.
-    live_button_foreground : str
+    live_button_foreground : str | None
         The live button foreground image URL of the campaign.
-    popup : str
+    popup : str | None
         The popup image URL of the campaign.
-    popup_background : str
+    popup_background : str | None
         The popup background image URL of the campaign.
     """
 
     def __init__(
         self,
-        button_background: str,
-        button_foreground: str,
-        decal: str,
-        live_button_background: str,
-        live_button_foreground: str,
-        popup: str,
-        popup_background: str,
+        button_background: str | None = None,
+        button_foreground: str | None = None,
+        decal: str | None = None,
+        live_button_background: str | None = None,
+        live_button_foreground: str | None = None,
+        popup: str | None = None,
+        popup_background: str | None = None,
     ):
         self.button_background = button_background
         self.button_foreground = button_foreground
@@ -85,6 +85,10 @@ class OfficialCampaignMedia:
             popup,
             popup_background,
         ]
+
+        for i, argument in enumerate(args):
+            if str(argument) == "":
+                args[i] = None
 
         return cls(*args)
 
@@ -234,21 +238,22 @@ class Campaign:
         The campaign's ID
     club_id : int
         The club's id.
-    image : str
+    image : str | None
         The image URL of the campaign.
-        Returns the decal image if this is an official campaign
+        Returns the decal image if this is an official campaign.
+        NoneType if there is no decal image.
     is_official : bool
         Whether the camapaign is official (made by Nadeo).
-    leaderboard_id : str
+    leaderboard_uid : str
         The campaign's leaderboard id.
+    maps : :class:`list[TMMap]`
+        The maps in the campaign.
     map_count : int
         The number of maps in the campaign.
     media : :class:`OfficialCampaignMedia` | None
         The media of the campaign only if it is on official campaign.
     name : str
         The name of the campaign
-    updated_at : datetime
-        The date the campaign was last updated
     """
 
     def __init__(
@@ -278,7 +283,7 @@ class Campaign:
         _log.debug("Creating a Campaign class from given dictionary")
         campaign_id = raw_data.get("id")
         club_id = raw_data.get("clubid", 0)
-        image = raw_data.get("media")
+        image = raw_data.get("media") if raw_data.get("media") != "" else None
         is_official = official
         leaderboard_uid = raw_data.get("leaderboarduid")
         maps = [TMMap._from_dict(map_data) for map_data in raw_data.get("playlist", [])]
@@ -309,6 +314,8 @@ class Campaign:
         .. versionadded :: 0.5
 
         Gets a campaign with the given campaign and club ids.
+        If it's an official campaign, the `club_id` should be = 0
+
 
         Parameters
         ----------
@@ -316,6 +323,7 @@ class Campaign:
             The campaign's id.
         club_id : int
             The club the campaign belongs to.
+            = 0 if the campaign is an official nadeo campaign.
 
         Returns
         -------
@@ -381,8 +389,8 @@ class Campaign:
         all_campaigns = get_from_cache("campaigns:all:0")
 
         if all_campaigns is not None:
-            for campaign in all_campaigns:
-                if campaign.get("id", -1) == 0:
+            for campaign in all_campaigns.get("campaigns", []):
+                if campaign.get("clubid", -1) == 0:
                     official_campaigns.append(CampaignSearchResult._from_dict(campaign))
             return official_campaigns
 
@@ -395,7 +403,7 @@ class Campaign:
 
         set_in_cache("campaigns:all:0", all_campaigns, ex=432000)
 
-        for campaign in all_campaigns:
+        for campaign in all_campaigns.get("campaigns", []):
             if campaign.get("id", -1) == 0:
                 official_campaigns.append(CampaignSearchResult._from_dict(campaign))
 
@@ -423,7 +431,7 @@ class Campaign:
         all_campaigns = get_from_cache(f"campaigns:all:{page}")
 
         if all_campaigns is not None:
-            for campaign in all_campaigns:
+            for campaign in all_campaigns.get("campaigns", []):
                 if campaign.get("clubid", -1) != 0:
                     campaigns_list.append(CampaignSearchResult._from_dict(campaign))
 
@@ -434,7 +442,7 @@ class Campaign:
         with suppress(KeyError, TypeError):
             raise TMIOException(all_campaigns["error"])
 
-        for campaign in all_campaigns:
+        for campaign in all_campaigns.get("campaigns", []):
             if campaign.get("clubid", -1) != 0:
                 campaigns_list.append(CampaignSearchResult._from_dict(campaign))
 
