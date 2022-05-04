@@ -15,8 +15,35 @@ from .tmmap import TMMap
 
 _log = logging.getLogger(__name__)
 
+__all__ = (
+    "ClubMember",
+    "ClubActivity",
+    "Club",
+)
+
 
 class ClubMember:
+    """
+    .. versionadded :: 0.5
+
+    Represents a member of a club.
+
+    Parameters
+    ----------
+    name : str
+        The name of the player.
+    tag : str | None
+        The club tab of the player.
+    player_id : str
+        The ID of the player.
+    join_time : datetime
+        When the player joined the club.
+    role : str
+        The role of the player inside the club
+    vip : bool
+        Whether the player is a VIP.
+    """
+
     def __init__(
         self,
         name: str,
@@ -36,10 +63,10 @@ class ClubMember:
     @classmethod
     def _from_dict(cls: Self, raw_data: dict) -> Self:
         _log.debug("Creating a ClubMember class from the given dictionary")
-        name = _regex_it(raw_data.get("name"))
-        tag = _regex_it(raw_data.get("tag", None))
-        player_id = raw_data.get("id")
-        join_time = datetime.utcfromtimestamp(raw_data.get("jointime"))
+        name = _regex_it(raw_data["player"].get("name"))
+        tag = _regex_it(raw_data["player"].get("tag", None))
+        player_id = raw_data["player"].get("id")
+        join_time = datetime.utcfromtimestamp(raw_data.get("joinTime"))
         role = raw_data.get("role")
         vip = raw_data.get("vip")
 
@@ -56,6 +83,8 @@ class ClubMember:
 
     async def player(self) -> Player:
         """
+        .. versionadded :: 0.5
+
         Gets the player who is this specific club member.
         (IDK wtf to put here xD)
 
@@ -73,6 +102,31 @@ class ClubMember:
 
 
 class ClubActivity:
+    """
+    .. versionadded :: 0.5
+
+    Represents an activity of the club.
+
+    Parameters
+    ----------
+    name : str
+        The name of the activity.
+    type : str
+        What type of activity it is.
+    activity_id : int
+        The activity's ID.
+    target_activity_id : int
+        The activity's target ID.
+    position : int
+        The position of the activity within the club.
+    public : bool
+        Whether the activity is public or club-member only.
+    media : str
+        The media of the activity.
+    password : bool
+        Whether the activity is password-protected.
+    """
+
     def __init__(
         self,
         name: str,
@@ -150,8 +204,6 @@ class Club:
         Is either Private or Public.
     tag : str
         The club tag
-    vertical : str
-        The club vertical background URL.
     """
 
     def __init__(
@@ -220,9 +272,12 @@ class Club:
         return cls(*args)
 
     @classmethod
-    async def get_club(cls: Self, club_id: int) -> Self:
+    async def get_club(cls: Self, club_id: int) -> Self | None:
         """
+        .. versionadded :: 0.5
+
         Gets a club based on its club id.
+        Returns None if the `club_id` is 0
 
         Parameters
         ----------
@@ -239,6 +294,9 @@ class Club:
         :class:`TMIOException`
             If the club doesn't exist or if an unexpected error occurs on TMIO's side.
         """
+        if club_id == 0:
+            return None
+
         club_data = get_from_cache(f"club:{club_id}")
         if club_data is not None:
             return cls._from_dict(club_data)
@@ -255,6 +313,8 @@ class Club:
     @classmethod
     async def list_clubs(cls: Self, page: int = 0) -> list[Self]:
         """
+        .. versionadded :: 0.5
+
         Lists all the popular clubs.
 
         Parameters
@@ -290,6 +350,8 @@ class Club:
 
     async def get_activities(self: Self, page: int = 0) -> list[ClubActivity]:
         """
+        .. versionadded :: 0.5
+
         Gets the activities of the club.
 
         Parameters
@@ -303,7 +365,7 @@ class Club:
             The list of activities of the club.
         """
         club_activities = []
-        all_activities = get_from_cache(f"club_activities:{self.id}:{page}")
+        all_activities = get_from_cache(f"club_activities:{self.club_id}:{page}")
 
         if all_activities is not None:
             for activity in all_activities:
@@ -327,6 +389,8 @@ class Club:
 
     async def get_members(self: Self, page: int = 0) -> list[ClubMember]:
         """
+        .. versionadded :: 0.5
+
         Gets the members of the club.
 
         Parameters
@@ -343,7 +407,7 @@ class Club:
         club_members = get_from_cache(f"club_members:{self.club_id}:{page}")
 
         if club_members is not None:
-            for member in club_members:
+            for member in club_members.get("members", []):
                 player_list.append(ClubMember._from_dict(member))
 
             return player_list
@@ -354,13 +418,15 @@ class Club:
         )
         await api_client.close()
 
-        for member in club_members:
+        for member in club_members.get("members", []):
             player_list.append(ClubMember._from_dict(member))
 
         return player_list
 
     async def creator(self) -> Player:
         """
+        .. versionadded :: 0.5
+
         Gets the creator of the club.
 
         Returns
