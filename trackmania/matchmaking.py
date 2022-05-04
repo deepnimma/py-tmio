@@ -10,7 +10,6 @@ from .base import MatchmakingObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
-from .player import Player
 
 _log = logging.getLogger(__name__)
 
@@ -117,7 +116,7 @@ class MatchmakingLeaderboardPlayer(MatchmakingObject):
 
         return cls(*args)
 
-    async def player(self: Self) -> Player:
+    async def player(self: Self):
         """
         Returns the player who owns this position on the leaderboard.
 
@@ -126,6 +125,8 @@ class MatchmakingLeaderboardPlayer(MatchmakingObject):
         :class:`Player`
             The player.
         """
+        from .player import Player
+
         return await Player.get_player(self.player_id)
 
 
