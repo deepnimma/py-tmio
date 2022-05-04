@@ -7,11 +7,11 @@ from typing_extensions import Self
 
 from ._util import _regex_it
 from .api import _APIClient
+from .base import ClubObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException
 from .player import Player
-from .tmmap import TMMap
 
 _log = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ __all__ = (
 )
 
 
-class ClubMember:
+class ClubMember(ClubObject):
     """
     .. versionadded :: 0.5
 
@@ -101,7 +101,7 @@ class ClubMember:
         return await Player.get_player(self.player_id)
 
 
-class ClubActivity:
+class ClubActivity(ClubObject):
     """
     .. versionadded :: 0.5
 
@@ -173,7 +173,7 @@ class ClubActivity:
         return cls(*args)
 
 
-class Club:
+class Club(ClubObject):
     """
     Represents a Club in Trackmania 2020.
 

@@ -8,6 +8,7 @@ from trackmania.errors import TMIOException
 
 from ._util import _regex_it
 from .api import _APIClient
+from .base import AdObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 
@@ -41,7 +42,7 @@ async def _get_ad_list() -> list[dict]:
     return ad_list
 
 
-class Ad:
+class Ad(AdObject):
     """
     .. versionadded :: 0.3.0
 

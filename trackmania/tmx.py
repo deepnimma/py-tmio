@@ -7,6 +7,7 @@ from typing_extensions import Self
 from trackmania.api import _APIClient
 
 from .api import _APIClient
+from .base import TMXObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMX
 from .errors import InvalidTMXCode
@@ -44,7 +45,7 @@ async def _get_map(tmx_id: int) -> dict:
     return map_data
 
 
-class TMXMapTimes:
+class TMXMapTimes(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -79,7 +80,7 @@ class TMXMapTimes:
         return cls(uploaded, updated)
 
 
-class GbxFileMetadata:
+class GbxFileMetadata(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -173,7 +174,7 @@ class GbxFileMetadata:
         return cls(*args)
 
 
-class TMXTags:
+class TMXTags(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -204,7 +205,7 @@ class TMXTags:
         return ", ".join([_TMX.MAP_TYPE_ENUMS.get(tag) for tag in self.map_tags])
 
 
-class ReplayWRData:
+class ReplayWRData(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -248,7 +249,7 @@ class ReplayWRData:
         return cls(*args)
 
 
-class TMXMetadata:
+class TMXMetadata(TMXObject):
     """
     .. versionadded :: 0.3.3
 

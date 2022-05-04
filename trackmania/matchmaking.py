@@ -6,6 +6,7 @@ import redis
 from typing_extensions import Self
 
 from .api import _APIClient
+from .base import MatchmakingObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
@@ -82,7 +83,7 @@ async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
     return match_history.get("history", [])
 
 
-class PlayerMatchmakingResult:
+class PlayerMatchmakingResult(MatchmakingObject):
     """
     .. versionadded :: 0.3.0
 
@@ -140,7 +141,7 @@ class PlayerMatchmakingResult:
         return cls(*args)
 
 
-class PlayerMatchmaking:
+class PlayerMatchmaking(MatchmakingObject):
     """
     .. versionadded :: 0.1.0
 

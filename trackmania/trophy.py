@@ -8,6 +8,7 @@ from typing_extensions import Self
 
 from ._util import _add_commas, _regex_it
 from .api import _APIClient
+from .base import TrophyObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, InvalidTrophyNumber, TMIOException
@@ -17,7 +18,7 @@ _log = logging.getLogger(__name__)
 __all__ = ("PlayerTrophies", "TrophyLeaderboardPlayer")
 
 
-class TrophyLeaderboardPlayer:
+class TrophyLeaderboardPlayer(TrophyObject):
     """
     .. versionadded :: 0.4.0
 
@@ -86,7 +87,7 @@ class TrophyLeaderboardPlayer:
         return await Player.get_player(self.player_id)
 
 
-class PlayerTrophies:
+class PlayerTrophies(TrophyObject):
     """
     .. versionadded :: 0.1.0
 

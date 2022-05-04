@@ -10,6 +10,7 @@ from typing_extensions import Self
 from trackmania.errors import InvalidTOTDDate, TMIOException
 
 from .api import _APIClient
+from .base import TOTDObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException, TrackmaniaException
@@ -20,7 +21,7 @@ _log = logging.getLogger(__name__)
 __all__ = ("TOTD",)
 
 
-class TOTD:
+class TOTD(TOTDObject):
     """
     .. versionadded :: 0.3.0
 

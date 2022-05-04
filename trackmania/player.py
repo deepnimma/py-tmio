@@ -7,6 +7,7 @@ from typing_extensions import Self
 
 from ._util import _regex_it
 from .api import _APIClient
+from .base import PlayerObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException
@@ -24,7 +25,7 @@ __all__ = (
 )
 
 
-class PlayerMetaInfo:
+class PlayerMetaInfo(PlayerObject):
     """
     .. versionadded :: 0.1.0
 
@@ -113,7 +114,7 @@ class PlayerMetaInfo:
         )
 
 
-class PlayerZone:
+class PlayerZone(PlayerObject):
     """
     .. versionadded :: 0.1.0
 
@@ -219,7 +220,7 @@ class PlayerZone:
         return zone_str
 
 
-class PlayerSearchResult:
+class PlayerSearchResult(PlayerObject):
     """
     .. versionadded :: 0.1.0
 
@@ -276,7 +277,7 @@ class PlayerSearchResult:
         return cls(club_tag, name, player_id, zone, matchmaking[0], matchmaking[1])
 
 
-class Player:
+class Player(PlayerObject):
     """
     .. versionadded :: 0.1.0
 

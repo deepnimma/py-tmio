@@ -1,7 +1,9 @@
 from typing_extensions import Self
 
+from .base import ConstantsObject
 
-class _TMIOTabs:
+
+class _TMIOTabs(ConstantsObject):
     """
     .. versionadded:: 0.3.0
 
@@ -39,7 +41,7 @@ class _TMIOTabs:
         self.ROOMS: str = "rooms"
 
 
-class _TMIO:
+class _TMIO(ConstantsObject):
     """
     .. versionadded:: 0.3.0
 
@@ -93,7 +95,7 @@ class _TMIO:
         return url + endpoints[0]
 
 
-class _TMXTabs:
+class _TMXTabs(ConstantsObject):
     """
     .. versionadded :: 0.3.3
 
@@ -108,7 +110,7 @@ class _TMXTabs:
         self.ID = "id"
 
 
-class _TMX:
+class _TMX(ConstantsObject):
     """
     .. versionadded:: 0.3.0
 

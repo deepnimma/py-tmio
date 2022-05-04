@@ -9,6 +9,7 @@ from typing_extensions import Self
 from trackmania.errors import TMIOException
 
 from .api import _APIClient
+from .base import COTDObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
@@ -66,7 +67,7 @@ async def _get_cotd_page(page: int) -> dict:
     return all_cotds["competitions"]
 
 
-class BestCOTDStats:
+class BestCOTDStats(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -151,7 +152,7 @@ class BestCOTDStats:
         return cls(*args)
 
 
-class PlayerCOTDStats:
+class PlayerCOTDStats(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -220,7 +221,7 @@ class PlayerCOTDStats:
         return cls(*args)
 
 
-class PlayerCOTDResults:
+class PlayerCOTDResults(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -299,7 +300,7 @@ class PlayerCOTDResults:
         )
 
 
-class PlayerCOTD:
+class PlayerCOTD(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -365,7 +366,7 @@ class PlayerCOTD:
         return cls._from_dict(await _get_trophy_page(player_id, page), player_id)
 
 
-class COTD:
+class COTD(COTDObject):
     """
     .. versionadded :: 0.3.0
 

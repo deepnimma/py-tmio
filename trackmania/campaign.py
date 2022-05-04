@@ -6,6 +6,7 @@ from typing_extensions import Self
 
 from ._util import _regex_it
 from .api import _APIClient
+from .base import CampaignObject
 from .club import Club
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
@@ -23,7 +24,7 @@ __all__ = (
 )
 
 
-class OfficialCampaignMedia:
+class OfficialCampaignMedia(CampaignObject):
     """
     .. versionadded :: 0.5
 
@@ -93,7 +94,7 @@ class OfficialCampaignMedia:
         return cls(*args)
 
 
-class CampaignSearchResult:
+class CampaignSearchResult(CampaignObject):
     """
     .. versionadded :: 0.5
 
@@ -160,7 +161,7 @@ class CampaignSearchResult:
         return Campaign.get_campaign(self.campaign_id, self.club_id)
 
 
-class CampaignLeaderboard:
+class CampaignLeaderboard(CampaignObject):
     """
     .. versionadded :: 0.5
 
@@ -226,7 +227,7 @@ class CampaignLeaderboard:
         return await Player.get_player(self.player_id)
 
 
-class Campaign:
+class Campaign(CampaignObject):
     """
     .. versionadded :: 0.5
 

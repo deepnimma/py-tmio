@@ -10,6 +10,7 @@ from trackmania.api import _APIClient
 
 from ._util import _regex_it
 from .api import _APIClient
+from .base import TMMapObject
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException
@@ -24,7 +25,7 @@ __all__ = (
 )
 
 
-class MedalTimes:
+class MedalTimes(TMMapObject):
     """
     .. versionadded :: 0.3.0
 
@@ -82,7 +83,7 @@ class MedalTimes:
         return "%01d:%02d.%03d" % (min, sec, ms)
 
 
-class Leaderboard:
+class Leaderboard(TMMapObject):
     """
     .. versionadded :: 0.3.0
 
@@ -170,7 +171,7 @@ class Leaderboard:
         return await Player.get_player(self.player_id)
 
 
-class TMMap:
+class TMMap(TMMapObject):
     """
     .. versionadded :: 0.3.0
 

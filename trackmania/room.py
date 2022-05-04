@@ -7,6 +7,7 @@ from trackmania.errors import TMIOException
 
 from ._util import _regex_it
 from .api import _APIClient
+from .base import RoomObject
 from .club import Club
 from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
@@ -20,7 +21,7 @@ __all__ = (
 )
 
 
-class RoomSearchResult:
+class RoomSearchResult(RoomObject):
     """
     .. versionadded :: 0.5
 
@@ -98,7 +99,7 @@ class RoomSearchResult:
         return await Room.get_room(self.club_id, self.room_id)
 
 
-class Room:
+class Room(RoomObject):
     """
     .. versionadded :: 0.5
 
