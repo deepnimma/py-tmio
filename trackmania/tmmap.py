@@ -142,7 +142,7 @@ class Leaderboard:
         position = raw.get("position")
         time = raw.get("time")
         ghost = raw.get("url")
-        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
+        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ")
 
         return cls(
             timestamp=timestamp,
@@ -276,7 +276,7 @@ class TMMap:
         submitter_name = raw.get("submitterplayer").get("name")
         thumbnail = raw.get("thumbnailUrl")
         uid = raw.get("mapUid")
-        uploaded = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
+        uploaded = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ")
         url = raw.get("fileUrl")
 
         return cls(

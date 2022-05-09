@@ -144,7 +144,7 @@ class PlayerTrophies:
         return cls(
             echelon=raw_trophy_data.get("echelon"),
             last_change=datetime.strptime(
-                raw_trophy_data.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00"
+                raw_trophy_data.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ"
             ),
             points=raw_trophy_data.get("points"),
             trophies=raw_trophy_data.get("counts"),

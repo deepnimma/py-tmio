@@ -525,16 +525,14 @@ class Player:
         """
         # Parsing First Login
         first_login = (
-            datetime.strptime(player_data["timestamp"], "%Y-%m-%dT%H:%M:%S+00:00")
+            datetime.strptime(player_data["timestamp"], "%Y-%m-%dT%H:%M:%SZ")
             if "timestamp" in player_data
             else None
         )
 
         # Parsing Last Club Tag Change
         last_club_tag_change = (
-            datetime.strptime(
-                player_data["clubtagtimestamp"], "%Y-%m-%dT%H:%M:%S+00:00"
-            )
+            datetime.strptime(player_data["clubtagtimestamp"], "%Y-%m-%dT%H:%M:%SZ")
             if "clubtagtimestamp" in player_data
             else None
         )

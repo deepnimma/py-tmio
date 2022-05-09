@@ -131,12 +131,12 @@ class BestCOTDStats:
 
         args = [
             raw.get("bestrank"),
-            datetime.strptime(raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%S+00:00"),
+            datetime.strptime(raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%SZ"),
             raw.get("bestrankdivrank"),
             raw.get("bestdiv"),
-            datetime.strptime(raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%S+00:00"),
+            datetime.strptime(raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%SZ"),
             raw.get("bestrankindiv"),
-            datetime.strptime(raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%S+00:00"),
+            datetime.strptime(raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%SZ"),
             raw.get("bestrankindivdiv"),
         ]
 
@@ -263,7 +263,7 @@ class PlayerCOTDResults:
         _log.debug("Creating a PlayerCOTDResults class from given dictionary")
 
         id = raw.get("id")
-        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%S+00:00")
+        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ")
         name = raw.get("name")
         div = raw.get("div")
         rank = raw.get("rank")
