@@ -292,8 +292,6 @@ class Player(PlayerObject):
         The Trackmania ID of the player.
     last_club_tag_change : str
         The date of the last club tag change of the player.
-    login : str
-        Login of the player.
     meta : :class:`PlayerMetaInfo`.
         Meta data of the player.
     name : str
