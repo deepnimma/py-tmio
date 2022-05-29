@@ -109,6 +109,9 @@ class _TMXTabs(ConstantsObject):
         self.MULTI = "multi"
         self.ID = "id"
 
+        self.MAPSEARCHTWO = "mapsearch2"
+        self.SEARCH = "search"
+
 
 class _TMX(ConstantsObject):
     """

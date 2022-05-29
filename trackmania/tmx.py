@@ -44,6 +44,18 @@ async def _get_map(tmx_id: int) -> dict:
     return map_data
 
 
+async def _get_random_map() -> dict:
+    _log.info(f"Getting a random map from trackmania.exchange")
+
+    api_client = _APIClient()
+    map_data = await api_client.get(
+        "https://trackmania.exchange/mapsearch2/search?api=on&random=1&format=json"
+    )  # Not using _TMX.build here because it doesn't need _TMX.api in the url
+    await api_client.close()
+
+    return map_data["results"][0]
+
+
 class TMXMapTimes(TMXObject):
     """
     .. versionadded :: 0.3.3
@@ -480,3 +492,16 @@ class TMXMap:
         """
         tmx_map_data = await _get_map(tmx_id)
         return cls._from_dict(tmx_map_data)
+
+    @classmethod
+    async def get_random_map(cls: Self) -> Self:
+        """
+        Gets a random map from trackmania.exchange
+
+        Returns
+        -------
+        :class:`TMXMap`
+            The random map.
+        """
+        map_data = await _get_random_map()
+        return cls._from_dict(map_data)
