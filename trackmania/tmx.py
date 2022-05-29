@@ -489,6 +489,11 @@ class TMXMap:
         ----------
         tmx_id : int
             The tmx id
+
+        Returns
+        -------
+        :class:`TMXMap`
+            The map of the given id.
         """
         tmx_map_data = await _get_map(tmx_id)
         return cls._from_dict(tmx_map_data)
