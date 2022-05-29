@@ -1,17 +1,15 @@
-import json
 import logging
 from contextlib import suppress
 from datetime import datetime
 from types import NoneType
-from typing import Dict, List
 
-import redis
 from typing_extensions import Self
 
 from trackmania.errors import TMIOException
 
 from .api import _APIClient
-from .config import Client
+from .base import COTDObject
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
 
@@ -26,17 +24,12 @@ __all__ = (
 )
 
 
-async def _get_trophy_page(player_id: str, page: int) -> Dict:
+async def _get_trophy_page(player_id: str, page: int) -> dict:
     _log.debug(f"Getting COTD Stats for Player {player_id} and page {page}")
 
-    cache_client = Client._get_cache_client()
-
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        if cache_client.exists(f"playercotd:{player_id}:{page}"):
-            _log.debug(f"Player {player_id}'s page {page} cotd results found in cache")
-            return json.loads(
-                cache_client.get(f"playercotd:{player_id}:{page}").decode("utf-8")
-            )
+    player_cotd = get_from_cache(f"playercotd:{player_id}:{page}")
+    if player_cotd is not None:
+        return player_cotd
 
     api_client = _APIClient()
     page_data = await api_client.get(
@@ -48,23 +41,18 @@ async def _get_trophy_page(player_id: str, page: int) -> Dict:
         raise TMIOException(page_data["error"])
     if isinstance(page_data, NoneType):
         raise InvalidIDError("Invalid PlayerID Given")
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        _log.debug(f"Caching Player {player_id} Page {page}")
-        cache_client.set(f"playercotd:{player_id}:{page}", json.dumps(page_data))
+
+    set_in_cache(f"playercotd:{player_id}:{page}", page_data)
 
     return page_data
 
 
-async def _get_cotd_page(page: int) -> Dict:
+async def _get_cotd_page(page: int) -> dict:
     _log.debug(f"Getting COTD Page {page}")
 
-    cache_client = Client._get_cache_client()
-
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        if cache_client.exists(f"cotd:{page}"):
-            _log.debug(f"COTD Page {page} found in cache")
-            all_cotds = json.loads(cache_client.get(f"cotd:{page}").decode("utf-8"))
-            return all_cotds["competitions"]
+    cotd_page = get_from_cache(f"cotd:{page}")
+    if cotd_page is not None:
+        return cotd_page.get("competitions", [])
 
     api_client = _APIClient()
     all_cotds = await api_client.get(_TMIO.build([_TMIO.TABS.COTD, page]))
@@ -72,14 +60,13 @@ async def _get_cotd_page(page: int) -> Dict:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(all_cotds["error"])
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        _log.debug(f"Caching COTD Page {page}")
-        cache_client.set(f"cotd:{page}", json.dumps(all_cotds), ex=7200)
+
+    set_in_cache(f"cotd:{page}", all_cotds, ex=7200)
 
     return all_cotds["competitions"]
 
 
-class BestCOTDStats:
+class BestCOTDStats(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -126,8 +113,29 @@ class BestCOTDStats:
         self.best_rank_in_div_div = best_rank_in_div_div
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a BestCOTDStats class from given dictionary")
+
+        try:
+            best_rank_time = datetime.strptime(
+                raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%S+00:00"
+            )
+            best_div_time = datetime.strptime(
+                raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%S+00:00"
+            )
+            best_rank_div_time = datetime.strptime(
+                raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%S+00:00"
+            )
+        except ValueError:
+            best_rank_time = datetime.strptime(
+                raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%SZ"
+            )
+            best_div_time = datetime.strptime(
+                raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%SZ"
+            )
+            best_rank_div_time = datetime.strptime(
+                raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%SZ"
+            )
 
         args = [
             raw.get("bestrank"),
@@ -143,7 +151,7 @@ class BestCOTDStats:
         return cls(*args)
 
 
-class PlayerCOTDStats:
+class PlayerCOTDStats(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -194,7 +202,7 @@ class PlayerCOTDStats:
         self.win_streak = win_streak
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: dict) -> Self:
         _log.debug("Creating a PlayerCOTDStats class from given dictionary")
 
         args = [
@@ -212,7 +220,7 @@ class PlayerCOTDStats:
         return cls(*args)
 
 
-class PlayerCOTDResults:
+class PlayerCOTDResults(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -259,7 +267,7 @@ class PlayerCOTDResults:
         self.total_players = total_players
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: dict) -> Self:
         _log.debug("Creating a PlayerCOTDResults class from given dictionary")
 
         id = raw.get("id")
@@ -286,7 +294,7 @@ class PlayerCOTDResults:
         )
 
 
-class PlayerCOTD:
+class PlayerCOTD(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -296,7 +304,7 @@ class PlayerCOTD:
     ----------
     total : int
         Total COTD's Played
-    recent_results : :class:`List[PlayerCOTDResults]`
+    recent_results : :class:`list[PlayerCOTDResults]`
         Represents the recent COTD results the player has gotten
     stats : :class:`PlayerCOTDStats`
         Represents the Statistics of the Player's COTD career
@@ -307,7 +315,7 @@ class PlayerCOTD:
     def __init__(
         self,
         total: int,
-        recent_results: List[PlayerCOTDResults],
+        recent_results: list[PlayerCOTDResults],
         stats: PlayerCOTDStats,
         player_id: str,
     ):
@@ -317,7 +325,7 @@ class PlayerCOTD:
         self.player_id = player_id
 
     @classmethod
-    def _from_dict(cls, page_data: Dict, player_id: str):
+    def _from_dict(cls, page_data: dict, player_id: str) -> Self:
         _log.debug("Creating a PlayerCOTD class from given dictionary")
 
         total = page_data.get("total")
@@ -352,7 +360,7 @@ class PlayerCOTD:
         return cls._from_dict(await _get_trophy_page(player_id, page), player_id)
 
 
-class COTD:
+class COTD(COTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -387,7 +395,7 @@ class COTD:
         self.end_date = end_date
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: dict) -> Self:
         _log.debug("Creating a COTD class from given dictionary")
 
         cotd_id = raw.get("id")
@@ -405,7 +413,7 @@ class COTD:
         )
 
     @classmethod
-    async def get_cotd(cls: Self, page: int = 0) -> List[Self]:
+    async def get_cotd(cls: Self, page: int = 0) -> list[Self]:
         """
         .. versionadded :: 0.3.0
 
@@ -418,7 +426,7 @@ class COTD:
 
         Returns
         -------
-        :class:`List[COTD]`
+        :class:`list[COTD]`
             The COTDs
         """
         all_cotds = await _get_cotd_page(page)

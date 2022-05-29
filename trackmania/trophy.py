@@ -2,15 +2,13 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from types import NoneType
-from typing import Dict, List
 
-import redis
 from typing_extensions import Self
 
 from ._util import _add_commas, _regex_it
 from .api import _APIClient
-from .config import Client
+from .base import TrophyObject
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, InvalidTrophyNumber, TMIOException
 
@@ -19,7 +17,7 @@ _log = logging.getLogger(__name__)
 __all__ = ("PlayerTrophies", "TrophyLeaderboardPlayer")
 
 
-class TrophyLeaderboardPlayer:
+class TrophyLeaderboardPlayer(TrophyObject):
     """
     .. versionadded :: 0.4.0
 
@@ -37,7 +35,7 @@ class TrophyLeaderboardPlayer:
         The player's rank
     score : str
         The player's score
-    zones : `List[PlayerZone]`
+    zones : `list[PlayerZone]`
         The player's zones
     """
 
@@ -48,7 +46,7 @@ class TrophyLeaderboardPlayer:
         player_id: str,
         rank: int,
         score: str,
-        zones: List,
+        zones: list,
     ):
         self.player_name = player_name
         self.club_tag = club_tag
@@ -58,7 +56,7 @@ class TrophyLeaderboardPlayer:
         self.zones = zones
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         from .player import PlayerZone
 
         args = []
@@ -88,7 +86,7 @@ class TrophyLeaderboardPlayer:
         return await Player.get_player(self.player_id)
 
 
-class PlayerTrophies:
+class PlayerTrophies(TrophyObject):
     """
     .. versionadded :: 0.1.0
 
@@ -102,7 +100,7 @@ class PlayerTrophies:
         The date of the last change of the player's self.
     points : ints: int
         The number of points of the player.
-    trophies : :class:`List[int]`
+    trophies : :class:`list[int]`
         The number of trophies of the player.
     player_id : str | :class:`NoneType`, optional
         The Trackmania ID of the player
@@ -113,8 +111,8 @@ class PlayerTrophies:
         echelon: int,
         last_change: datetime,
         points: int,
-        trophies: List[int],
-        player_id: str | NoneType = None,
+        trophies: list[int],
+        player_id: str | None = None,
     ):
         """Constructor for the class."""
         self.echelon = echelon
@@ -124,13 +122,13 @@ class PlayerTrophies:
         self._player_id = player_id
 
     @classmethod
-    def _from_dict(cls: Self, raw_trophy_data: Dict, player_id: str) -> Self:
+    def _from_dict(cls: Self, raw_trophy_data: dict, player_id: str) -> Self:
         """
         Creates a :class:`PlayerTrophies` object from the given dictionary.
 
         Parameters
         ----------
-        raw_trophy_data : :class:`Dict`
+        raw_trophy_data : :class:`dict`
             The raw trophy data to parse.
         player_id : str
             The player ID to set.
@@ -227,7 +225,7 @@ class PlayerTrophies:
 
         return trophy_str
 
-    async def history(self, page: int = 0) -> Dict:
+    async def history(self, page: int = 0) -> dict:
         """
         .. versionadded :: 0.3.0
 
@@ -239,7 +237,7 @@ class PlayerTrophies:
             page number of trophy history, by default 0
         Returns
         -------
-        :class:`Dict`
+        :class:`dict`
             Trophy history data.
         Raises
         ------
@@ -252,14 +250,9 @@ class PlayerTrophies:
             f"Getting Trophy Leaderboard for Page: {page} and Player Id: {self.player_id}"
         )
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"trophy:{page}"):
-                _log.debug(f"Found trophy leaderboard for page {page} in cache")
-                return json.loads(cache_client.get(f"trophy:{page}").decode("utf-8"))[
-                    "gains"
-                ]
+        trophy_leaderboard_data = get_from_cache(f"trophy:{page}")
+        if trophy_leaderboard_data is not None:
+            return trophy_leaderboard_data.get("gains")
 
         api_client = _APIClient()
 
@@ -276,14 +269,13 @@ class PlayerTrophies:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(history["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching trophy history for page: {page}")
-            cache_client.set(f"trophy:{page}", json.dumps(history), ex=3600)
+
+        set_in_cache(f"trophy:{page}", json.dumps(history), ex=3600)
 
         return history["gains"]
 
     @staticmethod
-    async def top(page: int = 0) -> List[TrophyLeaderboardPlayer]:
+    async def top(page: int = 0) -> list[TrophyLeaderboardPlayer]:
         """
         .. versionadded :: 0.3.0
 
@@ -296,23 +288,16 @@ class PlayerTrophies:
 
         Returns
         -------
-        :class:`List[TrophyLeaderboardPlayer]`
+        :class:`list[TrophyLeaderboardPlayer]`
             The players as a list of :class:`TrophyLeaderboardPlayer` objects.
         """
         _log.debug(f"Getting Page {page} of Trophy Leaderboards")
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"trophies:{page}"):
-                _log.debug(f"Found trophy leaderboard for page {page} in cache")
-                all_players = json.loads(
-                    cache_client.get(f"trophies:{page}").decode("utf-8")
-                )
-
-                lb_players = []
-                for top_player in all_players["ranks"]:
-                    lb_players.append(TrophyLeaderboardPlayer._from_dict(top_player))
+        trophy_leaderboard_data = get_from_cache(f"trophies:{page}")
+        if trophy_leaderboard_data is not None:
+            lb_players = []
+            for top_player in trophy_leaderboard_data.get("ranks", []):
+                lb_players.append(TrophyLeaderboardPlayer._from_dict(top_player))
 
         api_client = _APIClient()
 
@@ -324,9 +309,8 @@ class PlayerTrophies:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(top_trophies["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching trophy leaderboard for page: {page}")
-            cache_client.set(f"trophies:{page}", json.dumps(top_trophies), ex=3600)
+
+        set_in_cache(f"trophies:{page}", json.dumps(top_trophies), ex=3600)
 
         lb_players = []
         for top_player in top_trophies["ranks"]:

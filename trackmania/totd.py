@@ -2,15 +2,14 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict
 
-import redis
 from typing_extensions import Self
 
 from trackmania.errors import InvalidTOTDDate, TMIOException
 
 from .api import _APIClient
-from .config import Client
+from .base import TOTDObject
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException, TrackmaniaException
 from .tmmap import TMMap
@@ -20,7 +19,7 @@ _log = logging.getLogger(__name__)
 __all__ = ("TOTD",)
 
 
-class TOTD:
+class TOTD(TOTDObject):
     """
     .. versionadded :: 0.3.0
 
@@ -55,7 +54,7 @@ class TOTD:
         self._mapobj = mapobj
 
     @classmethod
-    def _from_dict(cls, raw: Dict):
+    def _from_dict(cls, raw: dict) -> Self:
         campaign_id = raw.get("campaignid")
         mapobj = TMMap._from_dict(raw.get("map"))
         week_day = raw.get("weekday")
@@ -100,7 +99,7 @@ class TOTD:
         return self._mapobj
 
     @classmethod
-    async def get_totd(cls: Self, date: datetime) -> Self:
+    async def get_totd(cls: Self, date: datetime, __get_latest: bool = False) -> Self:
         """
         .. versionadded :: 0.3.0
 
@@ -118,19 +117,15 @@ class TOTD:
         """
         _log.debug("Getting TOTD for date: %s", date)
 
-        cache_client = Client._get_cache_client()
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"totd:{date.year}:{date.month}:{date.day}"):
-                _log.debug(
-                    f"Found TOTD for date {date.day}:{date.month}:{date.year} in cache"
-                )
-                return cls._from_dict(
-                    json.loads(
-                        cache_client.get(
-                            f"totd:{date.year}:{date.month}:{date.day}"
-                        ).decode("utf-8")
-                    )
-                )
+        if __get_latest:
+            latest_totd_data = get_from_cache("totd:latest")
+        else:
+            latest_totd_data = get_from_cache(
+                f"totd:{date.year}:{date.month}:{date.day}"
+            )
+
+        if latest_totd_data is not None:
+            return cls._from_dict(latest_totd_data)
 
         api_client = _APIClient()
         all_totds = await api_client.get(
@@ -155,11 +150,10 @@ class TOTD:
                 f"Something Unexpected has occured. Please contact the developer of the Package.\nMessage: {excp}"
             ) from excp
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching TOTD for date {date.day}:{date.month}:{date.year}")
-            cache_client.set(
-                f"totd:{date.year}:{date.month}:{date.day}", json.dumps(totd)
-            )
+        if __get_latest:
+            set_in_cache("totd:latest", json.dumps(totd))
+        else:
+            set_in_cache(f"totd:{date.year}:{date.month}:{date.day}", json.dumps(totd))
 
         return cls._from_dict(totd)
 
@@ -178,6 +172,8 @@ class TOTD:
         today = datetime.utcnow()
 
         if today.hour > 17 and today.minute > 0:
-            return await cls.get_totd(datetime.utcnow())
+            return await cls.get_totd(datetime.utcnow(), True)
         else:
-            return await cls.get_totd(datetime(today.year, today.month, today.day - 1))
+            return await cls.get_totd(
+                datetime(today.year, today.month, today.day - 1), True
+            )

@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime
-from typing import Optional
 
 import aiohttp
 
@@ -21,7 +20,7 @@ class ResponseCodeError(ValueError):
     ----------
     response : :class:`aiohttp.ClientResponse`
         The response object
-    response_json : :class:`Dict`
+    response_json : :class:`dict`
         The response json
     response_text : str
         The response text
@@ -31,7 +30,7 @@ class ResponseCodeError(ValueError):
     def __init__(
         self,
         response: aiohttp.ClientResponse,
-        response_json: Optional[dict] = None,
+        response_json: dict | None = None,
         response_text: str = "",
     ):
         super().__init__(response_text)
@@ -40,7 +39,7 @@ class ResponseCodeError(ValueError):
         self.response_text = response_text
         self.response = response
 
-    def __str__(self):
+    def __str__(self) -> str:
         response = self.response_json if self.response_json else self.response_text
         return f"Status: {self.status} Response: {response}"
 

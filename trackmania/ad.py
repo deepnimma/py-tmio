@@ -1,16 +1,14 @@
-import json
 import logging
 from contextlib import suppress
-from typing import Dict, List
 
-import redis
 from typing_extensions import Self
 
 from trackmania.errors import TMIOException
 
 from ._util import _regex_it
 from .api import _APIClient
-from .config import Client
+from .base import AdObject
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 
 _log = logging.getLogger(__name__)
@@ -18,18 +16,15 @@ _log = logging.getLogger(__name__)
 __all__ = ("Ad",)
 
 
-async def _get_ad_list() -> List[Dict]:
+async def _get_ad_list() -> list[dict]:
     ad_list = []
 
     _log.debug("Getting all ads")
-    cache_client = Client._get_cache_client()
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        if cache_client.exists("ads"):
-            _log.debug("Found all ads in cache")
-            ads = json.loads(cache_client.get("ads").decode("utf-8"))
-            for ad_dict in ads.get("ads"):
-                ad_list.append(ad_dict)
-            return ad_list
+    ads = get_from_cache("ads")
+    if ads is not None:
+        for ad_dict in ads.get("ads"):
+            ad_list.append(ad_dict)
+        return ad_list
 
     api_client = _APIClient()
     all_ads = await api_client.get(_TMIO.build([_TMIO.TABS.ADS]))
@@ -37,9 +32,8 @@ async def _get_ad_list() -> List[Dict]:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(all_ads["error"])
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        _log.debug("Caching all ads for 12hours")
-        cache_client.set("ads", json.dumps(all_ads), ex=43200)
+
+    set_in_cache("ads", all_ads, ex=43200)
 
     for ad_dict in all_ads.get("ads"):
         ad_list.append(ad_dict)
@@ -47,7 +41,7 @@ async def _get_ad_list() -> List[Dict]:
     return ad_list
 
 
-class Ad:
+class Ad(AdObject):
     """
     .. versionadded :: 0.3.0
 
@@ -103,7 +97,7 @@ class Ad:
         self.display_format = display_format
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         uid = raw.get("uid")
         name = _regex_it(raw.get("name"))
         type = raw.get("type")
@@ -118,7 +112,7 @@ class Ad:
         return cls(*args)
 
     @classmethod
-    async def list_ads(cls) -> List[Self]:
+    async def list_ads(cls) -> list[Self]:
         """
         .. versionadded :: 0.3.0
         .. versionchanged :: 0.4.0
@@ -128,7 +122,7 @@ class Ad:
 
         Returns
         -------
-        :class:`List[Self]`
+        :class:`list[Self]`
             All the Ads
 
         Raises

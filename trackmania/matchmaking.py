@@ -1,75 +1,36 @@
-import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict, List
 
-import redis
+from typing_extensions import Self
 
+from ._util import _regex_it
 from .api import _APIClient
-from .config import Client
+from .base import MatchmakingObject
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import InvalidIDError, TMIOException
 
 _log = logging.getLogger(__name__)
 
 __all__ = (
+    "MatchmakingLeaderboardPlayer",
     "PlayerMatchmakingResult",
     "PlayerMatchmaking",
 )
 
 
-async def _get_top_matchmaking(page: int = 0, royal: bool = False):
-    _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
-
-    cache_client = Client._get_cache_client()
-
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        if cache_client.exists(f"top_matchmaking:{page}:{royal}"):
-            _log.debug(f"Found top matchmaking players for page {page} in cache")
-            return json.loads(
-                cache_client.get(f"top_matchmaking:{page}:{royal}").decode("utf-8")
-            ).get("ranks")
-    api_client = _APIClient()
-
-    if not royal:
-        match_history = await api_client.get(
-            _TMIO.build([_TMIO.TABS.TOP_MATCHMAKING, str(page)])
-        )
-    else:
-        match_history = await api_client.get(
-            _TMIO.build([_TMIO.TABS.TOP_ROYAL, str(page)])
-        )
-
-    await api_client.close()
-
-    with suppress(KeyError, TypeError):
-        raise TMIOException(match_history["error"])
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        _log.debug(f"Caching top matchmaking players for page {page}")
-        cache_client.set(
-            f"top_matchmaking:{page}:{royal}", json.dumps(match_history), ex=3600
-        )
-
-    return match_history.get("ranks")
-
-
-async def _get_history(player_id: str, type_id: int, page: int) -> List[Dict]:
+async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
     if player_id is None:
         raise InvalidIDError("Player ID is not set.")
 
     _log.debug("Getting matchmaking history for player %s and page %d", player_id, page)
 
-    cache_client = Client._get_cache_client()
-
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        if cache_client.exists(f"mm_hist:{page}:{type_id}:{player_id}"):
-            _log.debug("Found matchmaking history for page %s in cache", page)
-            return json.loads(
-                cache_client.get(f"mm_hist:{page}:{type_id}:{player_id}").decode(
-                    "utf-8"
-                )
-            )["history"]
+    matchmaking_history = get_from_cache(
+        f"matchmaking_history:{page}:{type_id}:{player_id}"
+    )
+    if matchmaking_history is not None:
+        return matchmaking_history.get("history")
 
     api_client = _APIClient()
     match_history = await api_client.get(
@@ -87,18 +48,126 @@ async def _get_history(player_id: str, type_id: int, page: int) -> List[Dict]:
 
     with suppress(KeyError, TypeError):
         raise TMIOException(match_history["error"])
-    with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-        _log.debug(f"Saving matchmaking history for page {page} to cache")
-        cache_client.set(
-            f"mm_history:{page}:{type_id}:{player_id}",
-            json.dumps(match_history),
-            ex=3600,
-        )
+
+    set_in_cache(
+        f"matchmaking_history:{page}:{type_id}:{player_id}", match_history, ex=3600
+    )
 
     return match_history.get("history", [])
 
 
-class PlayerMatchmakingResult:
+class MatchmakingLeaderboardPlayer(MatchmakingObject):
+    """
+    Represents a player on the Matchmaking leaderboards.
+
+    Parameters
+    ----------
+    player_name : str
+        The name of the player.
+    player_tag : str | None
+        The tag of the player.
+    player_id : str
+        The ID of the player.
+    rank : int
+        The rank of the player.
+    score : int
+        The score of the player.
+    progression : int
+        The progression of the player.
+    """
+
+    def __init__(
+        self,
+        player_name: str,
+        player_tag: str | None,
+        player_id: str,
+        rank: int,
+        score: int,
+        progression: int,
+        division: int,
+    ):
+        self.player_name = player_name
+        self.player_tag = player_tag
+        self.player_id = player_id
+        self.rank = rank
+        self.score = score
+        self.progression = progression
+        self.division = division
+
+    @classmethod
+    def _from_dict(cls: Self, raw_data: dict) -> Self:
+        player_name = raw_data["player"].get("name")
+        player_tag = _regex_it(raw_data["player"].get("tag", None))
+        player_id = raw_data["player"].get("id")
+        rank = raw_data.get("rank")
+        score = raw_data.get("score")
+        progression = raw_data.get("progression")
+        division = raw_data.get("division")
+
+        args = [
+            player_name,
+            player_tag,
+            player_id,
+            rank,
+            score,
+            progression,
+            division,
+        ]
+
+        return cls(*args)
+
+    async def player(self: Self):
+        """
+        Returns the player who owns this position on the leaderboard.
+
+        Returns
+        -------
+        :class:`Player`
+            The player.
+        """
+        from .player import Player
+
+        return await Player.get_player(self.player_id)
+
+
+async def _get_top_matchmaking(
+    page: int = 0, royal: bool = False
+) -> list[MatchmakingLeaderboardPlayer]:
+    _log.debug(f"Getting top matchmaking players page {page}. Royal? {royal}")
+    tops = []
+
+    top_matchmaking_data = get_from_cache(f"top_matchmaking:{page}:{royal}")
+    if top_matchmaking_data is not None:
+        for pos in top_matchmaking_data.get("ranks", []):
+            tops.append(MatchmakingLeaderboardPlayer._from_dict(pos))
+
+        return tops
+
+    api_client = _APIClient()
+
+    if not royal:
+        match_history = await api_client.get(
+            _TMIO.build([_TMIO.TABS.TOP_MATCHMAKING, str(page)])
+        )
+    else:
+        match_history = await api_client.get(
+            _TMIO.build([_TMIO.TABS.TOP_ROYAL, str(page)])
+        )
+
+    await api_client.close()
+
+    with suppress(KeyError, TypeError):
+        raise TMIOException(match_history["error"])
+
+    set_in_cache(f"top_matchmaking:{page}:{royal}", match_history, ex=3600)
+
+    for pos in match_history.get("ranks", []):
+        tops.append(MatchmakingLeaderboardPlayer._from_dict(pos))
+
+    return tops
+
+
+class PlayerMatchmakingResult(MatchmakingObject):
     """
     .. versionadded :: 0.3.0
 
@@ -141,7 +210,7 @@ class PlayerMatchmakingResult:
         self.win = win
 
     @classmethod
-    def _from_dict(cls, data: Dict, player_id: str = None):
+    def _from_dict(cls, data: dict, player_id: str = None) -> Self:
         _log.debug("Creating a PlayerMatchmakingResult class from given dictionary")
 
         after_score = data.get("afterscore")
@@ -156,7 +225,7 @@ class PlayerMatchmakingResult:
         return cls(*args)
 
 
-class PlayerMatchmaking:
+class PlayerMatchmaking(MatchmakingObject):
     """
     .. versionadded :: 0.1.0
 
@@ -234,20 +303,20 @@ class PlayerMatchmaking:
             self.progress = 0
 
     @staticmethod
-    def _from_dict(mm_data: Dict, player_id: str = None):
+    def _from_dict(mm_data: dict, player_id: str = None) -> Self:
         """
         Parses the matchmaking data of the player and returns 2 :class:`PlayerMatchmaking` objects.
             One for 3v3 Matchmaking and the other for Royal matchmaking.
 
         Parameters
         ----------
-        mm_data : :class:`List[Dict]`
+        mm_data : :class:`list[dict]`
             The matchmaking data.
         player_id : str, optional
             The player's ID. Defaults to None
         Returns
         -------
-        :class:`List[PlayerMatchmaking]`
+        :class:`list[PlayerMatchmaking]`
             The list of matchmaking data, one for 3v3 and other other one for royal.
         """
         _log.debug("Creating a PlayerMatchmaking class from given dictionary")
@@ -272,13 +341,13 @@ class PlayerMatchmaking:
         return matchmaking_data
 
     @classmethod
-    def __parse_3v3(cls, data: Dict, player_id: str = None):
+    def __parse_3v3(cls, data: dict, player_id: str = None) -> Self:
         """
         Parses matchmaking data for 3v3 and royal type matchmaking.
 
         Parameters
         ----------
-        data : :class:`Dict`
+        data : :class:`dict`
             The matchmaking data only.
         Returns
         -------
@@ -286,7 +355,7 @@ class PlayerMatchmaking:
             The parsed data.
         """
         _log.debug(
-            f"Parsing Data from Dictionary for PlayerMatchmaking class. ID supplied: {player_id}"
+            f"Parsing Data from dictionary for PlayerMatchmaking class. ID supplied: {player_id}"
         )
 
         if "info" in data:
@@ -325,7 +394,7 @@ class PlayerMatchmaking:
         """max points"""
         return self._max_points
 
-    def __str__(self):
+    def __str__(self) -> str:
         progression = self.progression
         progress = self.progress
         rank = self.rank
@@ -336,7 +405,7 @@ class PlayerMatchmaking:
 
         return f"Progression: {progression}\nProgress: {progress}\nRank: {rank}\nScore: {score}\nDivision: {division_str} - {division}\n\nPoints to Next Division: {max_points + 1}"
 
-    async def history(self, page: int = 0) -> List[PlayerMatchmakingResult]:
+    async def history(self, page: int = 0) -> list[PlayerMatchmakingResult]:
         """
         .. versionadded :: 0.3.0
         .. versionchanged :: 0.4.0
@@ -351,7 +420,7 @@ class PlayerMatchmaking:
 
         Returns
         -------
-        :class:`List[PlayerMatchmakingResult]`
+        :class:`list[PlayerMatchmakingResult]`
             The list of matchmaking results
 
         Raises
@@ -370,7 +439,7 @@ class PlayerMatchmaking:
         return match_results
 
     @staticmethod
-    async def top_matchmaking(page: int = 0, royal: bool = False) -> List[Dict]:
+    async def top_matchmaking(page: int = 0, royal: bool = False) -> list[dict]:
         """
         .. versionadded :: 0.3.0
 
@@ -385,7 +454,7 @@ class PlayerMatchmaking:
 
         Returns
         -------
-        :class:`List[Dict]`
+        :class:`list[dict]`
             The top matchmaking players by score. Each page contains 50 players.
         """
         return await _get_top_matchmaking(page, royal)

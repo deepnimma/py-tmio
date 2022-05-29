@@ -1,16 +1,13 @@
-import json
 import logging
-from contextlib import suppress
 from datetime import datetime
-from typing import Dict, List
 
-import redis
 from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
 from .api import _APIClient
-from .config import Client
+from .base import TMXObject
+from .config import get_from_cache, set_in_cache
 from .constants import _TMX
 from .errors import InvalidTMXCode
 
@@ -26,14 +23,12 @@ __all__ = (
 )
 
 
-async def _get_map(tmx_id: int) -> Dict:
+async def _get_map(tmx_id: int) -> dict:
     _log.info(f"Getting map data for tmx id {tmx_id}")
 
-    cache_client = Client._get_cache_client()
-    with suppress(ConnectionError, redis.exceptions.ConnectionError):
-        if cache_client.exists(f"tmxmap:{tmx_id}"):
-            _log.debug(f"Found map data for tmx id {tmx_id} in cache")
-            return json.loads(cache_client.get(f"tmxmap:{tmx_id}").decode("utf-8"))
+    tmx_map = get_from_cache(f"tmxmap:{tmx_id}")
+    if tmx_map is not None:
+        return tmx_map
 
     api_client = _APIClient()
     map_data = await api_client.get(
@@ -43,14 +38,13 @@ async def _get_map(tmx_id: int) -> Dict:
 
     if not isinstance(map_data, dict):
         raise InvalidTMXCode("Invalid TMX code")
-    with suppress(ConnectionError, redis.exceptions.ConnectionError):
-        _log.debug(f"Caching map data for tmx id {tmx_id}")
-        cache_client.set(f"tmxmap:{tmx_id}", json.dumps(map_data))
+
+    set_in_cache(f"tmxmap:{tmx_id}", map_data)
 
     return map_data
 
 
-class TMXMapTimes:
+class TMXMapTimes(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -69,19 +63,23 @@ class TMXMapTimes:
         self.updated = updated
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a TMXMapTimes from given dictionary")
 
         uploaded_raw, updated_raw = raw.get("UploadedAt"), raw.get("UpdatedAt")
 
-        # 2022-03-15T18:18:50.007 to datetime
-        uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S.%f")
-        updated = datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%S.%f")
+        try:
+            # 2022-03-15T18:18:50.007 to datetime
+            uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S.%f")
+            updated = datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%S.%f")
+        except ValueError:
+            uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S")
+            updated = datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%S")
 
         return cls(uploaded, updated)
 
 
-class GbxFileMetadata:
+class GbxFileMetadata(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -152,7 +150,7 @@ class GbxFileMetadata:
         self.vehicle_name = vehicle_name
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a GbxFileMetadata from given dictionary")
 
         args = [
@@ -175,7 +173,7 @@ class GbxFileMetadata:
         return cls(*args)
 
 
-class TMXTags:
+class TMXTags(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -183,15 +181,15 @@ class TMXTags:
 
     Parameters
     ----------
-    map_tags : :class:`List[int]`
+    map_tags : :class:`list[int]`
         The map tags as a list of integers
     """
 
-    def __init__(self, map_tags: List[int]):
+    def __init__(self, map_tags: list[int]):
         self.map_tags = map_tags
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a TMXTags from given dictionary")
 
         map_tags_ss = raw.get("Tags", None).split(",")
@@ -206,7 +204,7 @@ class TMXTags:
         return ", ".join([_TMX.MAP_TYPE_ENUMS.get(tag) for tag in self.map_tags])
 
 
-class ReplayWRData:
+class ReplayWRData(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -237,7 +235,7 @@ class ReplayWRData:
         self.wr_username = wr_username
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a ReplayWRData from given dictionary")
 
         args = [
@@ -250,7 +248,7 @@ class ReplayWRData:
         return cls(*args)
 
 
-class TMXMetadata:
+class TMXMetadata(TMXObject):
     """
     .. versionadded :: 0.3.3
 
@@ -329,7 +327,7 @@ class TMXMetadata:
         self.video_count = video_count
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a TMXMetaData from given dictionary")
 
         args = [
@@ -429,7 +427,7 @@ class TMXMap:
         self.metadata = metadata
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a TMXMap from given dictionary")
 
         username = raw.get("Username")

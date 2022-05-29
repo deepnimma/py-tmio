@@ -2,16 +2,15 @@ import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict, List
 
-import redis
 from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
 from ._util import _regex_it
 from .api import _APIClient
-from .config import Client
+from .base import TMMapObject
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException
 from .player import Player
@@ -25,7 +24,7 @@ __all__ = (
 )
 
 
-class MedalTimes:
+class MedalTimes(TMMapObject):
     """
     .. versionadded :: 0.3.0
 
@@ -83,7 +82,7 @@ class MedalTimes:
         return "%01d:%02d.%03d" % (min, sec, ms)
 
 
-class Leaderboard:
+class Leaderboard(TMMapObject):
     """
     .. versionadded :: 0.3.0
 
@@ -127,7 +126,7 @@ class Leaderboard:
         self.player_id = player_id
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a Leaderboards class from given dictionary")
 
         if "player" in raw:
@@ -171,7 +170,7 @@ class Leaderboard:
         return await Player.get_player(self.player_id)
 
 
-class TMMap:
+class TMMap(TMMapObject):
     """
     .. versionadded :: 0.3.0
 
@@ -189,7 +188,7 @@ class TMMap:
         The file name of the map
     map_id : str
         The map id of the map
-    leaderboard : :class:`List[Leaderboard]` | None
+    leaderboard : :class:`list[Leaderboard]` | None
         The leaderboard of the map
     medal_times : :class:`MedalTimes`
         The medal times of the map
@@ -217,7 +216,7 @@ class TMMap:
         exchange_id: str | None,
         file_name: str,
         map_id: str,
-        leaderboard: List[Leaderboard] | None,
+        leaderboard: list[Leaderboard] | None,
         medal_time: MedalTimes,
         name: str,
         submitter_id: str,
@@ -255,7 +254,7 @@ class TMMap:
         return self._lb_loaded
 
     @classmethod
-    def _from_dict(cls: Self, raw: Dict) -> Self:
+    def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a Map class from given dictionary")
 
         author_id = raw.get("author")
@@ -311,23 +310,18 @@ class TMMap:
         """
         _log.debug(f"Getting the map with the UID {map_uid}")
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"map:{map_uid}"):
-                _log.debug(f"Map {map_uid} found in cache")
-                return cls._from_dict(json.loads(cache_client.get(f"map:{map_uid}")))
+        map_data = get_from_cache(f"map:{map_uid}")
+        if map_data is not None:
+            return cls._from_dict(map_data)
 
         api_client = _APIClient()
         map_data = await api_client.get(_TMIO.build([_TMIO.TABS.MAP, map_uid]))
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(map_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching map {map_uid}")
-            cache_client.set(f"map:{map_uid}", json.dumps(map_data))
+
+        set_in_cache(f"map:{map_uid}", json.dumps(map_data))
 
         return cls._from_dict(map_data)
 
@@ -361,7 +355,7 @@ class TMMap:
 
     async def get_leaderboard(
         self, offset: int = 0, length: int = 100
-    ) -> List[Leaderboard]:
+    ) -> list[Leaderboard]:
         """
         .. versionadded :: 0.3.0
 
@@ -376,7 +370,7 @@ class TMMap:
 
         Returns
         -------
-        :class:`List[Leaderboard]`
+        :class:`list[Leaderboard]`
             The leaderboard as a list of positions.
 
         Raises
@@ -392,27 +386,18 @@ class TMMap:
             f"Getting Leaderboard of the Map with Length {length} and offset {offset}"
         )
 
-        cache_client = Client._get_cache_client()
-
         self._offset = offset
         self.length = length
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(
-                f"leaderboard:{self.uid}:{self.offset}:{self.length}"
-            ):
-                _log.debug(
-                    f"Leaderboard {self.uid}:{self.offset}:{self.length} found in cache"
-                )
-                leaderboards = []
-                for lb in json.loads(
-                    cache_client.get(
-                        f"leaderboard:{self.uid}:{self.offset}:{self.length}"
-                    ).decode("utf-8")
-                )["tops"]:
-                    leaderboards.append(Leaderboard._from_dict(lb))
+        leaderboards_data = get_from_cache(
+            f"leaderboard:{self.uid}:{self.offset}:{self.length}"
+        )
+        if leaderboards_data is not None:
+            leaderboards = []
+            for lb in leaderboards_data.get("tops", []):
+                leaderboards.append(Leaderboard._from_dict(lb))
 
-                return leaderboards
+            return leaderboards
 
         api_client = _APIClient()
         lb_data = await api_client.get(
@@ -422,14 +407,11 @@ class TMMap:
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(lb_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
-            cache_client.set(
-                f"leaderboard:{self.uid}:{self.offset}:{self.length}",
-                json.dumps(lb_data),
-            )
+
+        set_in_cache(
+            f"leaderboard:{self.uid}:{self.offset}:{self.length}", json.dumps(lb_data)
+        )
 
         self._offset += self.length
         self._lb_loaded = True
@@ -440,7 +422,7 @@ class TMMap:
 
         return leaderboards
 
-    async def load_more_leaderboard(self, length: int = 100) -> List[Leaderboard]:
+    async def load_more_leaderboard(self, length: int = 100) -> list[Leaderboard]:
         """
         .. versionadded :: 0.3.0
 
@@ -453,27 +435,18 @@ class TMMap:
 
         Returns
         -------
-        :class:`List[Leaderboard]`
+        :class:`list[Leaderboard]`
             The leaderboard positions.
         """
-        cache_client = Client._get_cache_client()
+        leaderboard_data = get_from_cache(
+            f"leaderboard:{self.uid}:{self.offset}:{self.length}"
+        )
+        if leaderboard_data is not None:
+            leaderboards = []
+            for lb in leaderboard_data.get("tops", []):
+                leaderboards.append(Leaderboard._from_dict(lb))
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(
-                f"leaderboard:{self.uid}:{self.offset}:{self.length}"
-            ):
-                _log.debug(
-                    f"Leaderboard {self.uid}:{self.offset}:{self.length} found in cache"
-                )
-                leaderboards = []
-                for lb in json.loads(
-                    cache_client.get(
-                        f"leaderboard:{self.uid}:{self.offset}:{self.length}"
-                    ).decode("utf-8")
-                )["tops"]:
-                    leaderboards.append(Leaderboard._from_dict(lb))
-
-                return leaderboards
+            return leaderboards
 
         if not self._lb_loaded:
             _log.warn("Leaderboard is not loaded yet, loading from start")
@@ -488,12 +461,11 @@ class TMMap:
 
         with suppress(KeyError, TypeError):
             raise TMIOException(leaderboards["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching leaderboard {self.uid}:{self.offset}:{self.length}")
-            cache_client.set(
-                f"leaderboard:{self.uid}:{self.offset}:{self.length}",
-                json.dumps(leaderboards),
-            )
+
+        set_in_cache(
+            f"leaderboard:{self.uid}:{self.offset}:{self.length}",
+            json.dumps(leaderboards),
+        )
 
         self._offset += length
         self._lb_loaded = True

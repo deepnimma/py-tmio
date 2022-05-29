@@ -1,9 +1,9 @@
-from typing import List
-
 from typing_extensions import Self
 
+from .base import ConstantsObject
 
-class _TMIOTabs:
+
+class _TMIOTabs(ConstantsObject):
     """
     .. versionadded:: 0.3.0
 
@@ -29,8 +29,19 @@ class _TMIOTabs:
         self.COTD: str = "cotd"
         self.ADS: str = "ads"
 
+        self.OFFICIAL_CAMPAIGN: str = "officialcampaign"
+        self.CAMPAIGNS: str = "campaigns"
+        self.CAMPAIGN: str = "campaign"
 
-class _TMIO:
+        self.CLUB: str = "club"
+        self.CLUBS: str = "clubs"
+        self.ACTIVITIES: str = "activities"
+        self.MEMBERS: str = "members"
+        self.ROOM: str = "room"
+        self.ROOMS: str = "rooms"
+
+
+class _TMIO(ConstantsObject):
     """
     .. versionadded:: 0.3.0
 
@@ -55,12 +66,12 @@ class _TMIO:
     TABS: _TMIOTabs = _TMIOTabs()
 
     @classmethod
-    def build(cls: Self, endpoints: List[str]) -> str:
+    def build(cls: Self, endpoints: list[str]) -> str:
         """Builds a _TMIO endpoint url.
 
         Parameters
         ----------
-        endpoints : List[str]
+        endpoints : list[str]
             The endpoints to build the url with.
 
         Returns
@@ -84,7 +95,7 @@ class _TMIO:
         return url + endpoints[0]
 
 
-class _TMXTabs:
+class _TMXTabs(ConstantsObject):
     """
     .. versionadded :: 0.3.3
 
@@ -99,7 +110,7 @@ class _TMXTabs:
         self.ID = "id"
 
 
-class _TMX:
+class _TMX(ConstantsObject):
     """
     .. versionadded:: 0.3.0
 
@@ -167,12 +178,12 @@ class _TMX:
     }
 
     @classmethod
-    def build(cls: Self, endpoints: List[str]) -> str:
+    def build(cls: Self, endpoints: list[str]) -> str:
         """URL Builder for _TMX API
 
         Parameters
         ----------
-        endpoints : class:`List`[str]
+        endpoints : class:`list`[str]
             The endpoints as a list.
 
         Returns

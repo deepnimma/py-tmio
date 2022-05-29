@@ -1,15 +1,13 @@
-import json
 import logging
 from contextlib import suppress
 from datetime import datetime
-from typing import Dict, List
 
-import redis
 from typing_extensions import Self
 
 from ._util import _regex_it
 from .api import _APIClient
-from .config import Client
+from .base import PlayerObject
+from .config import get_from_cache, set_in_cache
 from .constants import _TMIO
 from .errors import TMIOException
 from .matchmaking import PlayerMatchmaking
@@ -26,7 +24,7 @@ __all__ = (
 )
 
 
-class PlayerMetaInfo:
+class PlayerMetaInfo(PlayerObject):
     """
     .. versionadded :: 0.1.0
 
@@ -84,7 +82,7 @@ class PlayerMetaInfo:
         self.vanity = vanity
 
     @classmethod
-    def _from_dict(cls, meta_data: Dict):
+    def _from_dict(cls, meta_data: dict) -> Self:
         """
         .. versionadded :: 0.1.0
 
@@ -92,7 +90,7 @@ class PlayerMetaInfo:
 
         Parameters
         ----------
-        meta_data : Dict
+        meta_data : dict
             The meta data to parse
         Returns
         -------
@@ -115,7 +113,7 @@ class PlayerMetaInfo:
         )
 
 
-class PlayerZone:
+class PlayerZone(PlayerObject):
     """
     .. versionadded :: 0.1.0
 
@@ -138,7 +136,7 @@ class PlayerZone:
         self.rank = rank
 
     @classmethod
-    def _parse_zones(cls: Self, zones: Dict, zone_positions: List[int]) -> List[Self]:
+    def _parse_zones(cls: Self, zones: dict, zone_positions: list[int]) -> list[Self]:
         """
           .. versionadded :: 0.1.0
 
@@ -146,17 +144,17 @@ class PlayerZone:
 
          Parameters
          ----------
-         zones : :class:`Dict`
+         zones : :class:`dict`
              the zones data from the API.
-         zone_positions : :class:`List[int]`
+         zone_positions : :class:`list[int]`
              The zone positions data from the API.
          Returns
          -------
-         class:`List[PlayerZone]`
+         class:`list[PlayerZone]`
              The list of :class:`PlayerZone` objects.
         """
         _log.debug("Parsing Zones")
-        player_zone_list: List = []
+        player_zone_list: list = []
         i: int = 0
 
         while "name" in zones:
@@ -175,7 +173,7 @@ class PlayerZone:
 
     @staticmethod
     def to_string(
-        player_zones: List[Self] | None, add_pos: bool = True, inline: bool = False
+        player_zones: list[Self] | None, add_pos: bool = True, inline: bool = False
     ) -> str | None:
         """
         .. versionadded :: 0.4.0
@@ -184,7 +182,7 @@ class PlayerZone:
 
         Parameters
         ----------
-        player_zones : :class:`List[Self]`
+        player_zones : :class:`list[Self]`
             The list of :class:`PlayerZone` objects.
         add_pos : bool
             .. versionadded:: 0.4.0
@@ -221,7 +219,7 @@ class PlayerZone:
         return zone_str
 
 
-class PlayerSearchResult:
+class PlayerSearchResult(PlayerObject):
     """
     .. versionadded :: 0.1.0
 
@@ -235,7 +233,7 @@ class PlayerSearchResult:
         Name of the player.
     player_id : str
         The Trackmania ID of the player.
-    zone : :class:`List[PlayerZone]`, optional
+    zone : :class:`list[PlayerZone]`, optional
         The zone of the player as a list.
     threes : :class:`PlayerMatchmaking`, optional
         The 3v3 data of the player.
@@ -248,7 +246,7 @@ class PlayerSearchResult:
         club_tag: str | None,
         name: str,
         player_id: str,
-        zone: List[PlayerZone],
+        zone: list[PlayerZone],
         threes: PlayerMatchmaking | None,
         royal: PlayerMatchmaking | None,
     ):
@@ -260,7 +258,7 @@ class PlayerSearchResult:
         self.royal = royal
 
     @classmethod
-    def _from_dict(cls: Self, player_data: Dict) -> Self:
+    def _from_dict(cls: Self, player_data: dict) -> Self:
         _log.debug("Creating a PlayerSearchResult class from given dictionary")
 
         zone = (
@@ -278,7 +276,7 @@ class PlayerSearchResult:
         return cls(club_tag, name, player_id, zone, matchmaking[0], matchmaking[1])
 
 
-class Player:
+class Player(PlayerObject):
     """
     .. versionadded :: 0.1.0
 
@@ -302,7 +300,7 @@ class Player:
         Name of the player.
     trophies : :class:`PlayerTrophies`, optional
         The trophies of the player.
-    zone : :class:`List[PlayerZone]`, optional
+    zone : :class:`list[PlayerZone]`, optional
         The zone of the player as a list.
     m3v3_data : :class:`PlayerMatchmaking`, optional
         The 3v3 data of the player.
@@ -319,7 +317,7 @@ class Player:
         meta: PlayerMetaInfo,
         name: str,
         trophies: PlayerTrophies | None = None,
-        zone: List[PlayerZone] | None = None,
+        zone: list[PlayerZone] | None = None,
         m3v3_data: PlayerMatchmaking | None = None,
         royal_data: PlayerMatchmaking | None = None,
     ):
@@ -335,7 +333,7 @@ class Player:
         self.m3v3_data = m3v3_data
         self.royal_data = royal_data
 
-    def __str__(self):
+    def __str__(self) -> str:
         """String representation of the class."""
         return f"Player: {self.name} ({self.player_id})"
 
@@ -363,39 +361,26 @@ class Player:
         """
         _log.debug(f"Getting {player_id}'s data")
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"player:{player_id}"):
-                _log.debug(f"{player_id}'s data found in cache")
-                player_data = cache_client.get(f"player:{player_id}").decode("utf-8")
-                player_data = json.loads(player_data)
-                return cls(
-                    **Player._parse_player(
-                        json.loads(
-                            cache_client.get(f"player:{player_id}").decode("utf-8")
-                        )
-                    )
-                )
+        player_data = get_from_cache(f"player:{player_id}")
+        if player_data is not None:
+            return cls(**Player._parse_player(player_data))
 
         api_client = _APIClient()
         player_data = await api_client.get(_TMIO.build([_TMIO.TABS.PLAYER, player_id]))
         await api_client.close()
 
         with suppress(KeyError, TypeError):
-
             raise TMIOException(player_data["error"])
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            # Cache player_data for 6 hours
-            cache_client.set(f"player:{player_id}", json.dumps(player_data), ex=21600)
-            cache_client.set(f"{player_data['displayname'].lower()}:id", player_id)
+
+        set_in_cache(f"player:{player_id}", player_data, ex=21600)
+        set_in_cache(f"{player_data['displayname'].lower()}:id", player_id)
 
         return cls(**Player._parse_player(player_data))
 
     @staticmethod
     async def search(
         username: str,
-    ) -> List[PlayerSearchResult] | None:
+    ) -> list[PlayerSearchResult] | None:
         """
         .. versionadded :: 0.1.0
         .. versionchanged :: 0.3.4
@@ -410,7 +395,7 @@ class Player:
 
         Returns
         -------
-        :class:`List[PlayerSearchResult]` | None
+        :class:`list[PlayerSearchResult]` | None
             Returns a list of :class:`PlayerSearchResult` with users who have similar usernames. Returns `None`
             if no user with that username can be found.
         """
@@ -455,18 +440,14 @@ class Player:
         """
         _log.debug(f"Getting {username}'s id")
 
-        cache_client = Client._get_cache_client()
-
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"{username.lower()}:id"):
-                _log.debug(f"{username}'s id found in cache")
-                return cache_client.get(f"{username.lower()}:id").decode("utf-8")
+        player_id = get_from_cache(f"{username.lower()}:id")
+        if player_id is not None:
+            return player_id
 
         players = await Player.search(username)
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching {username.lower()} id as {players[0].player_id}")
-            cache_client.set(f"{username.lower()}:id", players[0].player_id)
+        set_in_cache(f"{username.lower()}:id", players[0].player_id)
+
         return players[0].player_id
 
     @staticmethod
@@ -487,25 +468,19 @@ class Player:
             The player's username
         """
         _log.debug(f"Getting the username for {player_id}")
-        cache_client = Client._get_cache_client()
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            if cache_client.exists(f"{player_id}:username"):
-                _log.debug(f"{player_id}'s username found in cache")
-                return json.loads(
-                    cache_client.get(f"{player_id}:username").decode("utf-8")
-                )
+        player_username = get_from_cache(f"{player_id}:username")
+        if player_username is not None:
+            return player_username
 
         player: Player = await Player.get_player(player_id)
 
-        with suppress(ConnectionRefusedError, redis.exceptions.ConnectionError):
-            _log.debug(f"Caching {player_id}:username as {player.name}")
-            cache_client.set(f"{player_id}:username", player.name)
+        set_in_cache(f"{player_id}:username", player.name)
 
         return player.name
 
     @staticmethod
-    def _parse_player(player_data: Dict) -> Dict:
+    def _parse_player(player_data: dict) -> dict:
         """
         .. versionadded :: 0.1.0
         .. versionchanged :: 0.4.0
@@ -515,12 +490,12 @@ class Player:
 
         Parameters
         ----------
-        player_data : :class:`Dict`
+        player_data : :class:`dict`
             The player data as a dictionary
 
         Returns
         -------
-        :class:`Dict`
+        :class:`dict`
             The parsed player data formatted kwargs friendly for the :class:`Player` constructors
         """
         # Parsing First Login
