@@ -7,6 +7,7 @@ from typing_extensions import Self
 
 from trackmania.errors import TMIOException
 
+from ._util import _frmt_str_to_datetime
 from .api import _APIClient
 from .base import COTDObject
 from .config import get_from_cache, set_in_cache
@@ -116,35 +117,18 @@ class BestCOTDStats(COTDObject):
     def _from_dict(cls: Self, raw: dict) -> Self:
         _log.debug("Creating a BestCOTDStats class from given dictionary")
 
-        try:
-            best_rank_time = datetime.strptime(
-                raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%S+00:00"
-            )
-            best_div_time = datetime.strptime(
-                raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%S+00:00"
-            )
-            best_rank_div_time = datetime.strptime(
-                raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%S+00:00"
-            )
-        except ValueError:
-            best_rank_time = datetime.strptime(
-                raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%SZ"
-            )
-            best_div_time = datetime.strptime(
-                raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%SZ"
-            )
-            best_rank_div_time = datetime.strptime(
-                raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%SZ"
-            )
+        best_rank_time = _frmt_str_to_datetime(raw.get("bestranktime"))
+        best_div_time = _frmt_str_to_datetime(raw.get("bestdivtime"))
+        best_rank_div_time = _frmt_str_to_datetime(raw.get("bestrankindivtime"))
 
         args = [
             raw.get("bestrank"),
-            datetime.strptime(raw.get("bestranktime"), "%Y-%m-%dT%H:%M:%SZ"),
+            best_rank_time,
             raw.get("bestrankdivrank"),
             raw.get("bestdiv"),
-            datetime.strptime(raw.get("bestdivtime"), "%Y-%m-%dT%H:%M:%SZ"),
+            best_div_time,
             raw.get("bestrankindiv"),
-            datetime.strptime(raw.get("bestrankindivtime"), "%Y-%m-%dT%H:%M:%SZ"),
+            best_rank_div_time,
             raw.get("bestrankindivdiv"),
         ]
 
@@ -271,7 +255,7 @@ class PlayerCOTDResults(COTDObject):
         _log.debug("Creating a PlayerCOTDResults class from given dictionary")
 
         id = raw.get("id")
-        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ")
+        timestamp = _frmt_str_to_datetime(raw.get("timestamp"))
         name = raw.get("name")
         div = raw.get("div")
         rank = raw.get("rank")

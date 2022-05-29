@@ -7,7 +7,7 @@ from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
-from ._util import _regex_it
+from ._util import _frmt_str_to_datetime, _regex_it
 from .api import _APIClient
 from .base import TMMapObject
 from .config import get_from_cache, set_in_cache
@@ -141,7 +141,7 @@ class Leaderboard(TMMapObject):
         position = raw.get("position")
         time = raw.get("time")
         ghost = raw.get("url")
-        timestamp = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ")
+        timestamp = _frmt_str_to_datetime(raw.get("timestamp"))
 
         return cls(
             timestamp=timestamp,
@@ -275,7 +275,7 @@ class TMMap(TMMapObject):
         submitter_name = raw.get("submitterplayer").get("name")
         thumbnail = raw.get("thumbnailUrl")
         uid = raw.get("mapUid")
-        uploaded = datetime.strptime(raw.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ")
+        uploaded = _frmt_str_to_datetime(raw.get("timestamp"))
         url = raw.get("fileUrl")
 
         return cls(

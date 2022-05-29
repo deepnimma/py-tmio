@@ -5,7 +5,7 @@ from datetime import datetime
 
 from typing_extensions import Self
 
-from ._util import _add_commas, _regex_it
+from ._util import _add_commas, _frmt_str_to_datetime, _regex_it
 from .api import _APIClient
 from .base import TrophyObject
 from .config import get_from_cache, set_in_cache
@@ -141,9 +141,7 @@ class PlayerTrophies(TrophyObject):
 
         return cls(
             echelon=raw_trophy_data.get("echelon"),
-            last_change=datetime.strptime(
-                raw_trophy_data.get("timestamp"), "%Y-%m-%dT%H:%M:%SZ"
-            ),
+            last_change=_frmt_str_to_datetime(raw_trophy_data.get("timestamp")),
             points=raw_trophy_data.get("points"),
             trophies=raw_trophy_data.get("counts"),
             player_id=player_id,

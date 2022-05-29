@@ -4,7 +4,7 @@ from datetime import datetime
 
 from typing_extensions import Self
 
-from ._util import _regex_it
+from ._util import _frmt_str_to_datetime, _regex_it
 from .api import _APIClient
 from .base import PlayerObject
 from .config import get_from_cache, set_in_cache
@@ -496,18 +496,10 @@ class Player(PlayerObject):
         :class:`dict`
             The parsed player data formatted kwargs friendly for the :class:`Player` constructors
         """
-        # Parsing First Login
-        first_login = (
-            datetime.strptime(player_data["timestamp"], "%Y-%m-%dT%H:%M:%SZ")
-            if "timestamp" in player_data
-            else None
-        )
+        first_login = _frmt_str_to_datetime(player_data.get("timestamp"))
 
-        # Parsing Last Club Tag Change
-        last_club_tag_change = (
-            datetime.strptime(player_data["clubtagtimestamp"], "%Y-%m-%dT%H:%M:%SZ")
-            if "clubtagtimestamp" in player_data
-            else None
+        last_club_tag_change = _frmt_str_to_datetime(
+            player_data.get("clubtagtimestamp")
         )
 
         # Parsing Meta

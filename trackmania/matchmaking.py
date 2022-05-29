@@ -4,7 +4,7 @@ from datetime import datetime
 
 from typing_extensions import Self
 
-from ._util import _regex_it
+from ._util import _frmt_str_to_datetime, _regex_it
 from .api import _APIClient
 from .base import MatchmakingObject
 from .config import get_from_cache, set_in_cache
@@ -217,7 +217,7 @@ class PlayerMatchmakingResult(MatchmakingObject):
         leave = data.get("leave")
         live_id = data.get("lid")
         mvp = data.get("mvp")
-        start_time = datetime.strptime(data.get("startime"), "%Y-%m-%dT%H:%M:%SZ")
+        start_time = _frmt_str_to_datetime(data.get("startime"))
         win = data.get("win")
 
         args = [after_score, leave, live_id, mvp, player_id, start_time, win]

@@ -5,7 +5,7 @@ from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
-from ._util import _regex_it
+from ._util import _frmt_str_to_datetime, _regex_it
 from .api import _APIClient
 from .base import TMXObject
 from .config import get_from_cache, set_in_cache
@@ -81,13 +81,9 @@ class TMXMapTimes(TMXObject):
 
         uploaded_raw, updated_raw = raw.get("UploadedAt"), raw.get("UpdatedAt")
 
-        try:
-            # 2022-03-15T18:18:50.007 to datetime
-            uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S.%f")
-            updated = datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%S.%f")
-        except ValueError:
-            uploaded = datetime.strptime(uploaded_raw, "%Y-%m-%dT%H:%M:%S")
-            updated = datetime.strptime(updated_raw, "%Y-%m-%dT%H:%M:%S")
+        # 2022-03-15T18:18:50.007 to datetime
+        uploaded = _frmt_str_to_datetime(uploaded_raw)
+        updated = _frmt_str_to_datetime(updated_raw)
 
         return cls(uploaded, updated)
 
