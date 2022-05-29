@@ -5,6 +5,7 @@ from typing_extensions import Self
 
 from trackmania.api import _APIClient
 
+from ._util import _regex_it
 from .api import _APIClient
 from .base import TMXObject
 from .config import get_from_cache, set_in_cache
@@ -374,6 +375,8 @@ class TMXMap:
     ----------
     username : str
         The username of the map's creator
+    map_name : str
+        The name of the map. The exact same as `GbxMapName`.
     track_id : int | None
         The track id of the map
     map_id : int | None
@@ -407,6 +410,7 @@ class TMXMap:
     def __init__(
         self,
         username: str,
+        map_name: str,
         track_id: int | None,
         map_id: int | None,
         comments: str,
@@ -423,6 +427,7 @@ class TMXMap:
         metadata: TMXMetadata,
     ):
         self.username = username
+        self.map_name = map_name
         self.track_id = track_id
         self.map_id = map_id
         self.comments = comments
@@ -443,6 +448,7 @@ class TMXMap:
         _log.debug("Creating a TMXMap from given dictionary")
 
         username = raw.get("Username")
+        map_name = _regex_it(raw.get("GbxMapName"))
         track_id = raw.get("TrackID")
         map_id = raw.get("MapID")
         comments = raw.get("Comments")
@@ -460,6 +466,7 @@ class TMXMap:
 
         args = [
             username,
+            map_name,
             track_id,
             map_id,
             comments,
