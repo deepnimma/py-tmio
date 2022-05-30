@@ -439,7 +439,9 @@ class PlayerMatchmaking(MatchmakingObject):
         return match_results
 
     @staticmethod
-    async def top_matchmaking(page: int = 0, royal: bool = False) -> list[dict]:
+    async def top_matchmaking(
+        page: int = 0, royal: bool = False
+    ) -> list[MatchmakingLeaderboardPlayer]:
         """
         .. versionadded :: 0.3.0
 
@@ -454,7 +456,7 @@ class PlayerMatchmaking(MatchmakingObject):
 
         Returns
         -------
-        :class:`list[dict]`
+        :class:`list[MatchmakingLeaderboardPlayer]`
             The top matchmaking players by score. Each page contains 50 players.
         """
         return await _get_top_matchmaking(page, royal)
