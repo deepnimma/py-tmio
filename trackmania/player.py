@@ -378,11 +378,13 @@ class Player(PlayerObject):
     @staticmethod
     async def search(
         username: str,
-    ) -> list[PlayerSearchResult] | None:
+    ) -> list[PlayerSearchResult]:
         """
         .. versionadded :: 0.1.0
         .. versionchanged :: 0.3.4
             The function no longer returns a single :class:`PlayerSearchResult`. It will now always return a `list` or `None`
+        .. versionchanged :: 0.5.0
+            The function no longer returns a NoneType. It will return an empty list instead.
 
         Searches for a player's information using their username.
 
@@ -393,8 +395,8 @@ class Player(PlayerObject):
 
         Returns
         -------
-        :class:`list[PlayerSearchResult]` | None
-            Returns a list of :class:`PlayerSearchResult` with users who have similar usernames. Returns `None`
+        :class:`list[PlayerSearchResult]`
+            Returns a list of :class:`PlayerSearchResult` with users who have similar usernames. Returns an empty list
             if no user with that username can be found.
         """
         _log.debug(f"Searching for players with the username -> {username}")
@@ -409,7 +411,7 @@ class Player(PlayerObject):
             raise TMIOException(search_result["error"])
 
         if len(search_result) == 0:
-            return None
+            return []
 
         players = []
         for player in search_result:
