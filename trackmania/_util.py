@@ -33,7 +33,7 @@ def _frmt_str_to_datetime(date_string: str | None) -> datetime | None:
     ]
 
     for fmt in formats:
-        _log.warn("Trying %s with format %s", date_string, fmt)
+        _log.debug("Trying %s with format %s", date_string, fmt)
         try:
             return datetime.strptime(date_string, fmt)
         except ValueError:
