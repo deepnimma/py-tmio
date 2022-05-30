@@ -237,7 +237,7 @@ class PlayerSearchResult(PlayerObject):
         The zone of the player as a list.
     threes : :class:`PlayerMatchmaking`, optional
         The 3v3 data of the player.
-    royals : :class:`PlayerMatchmaking`, optional
+    royal : :class:`PlayerMatchmaking`, optional
         The royal data of the player.
     """
 
