@@ -30,7 +30,7 @@ async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
         f"matchmaking_history:{page}:{type_id}:{player_id}"
     )
     if matchmaking_history is not None:
-        return matchmaking_history.get("history")
+        return matchmaking_history.get("matches")
 
     api_client = _APIClient()
     match_history = await api_client.get(
@@ -53,7 +53,7 @@ async def _get_history(player_id: str, type_id: int, page: int) -> list[dict]:
         f"matchmaking_history:{page}:{type_id}:{player_id}", match_history, ex=3600
     )
 
-    return match_history.get("history", [])
+    return match_history.get("matches", [])
 
 
 class MatchmakingLeaderboardPlayer(MatchmakingObject):
@@ -433,7 +433,7 @@ class PlayerMatchmaking(MatchmakingObject):
         match_results = []
         for match in matches:
             match_results.append(
-                PlayerMatchmakingResult._from_dict(match), self.player_id
+                PlayerMatchmakingResult._from_dict(match, self.player_id),
             )
 
         return match_results

@@ -273,7 +273,7 @@ class PlayerTrophies(TrophyObject):
         return history["gains"]
 
     @staticmethod
-    async def top(page: int = 0) -> list[TrophyLeaderboardPlayer]:
+    async def top_trophies(page: int = 0) -> list[TrophyLeaderboardPlayer]:
         """
         .. versionadded :: 0.3.0
 
