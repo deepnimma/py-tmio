@@ -291,7 +291,7 @@ class TMXMetadata(TMXObject):
         The number of replays on the map
     award_count : int
         The number of awards on the map
-    comments_count : int
+    comment_count : int
         The number of comments on the map
     image_count : int
         The number of custom images on the map
