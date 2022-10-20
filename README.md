@@ -17,6 +17,9 @@ An Asyncio Friendly Trackmania API Wrapper for Python!
 
 ## Important - [Trackmania.io API for my own project?](https://openplanet.dev/tmio/api)
 
+## Important - 20/10/22
+Project is now on hold for an indefinite amount of time as I begin university. I do not know if I will be returning to this and continuing it. Feel free to fork it and work on the project yourself if you need to. As always, you can contact me on discord at `NottCurious#4351` for any questions.
+
 *See below on how to set your user agent*
 
 Your User-Agent Must Have:
